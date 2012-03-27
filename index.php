@@ -1,15 +1,15 @@
 <?php
 /*
-Plugin Name: Get Off Those Maliciously Loaded Scripts (Anti-Malware BETA)
+Plugin Name: Get Off Malicious Scripts (Anti-Malware)
 Plugin URI: http://gotmls.net/
 Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
-Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It is still in BETA testing so let me know if it is not working for you.
-Version: 1.2.03.27
+Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It is still in BETA so let me know if it is not working for you.
+Version: 1.2.03.28
 */
-$GOTMLS_Version='1.2.03.27';
+$GOTMLS_Version='1.2.03.28';
 $_SESSION['eli_debug_microtime']['include(GOTMLS)'] = microtime(true);
 $GOTMLS_plugin_dir='GOTMLS';
 /**
@@ -314,7 +314,7 @@ function showhide(id) {
 				error += "Email Address is a required field!\n";
 			else {
 				if (uem = document.getElementById("register_user_login"))
-					uem.value = form["user_email"].value;
+					uem.value = form["user_email"].value.replace("@", "_");
 				if (uem = document.getElementById("register_redirect_to"))
 					uem.value = "/donate/?email="+form["user_email"].value.replace("@", "_");
 			}

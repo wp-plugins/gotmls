@@ -1,17 +1,17 @@
-=== Get Off Those Maliciously Loaded Scripts (Anti-Malware BETA) ===
-Plugin Name: Get Off Those Maliciously Loaded Scripts (Anti-Malware BETA)
+=== Get Off Malicious Scripts (Anti-Malware) ===
+Plugin Name: Get Off Malicious Scripts (Anti-Malware)
 Plugin URI: http://gotmls.net/
 Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
-Tags: plugin, security, virus, malware
-Version: 1.2.03.27
-Stable tag: 1.2.03.27
+Tags: plugin, security, virus, malware, scan, repair, recover
+Version: 1.2.03.28
+Stable tag: 1.2.03.28
 Requires at least: 2.6
 Tested up to: 3.3.1
 
-This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and it helps you remove them. It is still in BETA so let me know if it is not working for you.
+This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and it helps you remove them.
 
 == Description ==
 
@@ -32,20 +32,28 @@ Many of these files may use eval and other powerful PHP function for perfectly l
 
 == Screenshots ==
 
-1. This is a screenshot of an example scan that found posible threats.
+1. The menu showing Anti-Malware.
+2. Aexample scan that found threats threats.
 
 == Changelog ==
 
-= 1.2.03.23 =
-* First BETA versions available for WordPress.
+= 1.2.03.28 =
+* Fixed registration form.
 
 = 1.2.03.27 =
 * Fixed some of the links on the settings page.
 
+= 1.2.03.23 =
+* First BETA versions available for WordPress.
+
 == Upgrade Notice ==
+
+= 1.2.03.28 =
+Fixed registration form.
+
+= 1.2.03.27 =
+Fixed some of the links on the settings page.
 
 = 1.2.03.23 =
 First BETA versions available for WordPress.
 
-= 1.2.03.27 =
-Fixed some of the links on the settings page.
