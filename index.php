@@ -7,9 +7,9 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It is still in BETA testing so let me know if it is not working for you.
-Version: 1.2.03.23
+Version: 1.2.03.27
 */
-$GOTMLS_Version='1.2.03.23';
+$GOTMLS_Version='1.2.03.27';
 $_SESSION['eli_debug_microtime']['include(GOTMLS)'] = microtime(true);
 $GOTMLS_plugin_dir='GOTMLS';
 /**
@@ -316,7 +316,7 @@ function showhide(id) {
 				if (uem = document.getElementById("register_user_login"))
 					uem.value = form["user_email"].value;
 				if (uem = document.getElementById("register_redirect_to"))
-					uem.value = "/donate/?email="+form["user_email"].value;
+					uem.value = "/donate/?email="+form["user_email"].value.replace("@", "_");
 			}
 			if(form["ws_plugin__s2member_custom_reg_field_user_url"].value == "")
 				error += "Your WordPress Site URL is a required field!\n";
@@ -550,7 +550,7 @@ function GOTMLS_set_plugin_action_links($links_array, $plugin_file) {
 function GOTMLS_set_plugin_row_meta($links_array, $plugin_file) {
 	if ($plugin_file == substr(__file__, (-1 * strlen($plugin_file)))) {
 		$_SESSION['eli_debug_microtime']['GOTMLS_set_plugin_row_meta'] = microtime(true);
-		$links_array = array_merge($links_array, array('<a target="_blank" href="http://wordpress.org/extend/plugins/GOTMLS/faq/">'.__( 'FAQ' ).'</a>','<a target="_blank" href="http://wordpress.org/tags/GOTMLS">'.__( 'Support' ).'</a>','<a target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE">'.__( 'Donate' ).'</a>'));
+		$links_array = array_merge($links_array, array('<a target="_blank" href="http://wordpress.org/extend/plugins/gotmls/faq/">'.__( 'FAQ' ).'</a>','<a target="_blank" href="http://wordpress.org/tags/gotmls">'.__( 'Support' ).'</a>','<a target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE">'.__( 'Donate' ).'</a>'));
 	}
 	return $links_array;
 }

@@ -6,18 +6,18 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: plugin, security, virus, malware
-Version: 1.2.03.23
-Stable tag: 1.2.03.23
+Version: 1.2.03.27
+Stable tag: 1.2.03.27
 Requires at least: 2.6
 Tested up to: 3.3.1
 
-This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It is still in BETA so let me know if it is not working for you.
+This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and it helps you remove them. It is still in BETA so let me know if it is not working for you.
 
 == Description ==
 
 It is almost impossible to detect every possible Malware threats, therefor this scanner may only find specific security threats and vulnerabilities that were know by me at the time of the latest release. Updated definition files can be downloaded within this plugin.
 
-Updated Mar-26th 
+Updated Mar-27th 
 
 == Installation ==
 
@@ -39,7 +39,13 @@ Many of these files may use eval and other powerful PHP function for perfectly l
 = 1.2.03.23 =
 * First BETA versions available for WordPress.
 
+= 1.2.03.27 =
+* Fixed some of the links on the settings page.
+
 == Upgrade Notice ==
 
 = 1.2.03.23 =
 First BETA versions available for WordPress.
+
+= 1.2.03.27 =
+Fixed some of the links on the settings page.
