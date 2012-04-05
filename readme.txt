@@ -6,8 +6,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: plugin, security, virus, malware, scan, repair, recover
-Version: 1.2.04.01
-Stable tag: 1.2.04.01
+Version: 1.2.04.02
+Stable tag: 1.2.04.02
 Requires at least: 2.6
 Tested up to: 3.3.1
 
@@ -17,7 +17,7 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 
 It is almost impossible to detect every possible Malware threats, therefor this scanner may only find specific security threats and vulnerabilities that were know by me at the time of the latest release. Updated definition files can be downloaded within this plugin.
 
-Updated Mar-29th 
+Updated Apr-5th 
 
 == Installation ==
 
@@ -45,6 +45,10 @@ First just leave it for a while. If there are a lot of files on your server it c
 
 == Changelog ==
 
+= 1.2.04.02 =
+* Changed definition updates to write to the DB instead of a file.
+* Added better messages about available updates.
+
 = 1.2.04.01 =
 * Fixed caching issue with downloading second definition file in Safari.
 * Added more FAQs to the readme.
@@ -60,6 +64,9 @@ First just leave it for a while. If there are a lot of files on your server it c
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.2.04.02 =
+Changed definition updates to write to the DB instead of a file and added better messages about available updates.
 
 = 1.2.04.01 =
 * Fixed caching issue with downloading second definition file in Safari and encoded registration url so your email address is your username.
