@@ -7,9 +7,9 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It is still in BETA so let me know if it is not working for you.
-Version: 1.2.04.04
+Version: 1.2.04.08
 */
-$GOTMLS_Version='1.2.04.04';
+$GOTMLS_Version='1.2.04.08';
 $_SESSION['eli_debug_microtime']['include(GOTMLS)'] = microtime(true);
 $GOTMLS_plugin_dir='GOTMLS';
 /**
@@ -218,9 +218,16 @@ function return_threats($showLinks = 0) {
 	return $li_threats;
 }
 $current_files = array();
+function GOTMLS_explode_dir($dir, $pre = '') {
+	$path = explode(':', $dir.':');
+	if (count($path) == 2)
+		return explode('/', (strlen($pre)?'/':'').$pre.$path[0]);
+	else
+		return explode('\\', (strlen($pre)?'\\':'').$pre.$path[1]);
+}
 function GOTMLS_scandir($dir, $current_depth = 0) {
 	global $bad_backups, $GOTMLS_ERRORS, $potential_threats, $threats_found, $GOTMLS_images_path, $skip_dirs, $skip_files, $total_files, $skipped_files, $scanned_files, $skipped_dirs, $total_dirs, $threats_fixed, $GOTMLS_FIRST_scandir_start, $file_at_depth, $current_percent, $current_files;
-	$dirs = explode('/', '/.'.$dir);
+	$dirs = GOTMLS_explode_dir($dir, '.');
 	set_time_limit(30);
 	if ((!in_array($dirs[count($dirs)-1], $skip_dirs)) && is_dir($dir)) {
 		if (($files = GOTMLS_getfiles($dir)) !== false) {
@@ -399,7 +406,7 @@ $_SESSION['eli_debug_microtime']['GOTMLS_Settings_start'] = microtime(true);
 	$noYesList = array('No', 'Yes');
 	$GOTMLS_menu_groups = array('Main Menu Item placed below <b>Comments</b> and above <b>Appearance</b>','Main Menu Item placed below <b>Settings</b>','Sub-Menu inside the <b>Tools</b> Menu Item');
 	$GOTMLS_scan_groups = array();
-	$dirs = explode('/', __file__);
+	$dirs = GOTMLS_explode_dir(__file__);
 	$GOTMLS_settings_array = get_option($GOTMLS_plugin_dir.'_settings_array');
 	$scan_level = intval($GOTMLS_settings_array['scan_level']);
 	for ($SL=0;$SL<$scan_level;$SL++)
@@ -416,15 +423,15 @@ $_SESSION['eli_debug_microtime']['GOTMLS_Settings_start'] = microtime(true);
 		$GOTMLS_settings_array['check_known'] = 1;
 	if (!isset($GOTMLS_settings_array['check_potential']))
 		$GOTMLS_settings_array['check_potential'] = 1;
-	if (!isset($GOTMLS_settings_array['exclude_ext']))
+	if (!(isset($GOTMLS_settings_array['exclude_ext']) && is_array($GOTMLS_settings_array['exclude_ext'])))
 		$GOTMLS_settings_array['exclude_ext'] = $skip_files;
 	if (isset($_POST['exclude_ext']) && strlen(trim($_POST['exclude_ext'].' ')) >0) {
 		$GOTMLS_settings_array['exclude_ext'] = preg_split("/[,]+/", trim($_POST['exclude_ext']), -1, PREG_SPLIT_NO_EMPTY);
 		array_walk($GOTMLS_settings_array['exclude_ext'], 'GOTMLS_trim_ar');
 	}
 	$skip_files = array_merge($GOTMLS_settings_array['exclude_ext'], array('bad'));
-	if (!isset($GOTMLS_settings_array['exclude_dir']))
-		$GOTMLS_settings_array['exclude_dir'] = '';
+	if (!(isset($GOTMLS_settings_array['exclude_dir']) && is_array($GOTMLS_settings_array['exclude_dir'])))
+		$GOTMLS_settings_array['exclude_dir'] = array();
 	if (isset($_POST['exclude_dir']) && strlen(trim($_POST['exclude_dir'].' ')) >0) {
 		$GOTMLS_settings_array['exclude_dir'] = preg_split("/[,]+/", trim($_POST['exclude_dir']), -1, PREG_SPLIT_NO_EMPTY);
 		array_walk($GOTMLS_settings_array['exclude_dir'], 'GOTMLS_trim_ar');

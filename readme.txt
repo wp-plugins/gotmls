@@ -6,8 +6,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: plugin, security, virus, malware, scan, repair, recover
-Version: 1.2.04.04
-Stable tag: 1.2.04.04
+Version: 1.2.04.08
+Stable tag: 1.2.04.08
 Requires at least: 2.6
 Tested up to: 3.3.1
 
@@ -17,7 +17,7 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 
 It is almost impossible to detect every possible Malware threats, therefor this scanner may only find specific security threats and vulnerabilities that were know by me at the time of the latest release. Updated definition files can be downloaded within this plugin.
 
-Updated Apr-5th 
+Updated Apr-6th 
 
 == Installation ==
 
@@ -45,6 +45,10 @@ First just leave it for a while. If there are a lot of files on your server it c
 
 == Changelog ==
 
+= 1.2.04.08 =
+* Fixed option to exclude directories so that the scan would not get stuck if omitted.
+* Added support for winblows servers using \ directory structures.
+
 = 1.2.04.04 =
 * Fixed new definition updates to properly update the version number.
 * Added option to exclude directories.
@@ -68,6 +72,9 @@ First just leave it for a while. If there are a lot of files on your server it c
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.2.04.08 =
+Fixed option to exclude directories and added support for winblows servers using \ directory structures.
 
 = 1.2.04.04 =
 Fixed new definition updates to properly update the version number and added option to exclude directories.
