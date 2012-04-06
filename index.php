@@ -7,9 +7,9 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It is still in BETA so let me know if it is not working for you.
-Version: 1.2.04.02
+Version: 1.2.04.04
 */
-$GOTMLS_Version='1.2.04.02';
+$GOTMLS_Version='1.2.04.04';
 $_SESSION['eli_debug_microtime']['include(GOTMLS)'] = microtime(true);
 $GOTMLS_plugin_dir='GOTMLS';
 /**
@@ -394,7 +394,7 @@ if (!function_exists('ur1encode')) { function ur1encode($url) {
 }}
 $GOTMLS_FIRST_scandir_start = 0;
 function GOTMLS_settings() {
-	global $threats_found, $bad_backups, $GOTMLS_plugin_dir, $GOTMLS_images_path, $total_files, $skipped_files, $scanned_files, $skipped_dirs, $total_dirs, $potential_threats, $GOTMLS_ERRORS, $skip_files, $threats_fixed, $GOTMLS_FIRST_scandir_start, $GOTMLS_known_treats;
+	global $threats_found, $bad_backups, $GOTMLS_plugin_dir, $GOTMLS_images_path, $total_files, $skipped_files, $scanned_files, $skipped_dirs, $total_dirs, $potential_threats, $GOTMLS_ERRORS, $skip_files, $skip_dirs, $threats_fixed, $GOTMLS_FIRST_scandir_start, $GOTMLS_known_treats;
 $_SESSION['eli_debug_microtime']['GOTMLS_Settings_start'] = microtime(true);
 	$noYesList = array('No', 'Yes');
 	$GOTMLS_menu_groups = array('Main Menu Item placed below <b>Comments</b> and above <b>Appearance</b>','Main Menu Item placed below <b>Settings</b>','Sub-Menu inside the <b>Tools</b> Menu Item');
@@ -423,6 +423,13 @@ $_SESSION['eli_debug_microtime']['GOTMLS_Settings_start'] = microtime(true);
 		array_walk($GOTMLS_settings_array['exclude_ext'], 'GOTMLS_trim_ar');
 	}
 	$skip_files = array_merge($GOTMLS_settings_array['exclude_ext'], array('bad'));
+	if (!isset($GOTMLS_settings_array['exclude_dir']))
+		$GOTMLS_settings_array['exclude_dir'] = '';
+	if (isset($_POST['exclude_dir']) && strlen(trim($_POST['exclude_dir'].' ')) >0) {
+		$GOTMLS_settings_array['exclude_dir'] = preg_split("/[,]+/", trim($_POST['exclude_dir']), -1, PREG_SPLIT_NO_EMPTY);
+		array_walk($GOTMLS_settings_array['exclude_dir'], 'GOTMLS_trim_ar');
+	}
+	$skip_dirs = array_merge($GOTMLS_settings_array['exclude_dir'], $skip_dirs);
 	if (isset($_POST['scan_what']) && is_numeric($_POST['scan_what']) && $_POST['scan_what'] != $GOTMLS_settings_array['scan_what'])
 		$GOTMLS_settings_array['scan_what'] = $_POST['scan_what'];
 //	else echo '<li>POST != $GOTMLS_settings_array('.$GOTMLS_settings_array['scan_what'].')='.($_POST['scan_what'] != $GOTMLS_settings_array['scan_what']);
@@ -460,7 +467,7 @@ $_SESSION['eli_debug_microtime']['GOTMLS_Settings_start'] = microtime(true);
 	$scan_opts .= '</div><br style="clear: left;" /><hr style="clear: left; color: #cccccc; background-color: #cccccc;" /><div style="float: left; padding: 0; width: 100%;" id="check_potential_div">Check for potential threats (usage of eval&#40;&#41; is not always a threat but it could be. This option helps you examine at each one to see if it is dangerous or malicious):';
 	foreach ($noYesList as $nY => $noYes)
 		$scan_opts .= '<div style="float: right; padding: 14px;" id="check_potential_div_'.$nY.'"><input type="radio" name="check_potential" value="'.$nY.'"'.($GOTMLS_settings_array['check_potential']==$nY?' checked':'').' />'.$noYes.'</div>';
-	$scan_opts .= '</div><br style="clear: left;" /><h3>Skip files with the following extentions:</h3><p>(a comma separated list of file extentions to be excluded from the scan)<br /><input type="text" name="exclude_ext" value="'.implode($GOTMLS_settings_array['exclude_ext'], ',').'" style="width: 90%;" /></p>';
+	$scan_opts .= '</div><br style="clear: left;" /><h3>What to skip:</h3><p><b>Skip files with the following extentions:</b>(a comma separated list of file extentions to be excluded from the scan)<br /><input type="text" name="exclude_ext" value="'.implode($GOTMLS_settings_array['exclude_ext'], ',').'" style="width: 90%;" /></p><p><b>Skip directories with the following names:</b>(a comma separated list of folders to be excluded from the scan)<br /><input type="text" name="exclude_dir" value="'.implode($GOTMLS_settings_array['exclude_dir'], ',').'" style="width: 90%;" /></p>';
 	$menu_opts = '<div class="stuffbox shadowed-box">
 		<h3 class="hndle"><span>Menu Item Placement Options</span></h3>
 		<div class="inside"><form method="POST" name="GOTMLS_menu_Form">';
@@ -535,13 +542,12 @@ function select_text_range(ta_id, start, end) {
 		}
 		update_option($GOTMLS_plugin_dir.'_settings_array', $GOTMLS_settings_array);
 		echo '</div></form></div></div>';
-	}// else  phpinfo();
+	}
 	echo '<div class="stuffbox shadowed-box">
 			<h3 class="hndle"><span>Scan Settings</span></h3>
 			<div class="inside">
 				<form method="POST" name="GOTMLS_Form"><p>'.$scan_opts.'</p>
 				<p style="text-align: right;"><input type="submit" value="Scan Now" class="button-primary" /></p></form></div></div>';
-//	print_r($GOTMLS_known_treats);
 	echo '</div></div></div><script>setDivNAtext();</script>';
 $_SESSION['eli_debug_microtime']['GOTMLS_Settings_end'] = microtime(true);
 }
@@ -583,7 +589,8 @@ $_SESSION['eli_debug_microtime']['GOTMLS_init_start'] = microtime(true);
 	if (isset($_POST['UPDATE_known_treats']) && is_array($_POST['UPDATE_known_treats']) && isset($_POST['definitions_version']) && is_numeric($_POST['definitions_version'])) {
 		$GOTMLS_known_treats = ($_POST['UPDATE_known_treats']);
 		if (isset($GOTMLS_known_treats['potential']['eval']) && substr($GOTMLS_known_treats['potential']['eval'], -5) == '\\\\)/i')
-			array_walk_recursive($GOTMLS_known_treats, 'GOTMLS_stripslashes');//$GOTMLS_known_treats['potential']['eval']=stripslashes($GOTMLS_k		$GOTMLS_definitions_version = intval($_POST['definitions_version']);
+			array_walk_recursive($GOTMLS_known_treats, 'GOTMLS_stripslashes');
+		$GOTMLS_definitions_version = intval($_POST['definitions_version']);
 	}
 	$GOTMLS_settings_array['definitions_version'] = $GOTMLS_definitions_version;
 	if (isset($_POST['scan_level']) && is_numeric($_POST['scan_level']))

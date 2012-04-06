@@ -6,8 +6,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: plugin, security, virus, malware, scan, repair, recover
-Version: 1.2.04.02
-Stable tag: 1.2.04.02
+Version: 1.2.04.04
+Stable tag: 1.2.04.04
 Requires at least: 2.6
 Tested up to: 3.3.1
 
@@ -45,6 +45,10 @@ First just leave it for a while. If there are a lot of files on your server it c
 
 == Changelog ==
 
+= 1.2.04.04 =
+* Fixed new definition updates to properly update the version number.
+* Added option to exclude directories.
+
 = 1.2.04.02 =
 * Changed definition updates to write to the DB instead of a file.
 * Added better messages about available updates.
@@ -64,6 +68,9 @@ First just leave it for a while. If there are a lot of files on your server it c
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.2.04.04 =
+Fixed new definition updates to properly update the version number and added option to exclude directories.
 
 = 1.2.04.02 =
 Changed definition updates to write to the DB instead of a file and added better messages about available updates.
