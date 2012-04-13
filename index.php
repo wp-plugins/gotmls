@@ -7,9 +7,9 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It is still in BETA so let me know if it is not working for you.
-Version: 1.2.04.08
+Version: 1.2.04.09
 */
-$GOTMLS_Version='1.2.04.08';
+$GOTMLS_Version='1.2.04.09';
 $_SESSION['eli_debug_microtime']['include(GOTMLS)'] = microtime(true);
 $GOTMLS_plugin_dir='GOTMLS';
 /**
@@ -40,34 +40,22 @@ $_SESSION['eli_debug_microtime']['GOTMLS_install_start'] = microtime(true);
 $_SESSION['eli_debug_microtime']['GOTMLS_install_end'] = microtime(true);
 }
 function GOTMLS_menu() {
-	global $GOTMLS_plugin_dir, $GOTMLS_Version, $wp_version, $GOTMLS_plugin_home, $GOTMLS_Logo_IMG, $GOTMLS_updated_images_path, $GOTMLS_images_path, $GOTMLS_url_parts;
+	global $GOTMLS_plugin_dir, $GOTMLS_Logo_IMG, $GOTMLS_images_path;
 $_SESSION['eli_debug_microtime']['GOTMLS_menu_start'] = microtime(true);
 	$GOTMLS_settings_array = get_option($GOTMLS_plugin_dir.'_settings_array');
 	if (isset($_POST['GOTMLS_menu_group']) && is_numeric($_POST['GOTMLS_menu_group']) && $_POST['GOTMLS_menu_group'] != $GOTMLS_settings_array['menu_group']) {
 		$GOTMLS_settings_array['menu_group'] = $_POST['GOTMLS_menu_group'];
 		update_option($GOTMLS_plugin_dir.'_settings_array', $GOTMLS_settings_array);
 	}
-	$img_path = basename(__FILE__);
-	$Full_plugin_logo_URL = get_option('siteurl');
-	if (!isset($GOTMLS_settings_array['img_url']))
-		$GOTMLS_settings_array['img_url'] = $img_path;
-		$img_path.='?v='.$GOTMLS_Version.'&wp='.$wp_version.'&p='.$GOTMLS_plugin_dir;
-	if ($img_path != $GOTMLS_settings_array['img_url']) {
-		$GOTMLS_settings_array['img_url'] = $img_path;
-		$img_path = $GOTMLS_plugin_home.$GOTMLS_updated_images_path.$img_path;
-		$Full_plugin_logo_URL = $img_path.'&key='.md5($GOTMLS_url_parts[2]).'&d='.
-		ur1encode($Full_plugin_logo_URL);
-		update_option($GOTMLS_plugin_dir.'_settings_array', $GOTMLS_settings_array);
-	} else //only used for debugging.//rem this line out
 	$Full_plugin_logo_URL = $GOTMLS_images_path.$GOTMLS_Logo_IMG;
 	$base_page = $GOTMLS_plugin_dir.'-settings';
 	if ($GOTMLS_settings_array['menu_group'] == 2)
 		$base_page = 'tools.php';
 	elseif (!function_exists('add_object_page') || $GOTMLS_settings_array['menu_group'] == 1)
-		add_menu_page(__('Anti-Malware Settings'), __('Anti-Malware'), 'administrator', $base_page, $GOTMLS_plugin_dir.'_settings', $Full_plugin_logo_URL);
+		add_menu_page(__('Anti-Malware Settings/Scan'), __('Anti-Malware'), 'administrator', $base_page, $GOTMLS_plugin_dir.'_settings', $Full_plugin_logo_URL);
 	else
-		add_object_page(__('Anti-Malware Settings'), __('Anti-Malware'), 'administrator', $base_page, $GOTMLS_plugin_dir.'_settings', $Full_plugin_logo_URL);
-	add_submenu_page($base_page, __('Anti-Malware Settings Page'), __('Malware Scan'), 'administrator', $GOTMLS_plugin_dir.'-settings', $GOTMLS_plugin_dir.'_settings');
+		add_object_page(__('Anti-Malware Settings/Scan'), __('Anti-Malware'), 'administrator', $base_page, $GOTMLS_plugin_dir.'_settings', $Full_plugin_logo_URL);
+	add_submenu_page($base_page, __('Anti-Malware Settings/Scan Page'), __('<span style="background: url(\''.$Full_plugin_logo_URL.'\') no-repeat; vertical-align: middle; border: 0 none; display: inline-block; height: 16px; width: 16px;"></span> Anti-Malware'), 'administrator', $GOTMLS_plugin_dir.'-settings', $GOTMLS_plugin_dir.'_settings');
 $_SESSION['eli_debug_microtime']['GOTMLS_menu_end'] = microtime(true);
 }
 function GOTMLS_debug($my_error = '', $echo_error = false) {
@@ -75,7 +63,7 @@ function GOTMLS_debug($my_error = '', $echo_error = false) {
 	$mtime=date("Y-m-d H:i:s", filemtime(__file__));
 	if ($echo_error || (substr($my_error, 0, 22) == 'Access denied for user'))
 		echo "<li>debug:<pre>$my_error\n".print_r($_SESSION['eli_debug_microtime'],true).'END;</pre>';
-	else mail("wordpress@ieonly.com", "GOTMLS $GOTMLS_Version ERRORS", "mtime=$mtime\nwp_version=$wp_version\n$my_error\n".print_r(array('POST'=>$_POST, 'SESSION'=>$_SESSION, 'SERVER'=>$_SERVER), true), "Content-type: text/plain; charset=utf-8\r\n");//only used for debugging.//rem this line out
+//	else mail("wordpress@ieonly.com", "GOTMLS $GOTMLS_Version ERRORS", "mtime=$mtime\nwp_version=$wp_version\n$my_error\n".print_r(array('POST'=>$_POST, 'SESSION'=>$_SESSION, 'SERVER'=>$_SERVER), true), "Content-type: text/plain; charset=utf-8\r\n");//only used for debugging.//rem this line out
 	$_SESSION['eli_debug_microtime']=array();
 	return $my_error;
 }
@@ -263,9 +251,10 @@ function GOTMLS_scandir($dir, $current_depth = 0) {
 	return $current_depth;
 }
 function GOTMLS_display_header($pTitle, $optional_box = '') {
-	global $GOTMLS_plugin_dir, $GOTMLS_url_parts, $GOTMLS_update_home, $GOTMLS_plugin_home, $GOTMLS_updated_images_path, $GOTMLS_Version, $GOTMLS_images_path, $GOTMLS_definitions_version, $current_user;
+	global $GOTMLS_plugin_dir, $GOTMLS_update_home, $GOTMLS_plugin_home, $GOTMLS_updated_images_path, $GOTMLS_Version, $GOTMLS_images_path, $GOTMLS_definitions_version, $GOTMLS_Version, $wp_version, $current_user;
 	get_currentuserinfo();
 $_SESSION['eli_debug_microtime']['GOTMLS_display_header_start'] = microtime(true);
+	$GOTMLS_url_parts = explode('/', get_option('siteurl'));
 	$wait_img_URL = $GOTMLS_images_path.'wait.gif';
 	if (isset($_GET['check_site']) && $_GET['check_site'] == 1)
 		echo '<div id="check_site" style="float: right; margin: 15px;"><img src="'.$GOTMLS_images_path.'checked.gif"> Tested your site. It appears we didn\'t break anything ;-)</div><style>#footer, #GOTMLS-Settings, #right-sidebar, #admin-page-container, #wpadminbar, #adminmenuback, #adminmenuwrap, #adminmenu {display: none !important;} #wpbody-content {padding-bottom: 0;}';
@@ -335,7 +324,7 @@ function showhide(id) {
 				return true;
 		}
 		</script>
-	<form id="updateform" method="post" name="updateform">
+	<form id="updateform" method="post" name="updateform" action="'.$_SERVER['REQUEST_URI'].'">
 		<div id="Definition_Updates" class="inside"><center>Searching for updates ...<br /><img src="'.$wait_img_URL.'" alt="Wait..." /><br /><input type="button" value="Cancel" onclick="document.getElementById(\'Definition_Updates\').innerHTML = \'Could not find server!\';" /></center></div>
 		<div id="autoUpdateForm" style="display: none;" class="inside">
 		<input type="submit" name="auto_update" onclick="check_for_updates(this);" value="Download new definitions!"> <img style="display: none;" src="'.$GOTMLS_images_path.'wait.gif" alt="Downloading new definitions file..." id="autoUpdateDownload">
@@ -358,7 +347,7 @@ Register your Key now and get instant access to new definition files as new thre
 <div>Plugin Installation Key:</div>
 <input style="width: 100%;" id="ws_plugin__s2member_custom_reg_field_installation_key" type="text" name="ws_plugin__s2member_custom_reg_field_installation_key" value="'.md5($GOTMLS_url_parts[2]).'" /></div>
 <input style="width: 100%;" id="wp-submit" type="submit" name="wp-submit" value="Register Now!" /></form></div>
-		<script type="text/javascript" src="'.$GOTMLS_update_home.$GOTMLS_updated_images_path.'?div=Definition_Updates&v='.$GOTMLS_Version.'&ver='.$GOTMLS_definitions_version.'&key='.md5($GOTMLS_url_parts[2]).'&p='.$GOTMLS_plugin_dir.'"></script>
+		<script type="text/javascript" src="'.$GOTMLS_update_home.$GOTMLS_updated_images_path.'?div=Definition_Updates&v='.$GOTMLS_Version.'&ver='.$GOTMLS_definitions_version.'&p='.$GOTMLS_plugin_dir.'&wp='.$wp_version.'&ts='.date("YmdHis").'&key='.md5($GOTMLS_url_parts[2]).'&d='.ur1encode(implode('/', $GOTMLS_url_parts)).'"></script>
 	</div>
 	<div id="pluginlinks" class="shadowed-box stuffbox"><h3 class="hndle"><span>Plugin Links</span></h3>
 		<div class="inside">
@@ -453,7 +442,7 @@ $_SESSION['eli_debug_microtime']['GOTMLS_Settings_start'] = microtime(true);
 	$scan_opts = '<b>What to scan:</b>';
 	foreach ($GOTMLS_scan_groups as $mg => $GOTMLS_scan_group)
 		$scan_opts .= '<div style="float: left; padding: 4px 14px;" id="scan_group_div_'.$mg.'"><input type="radio" name="scan_what" value="'.$mg.'"'.($GOTMLS_settings_array['scan_what']==$mg?' checked':'').' />'.$GOTMLS_scan_group.'</div>';
-	$scan_opts .= '<br style="clear: left;" /><p><b>Scan Depth:</b> (how far do you want to drill down from your starting directory)<br /><input type="text" value="'.$GOTMLS_settings_array['scan_depth'].'" name="scan_depth"> (-1 is infinite depth)</p><p><h3>What to look for:</h3><br /><div style="float: left; padding: 0; width: 100%;" id="check_timthumb_div">Check for timthumb.php files older than 2.0 (a common vulnerability used to plant malicious code):';
+	$scan_opts .= '<br style="clear: left;" /><p><b>Scan Depth:</b> (how far do you want to drill down from your starting directory)<br /><input type="text" value="'.$GOTMLS_settings_array['scan_depth'].'" name="scan_depth"> (-1 is infinite depth)</p><p><h3>What to look for:</h3><br /><div style="float: left; padding: 0; width: 100%;" id="check_timthumb_div">Check for timthumb versions older than 2.0 (a common vulnerability used to plant malicious code) and upgrade them to version 2.8.10:';
 	if (isset($GOTMLS_known_treats['timthumb']) && is_array($GOTMLS_known_treats['timthumb'])) {
 		foreach ($noYesList as $nY => $noYes)
 			$scan_opts .= '<div style="float: right; padding: 14px;" id="check_timthumb_div_'.$nY.'"><input type="radio" name="check_timthumb" value="'.$nY.'"'.($GOTMLS_settings_array['check_timthumb']==$nY?' checked':'').' />'.$noYes.'</div>';
@@ -561,7 +550,12 @@ $_SESSION['eli_debug_microtime']['GOTMLS_Settings_end'] = microtime(true);
 function GOTMLS_set_plugin_action_links($links_array, $plugin_file) {
 	if ($plugin_file == substr(__file__, (-1 * strlen($plugin_file)))) {
 		$_SESSION['eli_debug_microtime']['GOTMLS_set_plugin_action_links'] = microtime(true);
-		$links_array = array_merge(array('<a href="admin.php?page=GOTMLS-settings">'.__( 'Settings' ).'</a>'), $links_array);
+		$GOTMLS_settings_array = get_option($GOTMLS_plugin_dir.'_settings_array');
+		if ($GOTMLS_settings_array['menu_group'] == 2)
+			$base_page = 'tools.php';
+		else
+			$base_page = 'admin.php';
+		$links_array = array_merge(array('<a href="'.$base_page.'?page=GOTMLS-settings">'.__( 'Settings' ).'</a>'), $links_array);
 	}
 	return $links_array;
 }

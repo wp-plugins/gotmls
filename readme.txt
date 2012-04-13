@@ -5,9 +5,9 @@ Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
-Tags: plugin, security, virus, malware, scan, repair, recover
-Version: 1.2.04.08
-Stable tag: 1.2.04.08
+Tags: security, plugin, scan, remove, repair, malware, virus, recover, hacked, server, scripts
+Version: 1.2.04.09
+Stable tag: 1.2.04.09
 Requires at least: 2.6
 Tested up to: 3.3.1
 
@@ -15,14 +15,15 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 
 == Description ==
 
-It is almost impossible to detect every possible Malware threats, therefor this scanner may only find specific security threats and vulnerabilities that were know by me at the time of the latest release. Updated definition files can be downloaded within this plugin.
+As is, this plugin only scans for the use of the eval function on your site. If you register on gotmls.net you will have access to new definitions of "known threats" and added features like automatic removal and patches for specific security threats and vulnerabilities. Updated definition files can be downloaded automatically within the admin once your Installation Key is registered.
 
-Updated Apr-6th 
+Updated Apr-12th 
 
 == Installation ==
 
 1. Download and unzip the plugin into your WordPress plugins directory (usually `/wp-content/plugins/`).
 1. Activate the plugin through the 'Plugins' menu in your WordPress Admin.
+1. Register on gotmls.net from you admin page to have access to new definitions of "known threats" and added features like automatic removal and security patches.
 
 == Frequently Asked Questions ==
 
@@ -38,6 +39,10 @@ Click on the linked filename, then click each numbered link above the file conte
 
 First just leave it for a while. If there are a lot of files on your server it could take quite a while and could sometimes appear to not be moving along at all even if it really is working. If, after a while, it still seems really stuck then make a note of what it was scanning when it stopped, then run it again. If it stops in the exact same place then you may want to try to figure out what file in that folder is causing it to hang or avoid scanning that folder all together. If you figure it out let me know what it was and I will try and make the program find it's own way around the problem.
 
+= Why should I register? =
+
+If you register on gotmls.net you will have access to new definitions of "known threats" and added features like automatic removal and patches for specific security threats and vulnerabilities. Otherwise, this plugin only scans for the use of the eval function on your site, it would still be your job to identify the good one from the bad one and remove them acoudingly. 
+
 == Screenshots ==
 
 1. The menu showing Anti-Malware.
@@ -45,9 +50,14 @@ First just leave it for a while. If there are a lot of files on your server it c
 
 == Changelog ==
 
+= 1.2.04.09 =
+* Added more info about registration to the readme file.
+* Updated timthumb replacement patch to version 2.8.10 per WordPress.org plugins requirement.
+* Fixed menu option placement to work just as well as a sub-menu under tools.
+
 = 1.2.04.08 =
 * Fixed option to exclude directories so that the scan would not get stuck if omitted.
-* Added support for winblows servers using \ directory structures.
+* Added support for winblows servers using BACKSLASH directory structures.
 
 = 1.2.04.04 =
 * Fixed new definition updates to properly update the version number.
@@ -73,8 +83,11 @@ First just leave it for a while. If there are a lot of files on your server it c
 
 == Upgrade Notice ==
 
+= 1.2.04.09 =
+Added more info about registration to the readme file, Updated timthumb replacement patch to version 2.8.10, and fixed menu option placement.
+
 = 1.2.04.08 =
-Fixed option to exclude directories and added support for winblows servers using \ directory structures.
+Fixed option to exclude directories and added support for winblows servers using BACKSLASH directory structures.
 
 = 1.2.04.04 =
 Fixed new definition updates to properly update the version number and added option to exclude directories.
