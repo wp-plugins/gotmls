@@ -6,24 +6,26 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: security, plugin, scan, remove, repair, malware, virus, recover, hacked, server, scripts
-Version: 1.2.04.09
-Stable tag: 1.2.04.09
+Version: 1.2.04.24
+Stable tag: 1.2.04.24
 Requires at least: 2.6
-Tested up to: 3.3.1
+Tested up to: 3.3.2
 
 This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and it helps you remove them.
 
 == Description ==
 
-As is, this plugin only scans for the use of the eval function on your site. If you register on gotmls.net you will have access to new definitions of "known threats" and added features like automatic removal and patches for specific security threats and vulnerabilities. Updated definition files can be downloaded automatically within the admin once your Installation Key is registered.
+As is, this plugin only scans for the use of the eval function on your site. If you register on gotmls.net you will have access to new definitions of "known threats" and added features like automatic removal, plus patches for specific security threats and vulnerabilities. Updated definition files can be downloaded automatically within the admin once your Key is registered.
 
-Updated Apr-12th 
+Updated Apr-24th
+
+NOTICE: This plugin make use of a "phone home" feature to check for updates. This is not unlike what WordPress already does with all your plugins. It is an essential part of any worthwhile security plugin and it is here to let you know when there are new plugin and definition update available. If you're allergic to "phone home" scripts then don't use this plugin (or WordPress at all for that matter).
 
 == Installation ==
 
 1. Download and unzip the plugin into your WordPress plugins directory (usually `/wp-content/plugins/`).
 1. Activate the plugin through the 'Plugins' menu in your WordPress Admin.
-1. Register on gotmls.net from you admin page to have access to new definitions of "known threats" and added features like automatic removal and security patches.
+1. Register on gotmls.net to have access to new definitions of "known threats" and added features like automatic removal and automatic security patches from your admin page.
 
 == Frequently Asked Questions ==
 
@@ -49,6 +51,9 @@ If you register on gotmls.net you will have access to new definitions of "known 
 2. An example scan that found some threats.
 
 == Changelog ==
+
+= 1.2.04.24 =
+* Fixed autoupdate script to update scan level even if there is no new definitions.
 
 = 1.2.04.09 =
 * Added more info about registration to the readme file.
@@ -83,6 +88,9 @@ If you register on gotmls.net you will have access to new definitions of "known 
 
 == Upgrade Notice ==
 
+= 1.2.04.24 =
+Fixed autoupdate script to update scan level even if there is no new definitions.
+
 = 1.2.04.09 =
 Added more info about registration to the readme file, Updated timthumb replacement patch to version 2.8.10, and fixed menu option placement.
 
@@ -96,7 +104,7 @@ Fixed new definition updates to properly update the version number and added opt
 Changed definition updates to write to the DB instead of a file and added better messages about available updates.
 
 = 1.2.04.01 =
-* Fixed caching issue with downloading second definition file in Safari and encoded registration url so your email address is your username.
+Fixed caching issue with downloading second definition file in Safari and encoded registration url so your email address is your username.
 
 = 1.2.03.28 =
 Fixed registration form.
