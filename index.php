@@ -7,9 +7,9 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It is still in BETA so let me know if it is not working for you.
-Version: 1.2.04.24
+Version: 1.2.05.04
 */
-$GOTMLS_Version='1.2.04.24';
+$GOTMLS_Version='1.2.05.04';
 $_SESSION['eli_debug_microtime']['include(GOTMLS)'] = microtime(true);
 $GOTMLS_plugin_dir='GOTMLS';
 /**
@@ -71,10 +71,10 @@ function GOTMLS_get_ext($filename) {
 	return strtolower($nameparts[(count($nameparts)-1)]);
 }
 function GOTMLS_check_threat($threat_level) {
-	global $GOTMLS_known_treats, $new_contents, $GOTMLS_ERRORS, $current_file, $GOTMLS_images_path;
+	global $GOTMLS_known_threats, $new_contents, $GOTMLS_ERRORS, $current_file, $GOTMLS_images_path;
 	$found = false;
-	if (isset($GOTMLS_known_treats[$threat_level]) && is_array($GOTMLS_known_treats[$threat_level])) {
-		foreach ($GOTMLS_known_treats[$threat_level] as $threat_name => $threat_match) {
+	if (isset($GOTMLS_known_threats[$threat_level]) && is_array($GOTMLS_known_threats[$threat_level])) {
+		foreach ($GOTMLS_known_threats[$threat_level] as $threat_name => $threat_match) {
 			if (preg_match_all($threat_match, $new_contents, $matches)) {
 				if ($threat_level == 'timthumb') {
 					$new_contents = @file_get_contents(dirname(__FILE__).'/images/tt2.php');
@@ -86,8 +86,14 @@ function GOTMLS_check_threat($threat_level) {
 				$found = $matches[0];
 			}// else $GOTMLS_ERRORS .= '<li class="GOTMLS_plugin '.$threat_level.'">NO "'.$threat_match.'" in '.$current_file.'('.strlen($new_contents).')</li>';
 		}
-	} else
-		$GOTMLS_ERRORS .= '<li class="GOTMLS_plugin known">Invalid Treat Level: '.$threat_level.'</li>';
+	} else {
+		if (preg_match_all('/'.$threat_level.'/i', $new_contents, $matches)) {
+			foreach ($matches[0] as $find)
+				$new_contents = str_replace($find, '', $new_contents);
+			$new_contents = preg_replace(array("/(\n+)/", "/([\r\n]+)/"), "\n", $new_contents);
+			$found = $matches[0];
+		}// else $GOTMLS_ERRORS .= '<li class="GOTMLS_plugin '.$threat_level.'">NO "'.$threat_match.'" in '.$current_file.'('.strlen	}
+	}
 	return $found;
 }
 $current_file = '';
@@ -119,6 +125,9 @@ function GOTMLS_scanfile($file) {
 			} else if (isset($_POST['check_known']) && $_POST['check_known'] > 0 && ($found = GOTMLS_check_threat('known')) !== false) {
 				$potential_threats[$file] = $found;
 				$className = 'known';
+			} else if (isset($_POST['custom_reg_exp']) && strlen(trim($_POST['custom_reg_exp'])) > 0 && ($found = GOTMLS_check_threat($_POST['custom_reg_exp'])) !== false) {
+				$potential_threats[$file] = $found;
+				$className = 'custom_reg_exp';
 			} else if (isset($_POST['check_potential']) && $_POST['check_potential'] > 0 && ($found = GOTMLS_check_threat('potential')) !== false) {
 				$className = 'potential';
 				$potential_threats[$file] = $found;
@@ -145,6 +154,8 @@ function GOTMLS_scanfile($file) {
  			if ($className == 'potential')
 				$threats_found_li = '<li>'.str_replace('GOTMLS_plugin', 'GOTMLS_plugin '.$className, $threat_link).'</li>';
  			else {
+ 				if ($className == 'custom_reg_exp')
+ 					$className == 'potential';
 				$threats_found_li = '<li><input type="checkbox" value="1" name="fix_'.str_replace('.', '_', $file).'" '.($className != 'potential'?'checked="'.$className.'" />':'/>').str_replace('GOTMLS_plugin', 'GOTMLS_plugin '.$className, $threat_link).'</li>';
 			}
 //			if (isset($_POST[$fix_file]) && $_POST[$fix_file] > 0)
@@ -250,7 +261,7 @@ function GOTMLS_scandir($dir, $current_depth = 0) {
 	return $current_depth;
 }
 function GOTMLS_display_header($pTitle, $optional_box = '') {
-	global $GOTMLS_plugin_dir, $GOTMLS_update_home, $GOTMLS_plugin_home, $GOTMLS_updated_images_path, $GOTMLS_Version, $GOTMLS_images_path, $GOTMLS_definitions_version, $GOTMLS_Version, $wp_version, $current_user;
+	global $GOTMLS_plugin_dir, $GOTMLS_update_home, $GOTMLS_plugin_home, $GOTMLS_updated_images_path, $GOTMLS_Version, $GOTMLS_images_path, $GOTMLS_definitions_version, $GOTMLS_Version, $wp_version, $current_user,$GOTMLS_updated_definition_path;
 	get_currentuserinfo();
 $_SESSION['eli_debug_microtime']['GOTMLS_display_header_start'] = microtime(true);
 	$GOTMLS_url_parts = explode('/', get_option('siteurl'));
@@ -353,17 +364,18 @@ Register your Key now and get instant access to new definition files as new thre
 <div>Plugin Installation Key:</div>
 <input style="width: 100%;" id="ws_plugin__s2member_custom_reg_field_installation_key" type="text" name="ws_plugin__s2member_custom_reg_field_installation_key" value="'.md5($GOTMLS_url_parts[2]).'" /></div>
 <input style="width: 100%;" id="wp-submit" type="submit" name="wp-submit" value="Register Now!" /></form></div>
-		<script type="text/javascript" src="'.$GOTMLS_update_home.$GOTMLS_updated_images_path.'?div=Definition_Updates&ver='.$GOTMLS_definitions_version.'&v='.$ver_info.'"></script>
+		<script type="text/javascript" src="'.$GOTMLS_update_home.$GOTMLS_updated_definition_path.'?div=Definition_Updates&ver='.$GOTMLS_definitions_version.'&v='.$ver_info.'"></script>
 	</div>
 	<div id="pluginlinks" class="shadowed-box stuffbox"><h3 class="hndle"><span>Plugin Links</span></h3>
 		<div class="inside">
 		<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-			<table cellpadding=0 cellspacing=0><tr><td>
+			<div style="height: 28px;">
 				<input type="hidden" name="cmd" value="_s-xclick">
 				<input type="hidden" name="hosted_button_id" value="QZHD8QHZ2E7PE">
 				<div class="pp_donate pp_left"><input type="image" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" border="0" name="submit" alt="Make a Donation with PayPal"></div>
 				<div class="pp_donate pp_right"><input type="image" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" border="0" name="submitc" alt="Make a Donation with your credit card at PayPal"></div>
-			</td></tr><tr><td>
+			</div>
+			<div>
 				<ul class="sidebar-links">
 					<li style="float: right;"><b>on <a target="_blank" href="http://wordpress.org/extend/plugins/profile/scheeeli">WordPress.org</a></b><ul class="sidebar-links">
 						<li><a target="_blank" href="http://wordpress.org/extend/plugins/'.strtolower($GOTMLS_plugin_dir).'/faq/">Plugin FAQs</a>
@@ -377,7 +389,7 @@ Register your Key now and get instant access to new definition files as new thre
 						<li><a target="_blank" href="'.$GOTMLS_update_home.'blog/">Blog</a>
 					</ul></li>
 				</ul>
-			</td></tr></table>
+			</div>
 		</form>
 		</div>
 	</div>
@@ -396,7 +408,7 @@ if (!function_exists('ur1encode')) { function ur1encode($url) {
 }}
 $GOTMLS_FIRST_scandir_start = 0;
 function GOTMLS_settings() {
-	global $threats_found, $bad_backups, $GOTMLS_plugin_dir, $GOTMLS_images_path, $total_files, $skipped_files, $scanned_files, $skipped_dirs, $total_dirs, $potential_threats, $GOTMLS_ERRORS, $skip_files, $skip_dirs, $threats_fixed, $GOTMLS_FIRST_scandir_start, $GOTMLS_known_treats;
+	global $threats_found, $bad_backups, $GOTMLS_plugin_dir, $GOTMLS_images_path, $total_files, $skipped_files, $scanned_files, $skipped_dirs, $total_dirs, $potential_threats, $GOTMLS_ERRORS, $skip_files, $skip_dirs, $threats_fixed, $GOTMLS_FIRST_scandir_start, $GOTMLS_known_threats;
 $_SESSION['eli_debug_microtime']['GOTMLS_Settings_start'] = microtime(true);
 	$noYesList = array('No', 'Yes');
 	$GOTMLS_menu_groups = array('Main Menu Item placed below <b>Comments</b> and above <b>Appearance</b>','Main Menu Item placed below <b>Settings</b>','Sub-Menu inside the <b>Tools</b> Menu Item');
@@ -420,6 +432,8 @@ $_SESSION['eli_debug_microtime']['GOTMLS_Settings_start'] = microtime(true);
 		$GOTMLS_settings_array['check_potential'] = 1;
 	if (!(isset($GOTMLS_settings_array['exclude_ext']) && is_array($GOTMLS_settings_array['exclude_ext'])))
 		$GOTMLS_settings_array['exclude_ext'] = $skip_files;
+	if (!isset($GOTMLS_settings_array['custom_reg_exp']))
+		$GOTMLS_settings_array['custom_reg_exp'] = '';
 	if (isset($_POST['exclude_ext']) && strlen(trim($_POST['exclude_ext'].' ')) >0) {
 		$GOTMLS_settings_array['exclude_ext'] = preg_split("/[,]+/", trim($_POST['exclude_ext']), -1, PREG_SPLIT_NO_EMPTY);
 		array_walk($GOTMLS_settings_array['exclude_ext'], 'GOTMLS_trim_ar');
@@ -427,14 +441,20 @@ $_SESSION['eli_debug_microtime']['GOTMLS_Settings_start'] = microtime(true);
 	$skip_files = array_merge($GOTMLS_settings_array['exclude_ext'], array('bad'));
 	if (!(isset($GOTMLS_settings_array['exclude_dir']) && is_array($GOTMLS_settings_array['exclude_dir'])))
 		$GOTMLS_settings_array['exclude_dir'] = array();
-	if (isset($_POST['exclude_dir']) && strlen(trim($_POST['exclude_dir'].' ')) >0) {
-		$GOTMLS_settings_array['exclude_dir'] = preg_split("/[,]+/", trim($_POST['exclude_dir']), -1, PREG_SPLIT_NO_EMPTY);
-		array_walk($GOTMLS_settings_array['exclude_dir'], 'GOTMLS_trim_ar');
+	if (isset($_POST['exclude_dir'])) {
+		if (strlen(trim(str_replace(',','',$_POST['exclude_dir']).' ')) > 0)
+			$GOTMLS_settings_array['exclude_dir'] = preg_split("/[\s]*([,]+[\s]*)+/", trim($_POST['exclude_dir']), -1, PREG_SPLIT_NO_EMPTY);
+		else
+			$GOTMLS_settings_array['exclude_dir'] = array();
 	}
 	$skip_dirs = array_merge($GOTMLS_settings_array['exclude_dir'], $skip_dirs);
 	if (isset($_POST['scan_what']) && is_numeric($_POST['scan_what']) && $_POST['scan_what'] != $GOTMLS_settings_array['scan_what'])
 		$GOTMLS_settings_array['scan_what'] = $_POST['scan_what'];
 //	else echo '<li>POST != $GOTMLS_settings_array('.$GOTMLS_settings_array['scan_what'].')='.($_POST['scan_what'] != $GOTMLS_settings_array['scan_what']);
+	if (isset($_POST['custom_reg_exp']) && $_POST['custom_reg_exp'] != $GOTMLS_settings_array['custom_reg_exp']) {
+		$_POST['custom_reg_exp'] = stripslashes($_POST['custom_reg_exp']);
+		$GOTMLS_settings_array['custom_reg_exp'] = ($_POST['custom_reg_exp']);
+	}
 	if (isset($_POST['scan_depth']) && is_numeric($_POST['scan_depth']) && $_POST['scan_depth'] != $GOTMLS_settings_array['scan_depth'])
 		$GOTMLS_settings_array['scan_depth'] = $_POST['scan_depth'];
 	if (isset($_POST['check_htaccess']) && is_numeric($_POST['check_htaccess']) && $_POST['check_htaccess'] != $GOTMLS_settings_array['check_htaccess'])
@@ -449,19 +469,19 @@ $_SESSION['eli_debug_microtime']['GOTMLS_Settings_start'] = microtime(true);
 	foreach ($GOTMLS_scan_groups as $mg => $GOTMLS_scan_group)
 		$scan_opts .= '<div style="float: left; padding: 4px 14px;" id="scan_group_div_'.$mg.'"><input type="radio" name="scan_what" value="'.$mg.'"'.($GOTMLS_settings_array['scan_what']==$mg?' checked':'').' />'.$GOTMLS_scan_group.'</div>';
 	$scan_opts .= '<br style="clear: left;" /><p><b>Scan Depth:</b> (how far do you want to drill down from your starting directory)<br /><input type="text" value="'.$GOTMLS_settings_array['scan_depth'].'" name="scan_depth"> (-1 is infinite depth)</p><p><h3>What to look for:</h3><br /><div style="float: left; padding: 0; width: 100%;" id="check_timthumb_div">';
-	if (isset($GOTMLS_known_treats['timthumb']) && is_array($GOTMLS_known_treats['timthumb'])) {
+	if (isset($GOTMLS_known_threats['timthumb']) && is_array($GOTMLS_known_threats['timthumb'])) {
 		foreach ($noYesList as $nY => $noYes)
 			$scan_opts .= '<div style="float: right; padding: 14px;" id="check_timthumb_div_'.$nY.'"><input type="radio" name="check_timthumb" value="'.$nY.'"'.($GOTMLS_settings_array['check_timthumb']==$nY?' checked':'').' />'.$noYes.'</div>';
 	} else
 		$scan_opts .= '<div style="float: right; padding: 14px;" id="check_timthumb_div_NA">Registration of your Installation Key is required for this feature</div>';
 	$scan_opts .= 'Check for timthumb versions older than 2.0 (a common vulnerability used to plant malicious code) and upgrade them to version 2.8.10:</div><hr style="clear: left; color: #cccccc; background-color: #cccccc;" /><div style="float: left; padding: 0; width: 100%;" id="check_htaccess_div">';
-	if (isset($GOTMLS_known_treats['htaccess']) && is_array($GOTMLS_known_treats['htaccess'])) {
+	if (isset($GOTMLS_known_threats['htaccess']) && is_array($GOTMLS_known_threats['htaccess'])) {
 		foreach ($noYesList as $nY => $noYes)
 			$scan_opts .= '<div style="float: right; padding: 14px;" id="check_htaccess_div_'.$nY.'"><input type="radio" name="check_htaccess" value="'.$nY.'"'.($GOTMLS_settings_array['check_htaccess']==$nY?' checked':'').' />'.$noYes.'</div>';
 	} else
 		$scan_opts .= '<div style="float: right; padding: 14px;" id="check_htaccess_div_NA">Registration of your Installation Key is required for this feature</div>';
 	$scan_opts .= 'Check .htaccess files for over indented lines (a common way to try and hide malicious code):</div><hr style="clear: left; color: #cccccc; background-color: #cccccc;" /><div style="float: left; padding: 0; width: 100%;" id="check_known_div">';
-	if (isset($GOTMLS_known_treats['known']) && is_array($GOTMLS_known_treats['known'])) {
+	if (isset($GOTMLS_known_threats['known']) && is_array($GOTMLS_known_threats['known'])) {
 		foreach ($noYesList as $nY => $noYes)
 			$scan_opts .= '<div style="float: right; padding: 14px;" id="check_known_div_'.$nY.'"><input type="radio" name="check_known" value="'.$nY.'"'.($GOTMLS_settings_array['check_known']==$nY?' checked':'').' />'.$noYes.'</div>';
 	} else
@@ -470,13 +490,14 @@ $_SESSION['eli_debug_microtime']['GOTMLS_Settings_start'] = microtime(true);
 	foreach ($noYesList as $nY => $noYes)
 		$scan_opts .= '<div style="float: right; padding: 14px;" id="check_potential_div_'.$nY.'"><input type="radio" name="check_potential" value="'.$nY.'"'.($GOTMLS_settings_array['check_potential']==$nY?' checked':'').' />'.$noYes.'</div>';
 	$scan_opts .= 'Check for potential threats (usage of eval&#40;&#41; is not always a threat but it could be. This option helps you examine at each one to see if it is dangerous or malicious):</div><br style="clear: left;" /><h3>What to skip:</h3><p><b>Skip files with the following extentions:</b>(a comma separated list of file extentions to be excluded from the scan)<br /><input type="text" name="exclude_ext" value="'.implode($GOTMLS_settings_array['exclude_ext'], ',').'" style="width: 90%;" /></p><p><b>Skip directories with the following names:</b>(a comma separated list of folders to be excluded from the scan)<br /><input type="text" name="exclude_dir" value="'.implode($GOTMLS_settings_array['exclude_dir'], ',').'" style="width: 90%;" /></p>';
+//	$scan_opts .= '<p><b>Custom code search:</b>(a reg_exp string to be searched for, this is for very advanced users. Please do not use this without talking to Eli first. If used incorrectly you could break your entire site.)<br /><input type="text" name="custom_reg_exp" value="'.$GOTMLS_settings_array['custom_reg_exp'].'" style="width: 90%;" /></p>';//still testing this option
 	$menu_opts = '<div class="stuffbox shadowed-box">
 		<h3 class="hndle"><span>Menu Item Placement Options</span></h3>
 		<div class="inside"><form method="POST" name="GOTMLS_menu_Form">';
 	foreach ($GOTMLS_menu_groups as $mg => $GOTMLS_menu_group)
 		$menu_opts .= '<div style="padding: 4px;" id="menu_group_div_'.$mg.'"><input type="radio" name="GOTMLS_menu_group" value="'.$mg.'"'.($GOTMLS_settings_array['menu_group']==$mg?' checked':'').' onchange="document.GOTMLS_menu_Form.submit();" />'.$GOTMLS_menu_group.'</div>';
 	GOTMLS_display_header('Malware Scan', $menu_opts.'</form><br style="clear: left;" /></div></div>');
-//echo("<textarea>".print_r($GOTMLS_known_treats, true)."</textarea>");
+//echo("<textarea>".print_r($GOTMLS_known_threats, true)."</textarea>");
 	echo '<script>
 function update_status(title, percent, time, total_dirs, scanned_files, skipped_files, bad_backups) {
 	divx = document.getElementById("status_bar");
@@ -577,26 +598,24 @@ function GOTMLS_stripslashes(&$item, $key) {
 }
 $GOTMLS_auto_update = 0;
 function GOTMLS_init() {
-	global $GOTMLS_definitions_version, $GOTMLS_known_treats, $GOTMLS_auto_update, $GOTMLS_plugin_dir, $GOTMLS_local_images_path;
+	global $GOTMLS_definitions_version, $GOTMLS_known_threats, $GOTMLS_auto_update, $GOTMLS_plugin_dir, $GOTMLS_local_images_path;
 $_SESSION['eli_debug_microtime']['GOTMLS_init_start'] = microtime(true);
 	$GOTMLS_settings_array = get_option($GOTMLS_plugin_dir.'_settings_array');
 	if (isset($GOTMLS_settings_array['scan_level']) && is_numeric($GOTMLS_settings_array['scan_level']))
 		$scan_level = intval($GOTMLS_settings_array['scan_level']);
 	else
 		$scan_level = 3;
-	if (file_exists($GOTMLS_local_images_path.'definitions.php'))
-		include($GOTMLS_local_images_path.'definitions.php');
-	else
-		$_SESSION['eli_debug_microtime']['GOTMLS_missing_definitions_file'] = $GOTMLS_local_images_path.'definitions.php';	
 	if (isset($GOTMLS_settings_array['definitions_version']) && is_numeric($GOTMLS_settings_array['definitions_version']) && intval($GOTMLS_settings_array['definitions_version']) >= $GOTMLS_definitions_version) {
-		$GOTMLS_known_treats = get_option($GOTMLS_plugin_dir.'_known_treats_array');
-		$GOTMLS_definitions_version = $GOTMLS_settings_array['definitions_version'];
-	} else
-		$GOTMLS_known_treats = $known_treats;
-	if (isset($_POST['UPDATE_known_treats']) && is_array($_POST['UPDATE_known_treats']) && isset($_POST['definitions_version']) && is_numeric($_POST['definitions_version'])) {
-		$GOTMLS_known_treats = ($_POST['UPDATE_known_treats']);
-		if (isset($GOTMLS_known_treats['potential']['eval']) && substr($GOTMLS_known_treats['potential']['eval'], -5) == '\\\\)/i')
-			array_walk_recursive($GOTMLS_known_treats, 'GOTMLS_stripslashes');
+		$known_threats = get_option($GOTMLS_plugin_dir.'_known_threats_array');
+		if (is_array($known_threats) && isset($known_threats['potential'])) {
+			$GOTMLS_known_threats = $known_threats;
+			$GOTMLS_definitions_version = $GOTMLS_settings_array['definitions_version'];
+		}
+	}
+	if (isset($_POST['UPDATE_known_threats']) && is_array($_POST['UPDATE_known_threats']) && isset($_POST['definitions_version']) && is_numeric($_POST['definitions_version'])) {
+		$GOTMLS_known_threats = ($_POST['UPDATE_known_threats']);
+		if (isset($GOTMLS_known_threats['potential']['eval']) && substr($GOTMLS_known_threats['potential']['eval'], -5) == '\\\\)/i')
+			array_walk_recursive($GOTMLS_known_threats, 'GOTMLS_stripslashes');
 		$GOTMLS_definitions_version = intval($_POST['definitions_version']);
 	}
 	$GOTMLS_settings_array['definitions_version'] = $GOTMLS_definitions_version;
@@ -606,7 +625,7 @@ $_SESSION['eli_debug_microtime']['GOTMLS_init_start'] = microtime(true);
 		$GOTMLS_settings_array['scan_level'] = intval($scan_level);
 	else
 		$GOTMLS_settings_array['scan_level'] = 3;
-	update_option($GOTMLS_plugin_dir.'_known_treats_array', $GOTMLS_known_treats);
+	update_option($GOTMLS_plugin_dir.'_known_threats_array', $GOTMLS_known_threats);
 	update_option($GOTMLS_plugin_dir.'_settings_array', $GOTMLS_settings_array);
 $_SESSION['eli_debug_microtime']['GOTMLS_init_end'] = microtime(true);
 }
@@ -619,9 +638,10 @@ $GOTMLS_images_path = plugins_url('/images/', __FILE__);
 $GOTMLS_url_parts = explode('/', $GOTMLS_images_path.'/../.');
 $GOTMLS_local_images_path = dirname(__FILE__).'/images/';
 $GOTMLS_updated_images_path = 'wp-content/plugins/update/images/';
-$GOTMLS_Logo_IMG='GOTMLS-16x16.gif';
-$GOTMLS_definitions_version = 1203000000;
-$GOTMLS_known_treats = array(
+$GOTMLS_updated_definition_path = 'wp-content/plugins/update/definitions/';
+$GOTMLS_Logo_IMG = 'GOTMLS-16x16.gif';
+$GOTMLS_definitions_version = 1204000000;
+$GOTMLS_known_threats = array(
 	'potential' => array(
 		'preg_replace /e' => '/preg_replace[ \t]*\([^\)]+[\/\#\|]e[\'"].+\)/i',
 		'eval' => "/[^a-z\/'\"]eval\(.+\)/i"));

@@ -6,8 +6,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: security, plugin, scan, remove, repair, malware, virus, recover, hacked, server, scripts
-Version: 1.2.04.24
-Stable tag: 1.2.04.24
+Version: 1.2.05.04
+Stable tag: 1.2.05.04
 Requires at least: 2.6
 Tested up to: 3.3.2
 
@@ -17,7 +17,7 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 
 As is, this plugin only scans for the use of the eval function on your site. If you register on gotmls.net you will have access to new definitions of "known threats" and added features like automatic removal, plus patches for specific security threats and vulnerabilities. Updated definition files can be downloaded automatically within the admin once your Key is registered.
 
-Updated Apr-24th
+Updated May-4th
 
 NOTICE: This plugin make use of a "phone home" feature to check for updates. This is not unlike what WordPress already does with all your plugins. It is an essential part of any worthwhile security plugin and it is here to let you know when there are new plugin and definition update available. If you're allergic to "phone home" scripts then don't use this plugin (or WordPress at all for that matter).
 
@@ -52,8 +52,12 @@ If you register on gotmls.net you will have access to new definitions of "known 
 
 == Changelog ==
 
+= 1.2.05.04 =
+* Fixed "Invalid Threat level" Error on default values for pre-registration scans.
+* Changed auto-update path to update threat level array for all new definition updates.
+
 = 1.2.04.24 =
-* Fixed autoupdate script to update scan level even if there is no new definitions.
+* Fixed auto-update script to update scan level even if there is no new definitions.
 
 = 1.2.04.09 =
 * Added more info about registration to the readme file.
@@ -88,8 +92,11 @@ If you register on gotmls.net you will have access to new definitions of "known 
 
 == Upgrade Notice ==
 
+= 1.2.05.04 =
+Fixed Threat Level error and changed auto-update path to update threat level array for all new definition updates.
+
 = 1.2.04.24 =
-Fixed autoupdate script to update scan level even if there is no new definitions.
+Fixed auto-update script to update scan level even if there is no new definitions.
 
 = 1.2.04.09 =
 Added more info about registration to the readme file, Updated timthumb replacement patch to version 2.8.10, and fixed menu option placement.
