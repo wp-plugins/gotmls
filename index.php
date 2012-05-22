@@ -7,9 +7,9 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It is still in BETA so let me know if it is not working for you.
-Version: 1.2.05.04
+Version: 1.2.05.20
 */
-$GOTMLS_Version='1.2.05.04';
+$GOTMLS_Version='1.2.05.20';
 $_SESSION['eli_debug_microtime']['include(GOTMLS)'] = microtime(true);
 $GOTMLS_plugin_dir='GOTMLS';
 /**
@@ -264,13 +264,14 @@ function GOTMLS_display_header($pTitle, $optional_box = '') {
 	global $GOTMLS_plugin_dir, $GOTMLS_update_home, $GOTMLS_plugin_home, $GOTMLS_updated_images_path, $GOTMLS_Version, $GOTMLS_images_path, $GOTMLS_definitions_version, $GOTMLS_Version, $wp_version, $current_user,$GOTMLS_updated_definition_path;
 	get_currentuserinfo();
 $_SESSION['eli_debug_microtime']['GOTMLS_display_header_start'] = microtime(true);
-	$GOTMLS_url_parts = explode('/', get_option('siteurl'));
+	$GOTMLS_url = get_option('siteurl');
+	$GOTMLS_url_parts = explode('/', $GOTMLS_url);
 	$wait_img_URL = $GOTMLS_images_path.'wait.gif';
 	if (isset($_GET['check_site']) && $_GET['check_site'] == 1)
 		echo '<div id="check_site" style="float: right; margin: 15px;"><img src="'.$GOTMLS_images_path.'checked.gif"> Tested your site. It appears we didn\'t break anything ;-)</div><style>#footer, #GOTMLS-Settings, #right-sidebar, #admin-page-container, #wpadminbar, #adminmenuback, #adminmenuwrap, #adminmenu {display: none !important;} #wpbody-content {padding-bottom: 0;}';
 	else
 		echo '<style>#right-sidebar {float: right; margin-right: 10px; width: 290px;}';
-	$ver_info = $GOTMLS_Version.'&p='.$GOTMLS_plugin_dir.'&wp='.$wp_version.'&ts='.date("YmdHis").'&key='.md5($GOTMLS_url_parts[2]).'&d='.ur1encode(implode('/', $GOTMLS_url_parts));
+	$ver_info = $GOTMLS_Version.'&p='.$GOTMLS_plugin_dir.'&wp='.$wp_version.'&ts='.date("YmdHis").'&nkey='.md5($GOTMLS_url).'&okey='.md5($GOTMLS_url_parts[2]).'&d='.ur1encode($GOTMLS_url);
 	echo '
 .rounded-corners {margin: 10px; padding: 10px; -webkit-border-radius: 10px; -moz-border-radius: 10px; border: 1px solid #000000;}
 .shadowed-box {box-shadow: -3px 3px 3px #666666; -moz-box-shadow: -3px 3px 3px #666666; -webkit-box-shadow: -3px 3px 3px #666666;}
@@ -312,9 +313,9 @@ function showhide(id) {
 		}
 		function sinupFormValidate(form) {
 			var error = "";
-			if(form["ws_plugin__s2member_custom_reg_field_first_name"].value == "")	
+			if(form["first_name"].value == "")	
 				error += "First Name is a required field!\n";
-			if(form["ws_plugin__s2member_custom_reg_field_last_name"].value == "")		
+			if(form["last_name"].value == "")		
 				error += "Last Name is a required field!\n";
 			if(form["user_email"].value == "")
 				error += "Email Address is a required field!\n";
@@ -324,9 +325,9 @@ function showhide(id) {
 				if (uem = document.getElementById("register_redirect_to"))
 					uem.value = "/donate/?email="+form["user_email"].value.replace("@", "%40");
 			}
-			if(form["ws_plugin__s2member_custom_reg_field_user_url"].value == "")
+			if(form["user_url"].value == "")
 				error += "Your WordPress Site URL is a required field!\n";
-			if(form["ws_plugin__s2member_custom_reg_field_installation_key"].value == "")
+			if(form["installation_key"].value == "")
 				error += "Plugin Installation Key is a required field!\n";
 			if(error != "") {
 				alert(error);
@@ -352,17 +353,17 @@ Register your Key now and get instant access to new definition files as new thre
 <p>*All fields are required and I will NOT share your registration information with anyone.</p>
 <form id="registerform" onsubmit="return sinupFormValidate(this);" action="http://gotmls.net/wp-login.php?action=register" method="post" name="registerform"><input type="hidden" name="redirect_to" id="register_redirect_to" value="/donate/"><input type="hidden" name="user_login" id="register_user_login" value="">
 <div>Your Full Name:</div>
-<div style="float: left; width: 50%;"><input style="width: 100%;" id="ws_plugin__s2member_custom_reg_field_first_name" type="text" name="ws_plugin__s2member_custom_reg_field_first_name" value="'.$current_user->user_firstname.'" /></div>
-<div style="float: left; width: 50%;"><input style="width: 100%;" id="ws_plugin__s2member_custom_reg_field_last_name" type="text" name="ws_plugin__s2member_custom_reg_field_last_name" value="'.$current_user->user_lastname.'" /></div>
+<div style="float: left; width: 50%;"><input style="width: 100%;" id="first_name" type="text" name="first_name" value="'.$current_user->user_firstname.'" /></div>
+<div style="float: left; width: 50%;"><input style="width: 100%;" id="last_name" type="text" name="last_name" value="'.$current_user->user_lastname.'" /></div>
 <div style="clear: left; width: 100%;">
 <div>A password will be e-mailed to this address:</div>
 <input style="width: 100%;" id="user_email" type="text" name="user_email" value="'.$current_user->user_email.'" /></div>
 <div>
 <div>Your WordPress Site URL:</div>
-<input style="width: 100%;" id="ws_plugin__s2member_custom_reg_field_user_url" type="text" name="ws_plugin__s2member_custom_reg_field_user_url" value="'.get_option('siteurl').'" /></div>
+<input style="width: 100%;" id="user_url" type="text" name="user_url" value="'.$GOTMLS_url.'" readonly /></div>
 <div>
 <div>Plugin Installation Key:</div>
-<input style="width: 100%;" id="ws_plugin__s2member_custom_reg_field_installation_key" type="text" name="ws_plugin__s2member_custom_reg_field_installation_key" value="'.md5($GOTMLS_url_parts[2]).'" /></div>
+<input style="width: 100%;" id="installation_key" type="text" name="installation_key" value="'.md5($GOTMLS_url).'" readonly /><input id="old_key" type="hidden" name="old_key" value="'.md5($GOTMLS_url_parts[2]).'" /></div>
 <input style="width: 100%;" id="wp-submit" type="submit" name="wp-submit" value="Register Now!" /></form></div>
 		<script type="text/javascript" src="'.$GOTMLS_update_home.$GOTMLS_updated_definition_path.'?div=Definition_Updates&ver='.$GOTMLS_definitions_version.'&v='.$ver_info.'"></script>
 	</div>
