@@ -5,11 +5,11 @@ Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
-Tags: security, plugin, scan, remove, repair, malware, virus, recover, hacked, server, scripts, infetion, timthumb, exploit, vulnerability
-Version: 1.2.05.20
-Stable tag: 1.2.05.20
-Requires at least: 2.6
-Tested up to: 3.3.2
+Tags: security, plugin, scan, remove, repair, malware, virus, recover, hacked, server, malicious, scripts, infetion, timthumb, exploit, vulnerability
+Version: 1.2.07.20
+Stable tag: 1.2.07.20
+Requires at least: 2.8
+Tested up to: 3.4.1
 
 This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and it helps you remove them.
 
@@ -17,7 +17,7 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 
 Register this plugin and you will have access to new definitions of "known threats" and added features like automatic removal, plus patches for specific security threats and vulnerabilities. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for the use of the eval function on your site (a potential threat, commonly unharmful).
 
-Updated May-20th
+Updated July-20th
 
 NOTICE: This plugin make use of a "phone home" feature to check for updates. This is not unlike what WordPress already does with all your plugins. It is an essential part of any worthwhile security plugin and it is here to let you know when there are new plugin and definition update available. If you're allergic to "phone home" scripts then don't use this plugin (or WordPress at all for that matter).
 
@@ -51,6 +51,9 @@ If you register on gotmls.net you will have access to new definitions of "known 
 2. An example scan that found some threats.
 
 == Changelog ==
+
+= 1.2.07.20 =
+* Fixed XSS vulnerability.
 
 = 1.2.05.20 =
 * Changed registration to allow for multiple sites/keys to be registered under one user/email.
@@ -94,6 +97,9 @@ If you register on gotmls.net you will have access to new definitions of "known 
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.2.07.20 =
+Fixed XSS vulnerability.
 
 = 1.2.05.20 =
 Changed registration to allow for multiple sites/keys to be registered under one user/email.

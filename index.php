@@ -7,9 +7,9 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It is still in BETA so let me know if it is not working for you.
-Version: 1.2.05.20
+Version: 1.2.07.20
 */
-$GOTMLS_Version='1.2.05.20';
+$GOTMLS_Version='1.2.07.20';
 $_SESSION['eli_debug_microtime']['include(GOTMLS)'] = microtime(true);
 $GOTMLS_plugin_dir='GOTMLS';
 /**
@@ -153,9 +153,9 @@ function GOTMLS_scanfile($file) {
  //			else print_r($_POST);
  			if ($className == 'potential')
 				$threats_found_li = '<li>'.str_replace('GOTMLS_plugin', 'GOTMLS_plugin '.$className, $threat_link).'</li>';
+ 			elseif ($className == 'custom_reg_exp')
+				$threats_found_li = '<li>'.str_replace('GOTMLS_plugin', 'GOTMLS_plugin '.$className, $threat_link).'</li>';
  			else {
- 				if ($className == 'custom_reg_exp')
- 					$className == 'potential';
 				$threats_found_li = '<li><input type="checkbox" value="1" name="fix_'.str_replace('.', '_', $file).'" '.($className != 'potential'?'checked="'.$className.'" />':'/>').str_replace('GOTMLS_plugin', 'GOTMLS_plugin '.$className, $threat_link).'</li>';
 			}
 //			if (isset($_POST[$fix_file]) && $_POST[$fix_file] > 0)
@@ -287,6 +287,11 @@ $_SESSION['eli_debug_microtime']['GOTMLS_display_header_start'] = microtime(true
 .pp_right input {width: 130px; height: 18px;}
 .inside p {margin: 10px;}
 #main-section {margin-right: 310px;}
+#main-page-title {
+	background: url("http://1.gravatar.com/avatar/5feb789dd3a292d563fea3b885f786d6?s=64&r=G") no-repeat scroll 0 0 transparent;
+	line-height: 22px;
+    margin: 10px 0 0;
+    padding: 22px 84px;}
 </style>
 <script>
 function showhide(id) {
@@ -297,7 +302,7 @@ function showhide(id) {
 		divx.style.display = "none";
 }
 </script>
-<h1>'.$pTitle.'</h1>
+<h1 id="main-page-title">'.$pTitle.'</h1>
 <div id="right-sidebar" class="metabox-holder">
 	<div id="pluginupdates" class="shadowed-box stuffbox"><h3 class="hndle"><span>Plugin Updates</span></h3>
 		<div id="findUpdates" class="inside"><center>Searching for updates ...<br /><img src="'.$wait_img_URL.'" alt="Wait..." /><br /><input type="button" value="Cancel" onclick="document.getElementById(\'findUpdates\').innerHTML = \'Could not find server!\';" /></center></div>
@@ -308,7 +313,10 @@ function showhide(id) {
 		function check_for_updates(chk) {
 			if (auto_img = document.getElementById("autoUpdateDownload")) {
 				auto_img.style.display="";
-				//auto_img.src="'.$GOTMLS_images_path.'index.php?ver='.$GOTMLS_definitions_version.'&v='.$ver_info.'";
+				if (auto_img.src.replace(/^.+\?/,"")=="0") {
+					alert("Please make a donation to use this feature!");
+					window.open( "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE", "_blank", "fullscreen=yes" );
+				}
 			}
 		}
 		function sinupFormValidate(form) {
@@ -337,11 +345,12 @@ function showhide(id) {
 		}
 		function downloadUpdates() {
 			foundUpdates = document.getElementById("autoUpdateForm");
+			check_for_updates(foundUpdates);
 			if (foundUpdates)
 				foundUpdates.style.display = "";
 		}
 		</script>
-	<form id="updateform" method="post" name="updateform" action="'.$_SERVER['REQUEST_URI'].'">
+	<form id="updateform" method="post" name="updateform" action="'.str_replace('&amp;','&', htmlspecialchars( $_SERVER['REQUEST_URI'] , ENT_QUOTES ) ).'">
 		<img style="display: none; float: right; margin-right: 14px;" src="'.$GOTMLS_images_path.'checked.gif" alt="definitions file updated" id="autoUpdateDownload" onclick="downloadUpdates();">
 		<div id="Definition_Updates" class="inside"><center>Searching for updates ...<br /><img src="'.$wait_img_URL.'" alt="Wait..." /><br /><input type="button" value="Cancel" onclick="document.getElementById(\'Definition_Updates\').innerHTML = \'Could not find server!\';" /></center></div>
 		<div id="autoUpdateForm" style="display: none;" class="inside">
@@ -490,14 +499,14 @@ $_SESSION['eli_debug_microtime']['GOTMLS_Settings_start'] = microtime(true);
 	$scan_opts .= 'Check for known threats (malicious scripts that use eval&#40;&#41; and similar techniques to infect your server):</div><br style="clear: left;" /><hr style="clear: left; color: #cccccc; background-color: #cccccc;" /><div style="float: left; padding: 0; width: 100%;" id="check_potential_div">';
 	foreach ($noYesList as $nY => $noYes)
 		$scan_opts .= '<div style="float: right; padding: 14px;" id="check_potential_div_'.$nY.'"><input type="radio" name="check_potential" value="'.$nY.'"'.($GOTMLS_settings_array['check_potential']==$nY?' checked':'').' />'.$noYes.'</div>';
-	$scan_opts .= 'Check for potential threats (usage of eval&#40;&#41; is not always a threat but it could be. This option helps you examine at each one to see if it is dangerous or malicious):</div><br style="clear: left;" /><h3>What to skip:</h3><p><b>Skip files with the following extentions:</b>(a comma separated list of file extentions to be excluded from the scan)<br /><input type="text" name="exclude_ext" value="'.implode($GOTMLS_settings_array['exclude_ext'], ',').'" style="width: 90%;" /></p><p><b>Skip directories with the following names:</b>(a comma separated list of folders to be excluded from the scan)<br /><input type="text" name="exclude_dir" value="'.implode($GOTMLS_settings_array['exclude_dir'], ',').'" style="width: 90%;" /></p>';
-//	$scan_opts .= '<p><b>Custom code search:</b>(a reg_exp string to be searched for, this is for very advanced users. Please do not use this without talking to Eli first. If used incorrectly you could break your entire site.)<br /><input type="text" name="custom_reg_exp" value="'.$GOTMLS_settings_array['custom_reg_exp'].'" style="width: 90%;" /></p>';//still testing this option
+	$scan_opts .= 'Check for potential threats (This option just looks for the usage of eval&#40;&#41;. It is usually not a threat but it could be. This helps you examine each file to see for yourself if you think it is dangerous or malicious. If you have reason to believe there is a threat hear you should have it examined by an expert.):</div><br style="clear: left;" /><h3>What to skip:</h3><p><b>Skip files with the following extentions:</b>(a comma separated list of file extentions to be excluded from the scan)<br /><input type="text" name="exclude_ext" value="'.implode($GOTMLS_settings_array['exclude_ext'], ',').'" style="width: 90%;" /></p><p><b>Skip directories with the following names:</b>(a comma separated list of folders to be excluded from the scan)<br /><input type="text" name="exclude_dir" value="'.implode($GOTMLS_settings_array['exclude_dir'], ',').'" style="width: 90%;" /></p>';
+	if (isset($_GET['eli'])) $scan_opts .= '<p><b>Custom code search:</b>(a reg_exp string to be searched for, this is for very advanced users. Please do not use this without talking to Eli first. If used incorrectly you could break your entire site.)<br /><input type="text" name="custom_reg_exp" value="'.$GOTMLS_settings_array['custom_reg_exp'].'" style="width: 90%;" /></p>';//still testing this option
 	$menu_opts = '<div class="stuffbox shadowed-box">
 		<h3 class="hndle"><span>Menu Item Placement Options</span></h3>
 		<div class="inside"><form method="POST" name="GOTMLS_menu_Form">';
 	foreach ($GOTMLS_menu_groups as $mg => $GOTMLS_menu_group)
 		$menu_opts .= '<div style="padding: 4px;" id="menu_group_div_'.$mg.'"><input type="radio" name="GOTMLS_menu_group" value="'.$mg.'"'.($GOTMLS_settings_array['menu_group']==$mg?' checked':'').' onchange="document.GOTMLS_menu_Form.submit();" />'.$GOTMLS_menu_group.'</div>';
-	GOTMLS_display_header('Malware Scan', $menu_opts.'</form><br style="clear: left;" /></div></div>');
+	GOTMLS_display_header('Anti-Malware by ELI at GOTMLS.NET', $menu_opts.'</form><br style="clear: left;" /></div></div>');
 //echo("<textarea>".print_r($GOTMLS_known_threats, true)."</textarea>");
 	echo '<script>
 function update_status(title, percent, time, total_dirs, scanned_files, skipped_files, bad_backups) {
@@ -541,7 +550,7 @@ function select_text_range(ta_id, start, end) {
 			if (substr($name, 0, 4) != 'fix_')
 				echo '<input type="hidden" name="'.$name.'" value="'.$value.'">';
 		echo '<p align="center">
-		<center><div class="rounded-corners" align="center" style="margin: 10px; vertical-align: middle; background-color: #cccccc; z-order: 3; border: 2px double #000000;"><b><a name="found_top">Scan Status</a></b><br><div id="status_bar"></div></div></center></p><p id="fix_button" style="display: none; text-align: right;"><input type="submit" value="Automatically Repair SELECTED files Now" class="button-primary" /></p>
+		<center><div class="rounded-corners" align="center" style="margin: 10px; vertical-align: middle; background-color: #cccccc; z-order: 3; border: 2px double #000000;"><b><a name="found_top">Scan Status</a></b><br><div id="status_bar"></div></div></center></p><p id="fix_button" style="display: none; text-align: right;"><input type="submit" value="Automatically Repair SELECTED files Now" class="button-primary" onclick="check_for_updates(this);" /></p>
 		<h3><span>Scan Details:</span></h3><div id="scan_details" class="inside">';
 		if ($_POST['scan_what'] > -1) {
 			$dir = implode('/', array_slice($dirs, 0, -1 * (2 + $_POST['scan_what'])));
@@ -559,7 +568,7 @@ function select_text_range(ta_id, start, end) {
 				if ($threats_type != 'potential')
 					$known_threat_count += count($threats_array);
 			if ($known_threat_count > 0)
-				echo '<p style="text-align: right;"><input type="submit" value="Automatically Repair SELECTED files Now" class="button-primary" /></p>';
+				echo '<p style="text-align: right;"><input type="submit" value="Automatically Repair SELECTED files Now" class="button-primary" onclick="check_for_updates(this);" /></p>';
 			else
 				$show_fix_b = '';
 			echo '<ul>'.return_threats(2)."</ul>\n<script>update_status(' Completed!</div><div style=\"width: 100%;\">".$GOTMLS_ERRORS."<ul style=\"float: right; text-align: left;\">".return_threats(1)."</ul>', 100, ".floor(microtime(true)-$GOTMLS_FIRST_scandir_start).", ".($total_dirs-$skipped_dirs).", $scanned_files, $skipped_files, $bad_backups);".$show_fix_b."</script>";
