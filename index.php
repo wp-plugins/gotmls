@@ -6,10 +6,10 @@ Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
-Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It is still in BETA so let me know if it is not working for you.
-Version: 1.2.07.20
+Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
+Version: 1.2.07.28
 */
-$GOTMLS_Version='1.2.07.20';
+$GOTMLS_Version='1.2.07.28';
 $_SESSION['eli_debug_microtime']['include(GOTMLS)'] = microtime(true);
 $GOTMLS_plugin_dir='GOTMLS';
 /**
@@ -227,7 +227,7 @@ function GOTMLS_scandir($dir, $current_depth = 0) {
 	global $bad_backups, $GOTMLS_ERRORS, $potential_threats, $threats_found, $GOTMLS_images_path, $skip_dirs, $skip_files, $total_files, $skipped_files, $scanned_files, $skipped_dirs, $total_dirs, $threats_fixed, $GOTMLS_FIRST_scandir_start, $file_at_depth, $current_percent, $current_files;
 	$dirs = GOTMLS_explode_dir($dir, '.');
 	set_time_limit(30);
-	if ((!in_array($dirs[count($dirs)-1], $skip_dirs)) && is_dir($dir)) {
+	if (($current_depth==0 || !in_array($dirs[count($dirs)-1], $skip_dirs)) && is_dir($dir)) {
 		if (($files = GOTMLS_getfiles($dir)) !== false) {
 			$file_at_depth[$current_depth] = count($files);
 			$current_files[$current_depth] = 0;
@@ -315,7 +315,7 @@ function showhide(id) {
 				auto_img.style.display="";
 				if (auto_img.src.replace(/^.+\?/,"")=="0") {
 					alert("Please make a donation to use this feature!");
-					window.open( "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE", "_blank", "fullscreen=yes" );
+					document.ppdform.submit();
 				}
 			}
 		}
@@ -378,10 +378,20 @@ Register your Key now and get instant access to new definition files as new thre
 	</div>
 	<div id="pluginlinks" class="shadowed-box stuffbox"><h3 class="hndle"><span>Plugin Links</span></h3>
 		<div class="inside">
-		<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+			<form name="ppdform" id="ppdform" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank"> 
+			<input type="hidden" name="cmd" value="_donations"> 
+			<input type="hidden" name="business" value="donations@gotmls.net"> 
+			<input type="hidden" name="no_shipping" value="1"> 
+			<input type="hidden" name="no_note" value="1"> 
+			<input type="hidden" name="currency_code" value="USD"> 
+			<input type="hidden" name="tax" value="0"> 
+			<input type="hidden" name="lc" value="US"> 
+			<input type="hidden" name="bn" value="PP-DonationsBF"> 
+			<input type="hidden" name="amount" value="0.00"> 
+			<input type="hidden" name="item_name" value="Donation to Eli\'s Anti-Malware Plugin"> 
+			<input type="hidden" name="item_number" value="GOTMLS-key-'.md5($GOTMLS_url).'"> 
+			<input type="hidden" name="notify_url" value="http://gotmls.net/?ipn"> 
 			<div style="height: 28px;">
-				<input type="hidden" name="cmd" value="_s-xclick">
-				<input type="hidden" name="hosted_button_id" value="QZHD8QHZ2E7PE">
 				<div class="pp_donate pp_left"><input type="image" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" border="0" name="submit" alt="Make a Donation with PayPal"></div>
 				<div class="pp_donate pp_right"><input type="image" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" border="0" name="submitc" alt="Make a Donation with your credit card at PayPal"></div>
 			</div>
@@ -400,7 +410,7 @@ Register your Key now and get instant access to new definition files as new thre
 					</ul></li>
 				</ul>
 			</div>
-		</form>
+			</form>
 		</div>
 	</div>
 	'.$optional_box.'
@@ -476,9 +486,19 @@ $_SESSION['eli_debug_microtime']['GOTMLS_Settings_start'] = microtime(true);
 	if (isset($_POST['check_potential']) && is_numeric($_POST['check_potential']) && $_POST['check_potential'] != $GOTMLS_settings_array['check_potential'])
 		$GOTMLS_settings_array['check_potential'] = $_POST['check_potential'];
 	$scan_opts = '<b>What to scan:</b>';
-	foreach ($GOTMLS_scan_groups as $mg => $GOTMLS_scan_group)
-		$scan_opts .= '<div style="float: left; padding: 4px 14px;" id="scan_group_div_'.$mg.'"><input type="radio" name="scan_what" value="'.$mg.'"'.($GOTMLS_settings_array['scan_what']==$mg?' checked':'').' />'.$GOTMLS_scan_group.'</div>';
-	$scan_opts .= '<br style="clear: left;" /><p><b>Scan Depth:</b> (how far do you want to drill down from your starting directory)<br /><input type="text" value="'.$GOTMLS_settings_array['scan_depth'].'" name="scan_depth"> (-1 is infinite depth)</p><p><h3>What to look for:</h3><br /><div style="float: left; padding: 0; width: 100%;" id="check_timthumb_div">';
+	$scan_optjs = "<script>\nfunction showOnly(what) {\n";
+	foreach ($GOTMLS_scan_groups as $mg => $GOTMLS_scan_group) {
+		$scan_optjs .= "document.getElementById('only$mg').style.display = 'none';\n";
+		$scan_opts .= '<div style="position: relative; float: left; padding: 4px 14px;" id="scan_group_div_'.$mg.'"><input type="radio" name="scan_what" id="not-only'.$mg.'" value="'.$mg.'"'.($GOTMLS_settings_array['scan_what']==$mg?' checked':'').' /><a style="text-decoration: none;" href="#scan_what" onclick="showOnly(\''.$mg.'\');document.getElementById(\'not-only'.$mg.'\').checked=true;">'.$GOTMLS_scan_group.'</a><br /><div class="rounded-corners" style="position: absolute; display: none; background-color: #CCCCFF;" id="only'.$mg.'"><a class="rounded-corners" style="float: right; padding: 0 4px; margin: 0 0 0 30px; text-decoration: none; color: #CC0000; background-color: #FFCCCC; border: solid #FF0000 1px;" href="#scan_what" onclick="showhide(\'only'.$mg.'\');">X</a><b>Only&nbsp;Scan&nbsp;These&nbsp;Folders:</b>';
+		$dir = implode('/', array_slice($dirs, 0, -1 * (2 + $mg)));
+		if (($files = GOTMLS_getfiles($dir)) !== false)
+			foreach ($files as $file)
+				if (is_dir($dir.'/'.$file) && !($file=='.' || $file=='..'))
+					$scan_opts .= '<br /><input type="checkbox" name="scan_only[]" value="'.$file.'" />'.$file;
+		$scan_opts .= '</div></div>';
+	}
+	$scan_optjs .= "document.getElementById('only'+what).style.display = 'block';\n}\n</script>";
+	$scan_opts .= $scan_optjs.'<br style="clear: left;" /><p><b>Scan Depth:</b> (how far do you want to drill down from your starting directory)<br /><input type="text" value="'.$GOTMLS_settings_array['scan_depth'].'" name="scan_depth"> (-1 is infinite depth)</p><p><h3>What to look for:</h3><br /><div style="float: left; padding: 0; width: 100%;" id="check_timthumb_div">';
 	if (isset($GOTMLS_known_threats['timthumb']) && is_array($GOTMLS_known_threats['timthumb'])) {
 		foreach ($noYesList as $nY => $noYes)
 			$scan_opts .= '<div style="float: right; padding: 14px;" id="check_timthumb_div_'.$nY.'"><input type="radio" name="check_timthumb" value="'.$nY.'"'.($GOTMLS_settings_array['check_timthumb']==$nY?' checked':'').' />'.$noYes.'</div>';
@@ -546,9 +566,15 @@ function select_text_range(ta_id, start, end) {
 <div id="GOTMLS-Settings" class="wrap meta metabox-holder GOTMLS">';
 	if (isset($_POST['scan_what']) && is_numeric($_POST['scan_what'])) {
 		echo '<div class="stuffbox shadowed-box"><h3 class="hndle"><span>Scan Results</span></h3><div class="inside"><form method="POST" name="GOTMLS_Form_clean">';
-		foreach ($_POST as $name => $value)
-			if (substr($name, 0, 4) != 'fix_')
-				echo '<input type="hidden" name="'.$name.'" value="'.$value.'">';
+		foreach ($_POST as $name => $value) {
+			if (substr($name, 0, 4) != 'fix_') {
+				if (is_array($value)) {
+					foreach ($value as $val)
+						echo '<input type="hidden" name="'.$name.'[]" value="'.$val.'">';
+				} else
+					echo '<input type="hidden" name="'.$name.'" value="'.$value.'">';
+			}
+		}
 		echo '<p align="center">
 		<center><div class="rounded-corners" align="center" style="margin: 10px; vertical-align: middle; background-color: #cccccc; z-order: 3; border: 2px double #000000;"><b><a name="found_top">Scan Status</a></b><br><div id="status_bar"></div></div></center></p><p id="fix_button" style="display: none; text-align: right;"><input type="submit" value="Automatically Repair SELECTED files Now" class="button-primary" onclick="check_for_updates(this);" /></p>
 		<h3><span>Scan Details:</span></h3><div id="scan_details" class="inside">';
@@ -556,9 +582,14 @@ function select_text_range(ta_id, start, end) {
 			$dir = implode('/', array_slice($dirs, 0, -1 * (2 + $_POST['scan_what'])));
 			echo '<ul name="found_top_known-2">';
 			$GOTMLS_FIRST_scandir_start = microtime(true);
-			if (is_dir($dir))
-				GOTMLS_scandir($dir);
-			else
+			if (is_dir($dir)) {
+				if (isset($_POST['scan_only']) && is_array($_POST['scan_only'])) {
+					foreach ($_POST['scan_only'] as $only_dir)
+						if (is_dir($dir.'/'.$only_dir))
+							GOTMLS_scandir($dir.'/'.$only_dir);
+				} else
+					GOTMLS_scandir($dir);
+			} else
 				echo "<li>Failed: $dir is not a directory!</li>";
 			ksort($threats_found);
 			echo '</ul>';
