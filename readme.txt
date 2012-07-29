@@ -6,8 +6,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: security, plugin, scan, remove, repair, malware, virus, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability
-Version: 1.2.07.28
-Stable tag: 1.2.07.28
+Version: 1.2.07.29
+Stable tag: 1.2.07.29
 Requires at least: 2.8
 Tested up to: 3.4.1
 
@@ -51,6 +51,9 @@ If you register on gotmls.net you will have access to new definitions of "known 
 2. An example scan that found some threats.
 
 == Changelog ==
+
+= 1.2.07.29 =
+* Fixed return URL on Donate form.
 
 = 1.2.07.28 =
 * Added options to limit scan to specific folders.
@@ -100,6 +103,9 @@ If you register on gotmls.net you will have access to new definitions of "known 
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.2.07.29 =
+Fixed return URL on Donate form.
 
 = 1.2.07.28 =
 Added options to limit scan to specific folders.

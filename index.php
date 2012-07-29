@@ -7,9 +7,9 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 1.2.07.28
+Version: 1.2.07.29
 */
-$GOTMLS_Version='1.2.07.28';
+$GOTMLS_Version='1.2.07.29';
 $_SESSION['eli_debug_microtime']['include(GOTMLS)'] = microtime(true);
 $GOTMLS_plugin_dir='GOTMLS';
 /**
@@ -390,7 +390,9 @@ Register your Key now and get instant access to new definition files as new thre
 			<input type="hidden" name="amount" value="0.00"> 
 			<input type="hidden" name="item_name" value="Donation to Eli\'s Anti-Malware Plugin"> 
 			<input type="hidden" name="item_number" value="GOTMLS-key-'.md5($GOTMLS_url).'"> 
-			<input type="hidden" name="notify_url" value="http://gotmls.net/?ipn"> 
+			<input type="hidden" name="notify_url" value="http://gotmls.net/?ipn">
+			<input type="hidden" name="return" value="http://gotmls.net/donate/?paid='.md5($GOTMLS_url).'">
+			<input type="hidden" name="cancel_return" value="http://gotmls.net/donate/?cancel='.md5($GOTMLS_url).'">
 			<div style="height: 28px;">
 				<div class="pp_donate pp_left"><input type="image" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" border="0" name="submit" alt="Make a Donation with PayPal"></div>
 				<div class="pp_donate pp_right"><input type="image" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" border="0" name="submitc" alt="Make a Donation with your credit card at PayPal"></div>
