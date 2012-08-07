@@ -1,12 +1,12 @@
-=== Get Off Malicious Scripts (Anti-Malware) ===
-Plugin Name: Get Off Malicious Scripts (Anti-Malware)
+=== Anti-Malware by ELI (Get Off Malicious Scripts) ===
+Plugin Name: Anti-Malware by ELI (Get Off Malicious Scripts)
 Plugin URI: http://gotmls.net/
 Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: security, plugin, scan, remove, repair, malware, virus, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability
-Version: 1.2.07.29
+Version: 1.2.07.30
 Stable tag: 1.2.07.29
 Requires at least: 2.8
 Tested up to: 3.4.1
@@ -15,9 +15,9 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 
 == Description ==
 
-Register this plugin and you will have access to new definitions of "known threats" and added features like automatic removal, plus patches for specific security threats and vulnerabilities. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for the use of the eval function on your site (a potential threat, usually not harmful).
+Register this plugin to get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security threats and vulnerabilities. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for the use of the eval function (a potential threat but usually harmless).
 
-Updated July-29th
+Updated Aug-1st
 
 NOTICE: This plugin make use of a "phone home" feature to check for updates. This is not unlike what WordPress already does with all your plugins. It is an essential part of any worthwhile security plugin and it is here to let you know when there are new plugin and definition update available. If you're allergic to "phone home" scripts then don't use this plugin (or WordPress at all for that matter).
 
@@ -51,6 +51,10 @@ If you register on gotmls.net you will have access to new definitions of "known 
 2. An example scan that found some threats.
 
 == Changelog ==
+
+= 1.2.07.30 =
+* BETA Release, Only downlod this version if your version does not finish the scan.
+* Whole new scan engine (not for everyone), takes longer but finishes more often.
 
 = 1.2.07.29 =
 * Fixed return URL on Donate form.
@@ -103,6 +107,9 @@ If you register on gotmls.net you will have access to new definitions of "known 
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.2.07.30 =
+BETA Release, Only downlod this version if your version does not finish the scan.
 
 = 1.2.07.29 =
 Fixed return URL on Donate form.
