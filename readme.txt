@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, remove, repair, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability
-Version: 1.2.09.14
-Stable tag: 1.2.09.14
+Version: 1.2.09.15
+Stable tag: 1.2.09.15
 Requires at least: 2.8
 Tested up to: 3.4.2
 
@@ -50,6 +50,9 @@ If you register on gotmls.net you will have access to new definitions of "known 
 2. An example scan that found some threats.
 
 == Changelog ==
+
+= 1.2.09.15 =
+* Fixed major bug in unregistered scan definition interpretation that causes many false positives.
 
 = 1.2.09.14 =
 * Moved the File Viewer and Automatic Fix process into an iFrame to decrease scan time and memory usage.
@@ -115,6 +118,9 @@ If you register on gotmls.net you will have access to new definitions of "known 
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.2.09.15 =
+Fixed major bug in unregistered scan definition interpretation that causes many false positives.
 
 = 1.2.09.14 =
 Moved the File Viewer and Automatic Fix into an iFrame for efficiency and enhanced for better success with read-only files.

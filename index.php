@@ -7,9 +7,9 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 1.2.09.14
+Version: 1.2.09.15
 */
-$GOTMLS_Version='1.2.09.14';
+$GOTMLS_Version='1.2.09.15';
 $_SESSION['eli_debug_microtime']['GOTMLS'] = array();
 $_SESSION['eli_debug_microtime']['GOTMLS']['START_microtime'] = microtime(true);
 $GOTMLS_plugin_dir='GOTMLS';
@@ -86,7 +86,7 @@ function GOTMLS_check_threat($threat_level) {
 				$found = $matches[0];
 			}
 		}
-	} else {
+	} elseif (isset($_GET['eli'])) {//don't use this without registration
 		if (preg_match_all('/'.$threat_level.'/i', $new_contents, $matches)) {
 			foreach ($matches[0] as $find)
 				$new_contents = str_replace($find, '', $new_contents);
