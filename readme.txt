@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, remove, repair, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability
-Version: 1.2.09.15
-Stable tag: 1.2.09.15
+Version: 1.2.09.21
+Stable tag: 1.2.09.21
 Requires at least: 2.8
 Tested up to: 3.4.2
 
@@ -16,7 +16,7 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 
 Register this plugin and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security threats and vulnerabilities like old vertions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for the use of the eval function.
 
-Updated Sept-14th
+Updated Sept-21st
 
 NOTICE: This plugin make use of a "phone home" feature to check for updates. This is not unlike what WordPress already does with all your plugins. It is an essential part of any worthwhile security plugin and it is here to let you know when there are new plugin and definition update available. If you're allergic to "phone home" scripts then don't use this plugin (or WordPress at all for that matter).
 
@@ -50,6 +50,10 @@ If you register on gotmls.net you will have access to new definitions of "known 
 2. An example scan that found some threats.
 
 == Changelog ==
+
+= 1.2.09.21 =
+* Enhanced the iFrame for the File Viewer and Automatic Fix process.
+* Improved error handling durring the scan.
 
 = 1.2.09.15 =
 * Fixed major bug in unregistered scan definition interpretation that causes many false positives.
@@ -118,6 +122,9 @@ If you register on gotmls.net you will have access to new definitions of "known 
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.2.09.21 =
+Enhanced the iFrame for the File Viewer and Automatic Fix process and improved error handling.
 
 = 1.2.09.15 =
 Fixed major bug in unregistered scan definition interpretation that causes many false positives.
