@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, remove, repair, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability
-Version: 1.2.09.22
-Stable tag: 1.2.09.22
+Version: 1.2.10.05
+Stable tag: 1.2.10.05
 Requires at least: 2.8
 Tested up to: 3.4.2
 
@@ -14,9 +14,17 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 
 == Description ==
 
-Register this plugin and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security threats and vulnerabilities like old vertions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for the use of the eval function.
+**Features:**
 
-Updated Sept-21st
+* Automatic removal of "Known Threats".
+* Download definitions of new threat as they are discovered.
+* Automatically upgrade vulnerable versions of timthumb to patch security holes.
+* Customize your scan setting.
+* Run a Quick Scan from the menu or run a Complete Scan from the Settings Page.
+
+Updated Oct-6th
+
+Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
 NOTICE: This plugin make use of a "phone home" feature to check for updates. This is not unlike what WordPress already does with all your plugins. It is an essential part of any worthwhile security plugin and it is here to let you know when there are new plugin and definition update available. If you're allergic to "phone home" scripts then don't use this plugin (or WordPress at all for that matter).
 
@@ -51,10 +59,18 @@ If you register on gotmls.net you will have access to new definitions of "known 
 
 == Changelog ==
 
+= 1.2.10.05 =
+* Completely revamped the scan engine to handle large file systems with better error handling.
+* Enhanced the results for the Automatic Fix process.
+* Fixes a few other small bugs.
+
 = 1.2.09.22 =
 * Enhanced the iFrame for the File Viewer and Automatic Fix process.
-* Improved error handling durring the scan.
+* Improved error handling during the scan.
 * Fixed update checker script.
+
+= 1.2.09.21 =
+* BETA version (finished and replaced by version 1.2.10.05).
 
 = 1.2.09.15 =
 * Fixed major bug in unregistered scan definition interpretation that causes many false positives.
@@ -124,8 +140,14 @@ If you register on gotmls.net you will have access to new definitions of "known 
 
 == Upgrade Notice ==
 
+= 1.2.10.05 =
+Completely revamped the scan engine, enhanced the Automatic Fix results, and fixes a few other small bugs.
+
 = 1.2.09.22 =
 Enhanced the iFrame for the File Viewer and Automatic Fix process and improved error handling.
+
+= 1.2.09.21 =
+BETA version (finished and replaced by version 1.2.10.05).
 
 = 1.2.09.15 =
 Fixed major bug in unregistered scan definition interpretation that causes many false positives.
