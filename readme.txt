@@ -4,9 +4,9 @@ Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
-Tags: anti-malware, security, plugin, scan, automatic, remove, repair, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability
-Version: 1.2.10.05
-Stable tag: 1.2.10.05
+Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability
+Version: 1.2.10.16
+Stable tag: 1.2.10.16
 Requires at least: 2.8
 Tested up to: 3.4.2
 
@@ -19,10 +19,10 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Automatic removal of "Known Threats".
 * Download definitions of new threat as they are discovered.
 * Automatically upgrade vulnerable versions of timthumb to patch security holes.
-* Customize your scan setting.
-* Run a Quick Scan from the menu or run a Complete Scan from the Settings Page.
+* Customize your Scan Setting.
+* Run a Quick Scan from the menu or a Complete Scan from the Settings Page.
 
-Updated Oct-6th
+Updated Oct-16th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -59,10 +59,15 @@ If you register on gotmls.net you will have access to new definitions of "known 
 
 == Changelog ==
 
+= 1.2.10.16 =
+* Re-calibrated the Progress Bar on the Quick Scan.
+* Improved overall error handling.
+* Minor UI enhancements and a few bug fixes.
+
 = 1.2.10.05 =
 * Completely revamped the scan engine to handle large file systems with better error handling.
 * Enhanced the results for the Automatic Fix process.
-* Fixes a few other small bugs.
+* Fixed a few other small bugs.
 
 = 1.2.09.22 =
 * Enhanced the iFrame for the File Viewer and Automatic Fix process.
@@ -140,8 +145,11 @@ If you register on gotmls.net you will have access to new definitions of "known 
 
 == Upgrade Notice ==
 
+= 1.2.10.16 =
+Re-calibrated the Progress Bar, improved error handling, and fixed a few minor bugs.
+
 = 1.2.10.05 =
-Completely revamped the scan engine, enhanced the Automatic Fix results, and fixes a few other small bugs.
+Completely revamped the scan engine, enhanced the Automatic Fix results, and fixed a few other small bugs.
 
 = 1.2.09.22 =
 Enhanced the iFrame for the File Viewer and Automatic Fix process and improved error handling.
