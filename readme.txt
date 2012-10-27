@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability
-Version: 1.2.10.16
-Stable tag: 1.2.10.16
+Version: 1.2.10.27
+Stable tag: 1.2.10.27
 Requires at least: 2.8
 Tested up to: 3.4.2
 
@@ -19,10 +19,10 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Automatic removal of "Known Threats".
 * Download definitions of new threat as they are discovered.
 * Automatically upgrade vulnerable versions of timthumb to patch security holes.
-* Customize your Scan Setting.
-* Run a Quick Scan from the menu or a Complete Scan from the Settings Page.
+* Customize Scan Setting.
+* Run a Quick Scan from the admin menu or a Complete Scan from the Settings Page.
 
-Updated Oct-16th
+Updated Oct-27th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -58,6 +58,11 @@ If you register on gotmls.net you will have access to new definitions of "known 
 2. An example scan that found some threats.
 
 == Changelog ==
+
+= 1.2.10.27 =
+* Enhanced the Automatic Fix process to handle bad directory permissions.
+* Added more detailed error messages for different types of file errors.
+* Fixed calculation for Time Remaining on the Progress Bar.
 
 = 1.2.10.16 =
 * Re-calibrated the Progress Bar on the Quick Scan.
@@ -144,6 +149,9 @@ If you register on gotmls.net you will have access to new definitions of "known 
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.2.10.27 =
+Enhanced the Automatic Fix to handle bad directory permissions, added more detailed error messages, and fixed calculation for Time Remaining.
 
 = 1.2.10.16 =
 Re-calibrated the Progress Bar, improved error handling, and fixed a few minor bugs.
