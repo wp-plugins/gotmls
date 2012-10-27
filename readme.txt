@@ -1,23 +1,30 @@
-=== Anti-Malware by ELI (Get Off Malicious Scripts) ===
-Plugin Name: Anti-Malware by ELI (Get Off Malicious Scripts)
+=== Anti-Malware (Get Off Malicious Scripts) ===
 Plugin URI: http://gotmls.net/
 Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
-Tags: security, plugin, scan, remove, repair, malware, virus, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability
-Version: 1.2.07.30
-Stable tag: 1.2.07.29
+Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability
+Version: 1.2.10.27
+Stable tag: 1.2.10.27
 Requires at least: 2.8
-Tested up to: 3.4.1
+Tested up to: 3.4.2
 
 This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and it helps you remove them.
 
 == Description ==
 
-Register this plugin to get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security threats and vulnerabilities. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for the use of the eval function (a potential threat but usually harmless).
+**Features:**
 
-Updated Aug-1st
+* Automatic removal of "Known Threats".
+* Download definitions of new threat as they are discovered.
+* Automatically upgrade vulnerable versions of timthumb to patch security holes.
+* Customize Scan Setting.
+* Run a Quick Scan from the admin menu or a Complete Scan from the Settings Page.
+
+Updated Oct-27th
+
+Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
 NOTICE: This plugin make use of a "phone home" feature to check for updates. This is not unlike what WordPress already does with all your plugins. It is an essential part of any worthwhile security plugin and it is here to let you know when there are new plugin and definition update available. If you're allergic to "phone home" scripts then don't use this plugin (or WordPress at all for that matter).
 
@@ -51,6 +58,41 @@ If you register on gotmls.net you will have access to new definitions of "known 
 2. An example scan that found some threats.
 
 == Changelog ==
+
+= 1.2.10.27 =
+* Enhanced the Automatic Fix process to handle bad directory permissions.
+* Added more detailed error messages for different types of file errors.
+* Fixed calculation for Time Remaining on the Progress Bar.
+
+= 1.2.10.16 =
+* Re-calibrated the Progress Bar on the Quick Scan.
+* Improved overall error handling.
+* Minor UI enhancements and a few bug fixes.
+
+= 1.2.10.05 =
+* Completely revamped the scan engine to handle large file systems with better error handling.
+* Enhanced the results for the Automatic Fix process.
+* Fixed a few other small bugs.
+
+= 1.2.09.22 =
+* Enhanced the iFrame for the File Viewer and Automatic Fix process.
+* Improved error handling during the scan.
+* Fixed update checker script.
+
+= 1.2.09.21 =
+* BETA version (finished and replaced by version 1.2.10.05).
+
+= 1.2.09.15 =
+* Fixed major bug in unregistered scan definition interpretation that causes many false positives.
+
+= 1.2.09.14 =
+* Moved the File Viewer and Automatic Fix process into an iFrame to decrease scan time and memory usage.
+* Enhanced the Automatic Fix process for better success with read-only files.
+* Improved code cleanup process and general efficiency of the scan.
+
+= 1.2.08.31 =
+* Encoded definition update for better compatibility with some servers that have post limitation.
+* Improved the code cleanup expression that is applied after removal of known threats.
 
 = 1.2.07.30 =
 * BETA Release, Only downlod this version if your version does not finish the scan.
@@ -95,7 +137,7 @@ If you register on gotmls.net you will have access to new definitions of "known 
 = 1.2.04.01 =
 * Fixed caching issue with downloading second definition file in Safari.
 * Added more FAQs to the readme.
-* Encoded registration url so your email address could be used as your username.
+* Encoded registration URL so your email address could be used as your username.
 
 = 1.2.03.28 =
 * Fixed registration form.
@@ -108,8 +150,32 @@ If you register on gotmls.net you will have access to new definitions of "known 
 
 == Upgrade Notice ==
 
+= 1.2.10.27 =
+Enhanced the Automatic Fix to handle bad directory permissions, added more detailed error messages, and fixed calculation for Time Remaining.
+
+= 1.2.10.16 =
+Re-calibrated the Progress Bar, improved error handling, and fixed a few minor bugs.
+
+= 1.2.10.05 =
+Completely revamped the scan engine, enhanced the Automatic Fix results, and fixed a few other small bugs.
+
+= 1.2.09.22 =
+Enhanced the iFrame for the File Viewer and Automatic Fix process and improved error handling.
+
+= 1.2.09.21 =
+BETA version (finished and replaced by version 1.2.10.05).
+
+= 1.2.09.15 =
+Fixed major bug in unregistered scan definition interpretation that causes many false positives.
+
+= 1.2.09.14 =
+Moved the File Viewer and Automatic Fix into an iFrame for efficiency and enhanced for better success with read-only files.
+
+= 1.2.08.31 =
+Encoded definition update to broaden server compatibility and improved the code cleanup expression after threat removal.
+
 = 1.2.07.30 =
-BETA Release, Only downlod this version if your version does not finish the scan.
+BETA Release, Only download this version if your version does not finish the scan.
 
 = 1.2.07.29 =
 Fixed return URL on Donate form.
@@ -142,7 +208,7 @@ Fixed new definition updates to properly update the version number and added opt
 Changed definition updates to write to the DB instead of a file and added better messages about available updates.
 
 = 1.2.04.01 =
-Fixed caching issue with downloading second definition file in Safari and encoded registration url so your email address is your username.
+Fixed caching issue with downloading second definition file in Safari and encoded registration URL so your email address is your username.
 
 = 1.2.03.28 =
 Fixed registration form.
@@ -152,5 +218,3 @@ Fixed some of the links on the settings page.
 
 = 1.2.03.23 =
 First BETA versions available for WordPress.
-
-
