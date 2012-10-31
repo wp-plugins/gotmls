@@ -10,7 +10,9 @@ Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other 
 Version: 1.2.10.31
 */
 $GOTMLS_Version='1.2.10.31';
-if (!isset($_SESSION)) session_start();
+if (headers_sent($filename, $linenum)) {
+    $HeadersError = "<div class=update>Headers already sent in $filename on line $linenum.<br />This is a bad sign, it may just be a poorly written plugin but Headers should not have been sent at this point.<br />Check the code in the above mentioned file to fix this problem.</div>";
+} elseif (!isset($_SESSION)) @session_start();
 if (__FILE__ == $_SERVER['SCRIPT_FILENAME']) die('You are not allowed to call this page directly.<p>You could try starting <a href="http://'.$_SERVER['SERVER_NAME'].'">here</a>.');
 $_SESSION['GOTMLS_debug'] = array();
 $_SESSION['GOTMLS_debug']['START_microtime'] = microtime(true);
@@ -597,7 +599,7 @@ $_SESSION['GOTMLS_debug'][(microtime(true)-$_SESSION['GOTMLS_debug']['START_micr
 		$GOTMLS_settings_array['check_known'] = $_POST['check_known'];
 	if (isset($_POST['check_potential']) && is_numeric($_POST['check_potential']) && $_POST['check_potential'] != $GOTMLS_settings_array['check_potential'])
 		$GOTMLS_settings_array['check_potential'] = $_POST['check_potential'];
-	$scan_opts = '><form method="POST" name="GOTMLS_Form" action="'.str_replace('&scan_type=Quick+Scan', '', $GOTMLS_script_URI).'"><p><input type="hidden" name="scan_type" id="scan_type" value="Quick Scan" /><b>What to scan:</b>';
+	$scan_opts = '>'.$HeadersError.'<form method="POST" name="GOTMLS_Form" action="'.str_replace('&scan_type=Quick+Scan', '', $GOTMLS_script_URI).'"><p><input type="hidden" name="scan_type" id="scan_type" value="Quick Scan" /><b>What to scan:</b>';
 	$scan_optjs = "<script type=\"text/javascript\">\nfunction showOnly(what) {\n";
 	foreach ($GOTMLS_scan_groups as $mg => $GOTMLS_scan_group) {
 		$scan_optjs .= "document.getElementById('only$mg').style.display = 'none';\n";
