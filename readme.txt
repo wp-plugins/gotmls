@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability
-Version: 1.2.10.31
-Stable tag: 1.2.10.31
+Version: 1.2.11.15
+Stable tag: 1.2.11.15
 Requires at least: 2.8
 Tested up to: 3.4.2
 
@@ -22,7 +22,7 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Customize Scan Setting.
 * Run a Quick Scan from the admin menu or a Complete Scan from the Settings Page.
 
-Updated Oct-31th
+Updated Nov-15th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -36,21 +36,29 @@ NOTICE: This plugin make use of a "phone home" feature to check for updates. Thi
 
 == Frequently Asked Questions ==
 
-= Why can't I automatically remove the "potential treats" in yellow? =
+= How did I get hacked in the first place? =
 
-Many of these files may use eval and other powerful PHP function for perfectly legitimate reasons and removing that code from the files would likely cripple or even break your site so I have only enabled the Auto remove feature for "know threats".
+This was most likely a random attack on your file-system by a hacker's robot/virus (automated script). This is usually because you are running an older version of WordPress or have installed a Plugin or Theme with vulnerabilities, or because your site is on a shared server with other exploitable sites that got infected. In some cases it's posible that your hosting provider got hacked at a root level and all their clients on that machine got infected.
 
-= How do I know if any of the "potential treats" are dangerous? =
+= What can I do to prevent it from happening again? =
 
-Click on the linked filename, then click each numbered link above the file content box to highlight the suspect code. If you cannot tell wheather or not the code is malicious just leave it alone or ask someone else to look at it for you. If you find that it is malicious please send me a copy of the file so that I can add it to the definitions file as a "known threat", then it can be automatically removed. If you want me to examine your files please consider making a donation.
+There is no sure-fire way to protect your site from any kind of hack attempt. That said, some of the basic steps should include: hardening your password, keeping all your sites up-to-date, and regular scans with Anti-Malware software like [GOTMLS.NET](http://gotmls.net/)
+
+= Why can't I automatically remove the "Potential Threats" in yellow? =
+
+Many of these files may use eval and other powerful PHP function for perfectly legitimate reasons and removing that code from the files would likely cripple or even break your site so I have only enabled the Auto remove feature for "Know Threats".
+
+= How do I know if any of the "Potential Threats" are dangerous? =
+
+Click on the linked filename, then click each numbered link above the file content box to highlight the suspect code. If you cannot tell wheather or not the code is malicious just leave it alone or ask someone else to look at it for you. If you find that it is malicious please send me a copy of the file so that I can add it to the definitions file as a "Know Threats", then it can be automatically removed. If you want me to examine your files please consider making a donation.
 
 = What if the scan gets stuck part way through? =
 
-First just leave it for a while. If there are a lot of files on your server it could take quite a while and could sometimes appear to not be moving along at all even if it really is working. If, after a while, it still seems really stuck then make a note of what it was scanning when it stopped, then run it again. If it stops in the exact same place then you may want to try to figure out what file in that folder is causing it to hang or avoid scanning that folder all together. If you figure it out let me know what it was and I will try and make the program find it's own way around the problem.
+First just leave it for a while. If there are a lot of files on your server it could take quite a while and could sometimes appear to not be moving along at all even if it really is working. If, after a while, it still seems really stuck then try the Complete Scan or try running the scan again. If it stops in the exact same place then you may want to try to figure out what file in that folder is causing it to hang or avoid scanning that folder all together. If you figure it out let me know what it was and I will try and make the program find it's own way around that problem.
 
 = Why should I register? =
 
-If you register on gotmls.net you will have access to new definitions of "known threats" and added features like automatic removal and patches for specific security threats and vulnerabilities. Otherwise, this plugin only scans for the use of the eval function on your site, it would still be your job to identify the good one from the bad one and remove them acoudingly. 
+If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to new definitions of "Know Threats" and added features like automatic removal and patches for specific security threats and vulnerabilities like timthumb. Otherwise, this plugin only scans for "Potential Threats" on your site, it would still be up to you to identify the good from the bad and remove them accoudingly. 
 
 == Screenshots ==
 
@@ -58,6 +66,10 @@ If you register on gotmls.net you will have access to new definitions of "known 
 2. An example scan that found some threats.
 
 == Changelog ==
+
+= 1.2.11.15 =
+* Enhanced Output Buffer to work with compression enabled (like ob_gzhandler).
+* Moved the quarantine to the uploads directory to protect against blanket inclusion.
 
 = 1.2.10.31 =
 * Fixed Output Buffer issue for when ob_start has already been called.
@@ -152,6 +164,9 @@ If you register on gotmls.net you will have access to new definitions of "known 
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.2.11.15 =
+* Enhanced Output Buffer to work with compression enabled and moved the quarantine.
 
 = 1.2.10.31 =
 Fixed Output Buffer issue for when ob_start has already been called.
