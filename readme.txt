@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability
-Version: 1.2.12.12
-Stable tag: 1.2.11.15
+Version: 1.2.12.14
+Stable tag: 1.2.12.14
 Requires at least: 2.8
 Tested up to: 3.5
 
@@ -22,7 +22,7 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Customize Scan Setting.
 * Run a Quick Scan from the admin menu or a Complete Scan from the Settings Page.
 
-Updated Dec-13th
+Updated Dec-15th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -66,6 +66,9 @@ If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to new 
 2. An example scan that found some threats.
 
 == Changelog ==
+
+= 1.2.12.14 =
+* Fixed bugs in the last release.
 
 = 1.2.12.12 =
 * Consolodated the Definition Types and added a Whitelist catagory.
@@ -169,6 +172,9 @@ If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to new 
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.2.12.14 =
+Fixed bugs in the last release.
 
 = 1.2.12.12 =
 BETA Release: Consolodated Definition Types and completely redesigned the Definition Updates.
