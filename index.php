@@ -7,9 +7,9 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 1.2.12.12
+Version: 1.2.12.14
 */
-$GOTMLS_Version="1.2.12.12";
+$GOTMLS_Version="1.2.12.14";
 if (__FILE__ == $_SERVER["SCRIPT_FILENAME"]) die('You are not allowed to call this page directly.<p>You could try starting <a href="http://'.$_SERVER["SERVER_NAME"].'">here</a>.');
 $GOTMLS_HeadersError = "";
 function GOTMLS_admin_notices() {
@@ -226,7 +226,7 @@ function GOTMLS_return_threat($className, $imageFile, $fileName, $link = "") {
 	$fileName64 = GOTMLS_encode($fileName);
 	$li_js = "/*-->*/";
 	if ($className != "scanned")
-		$li_js .= "\n$className++;\ndivx=document.getElementById('found_$className');\nif (divx) {\n\tvar newli = document.createElement('li');\n\tnewli.innerHTML='<img src=\"".$GOTMLS_images_path.$imageFile.".gif\" height=16 width=16 alt=\"".$GOTMLS_image_alt($imageFile)."\" style=\"float: left;\" alt=\"$fileNameJS\" id=\"$imageFile"."_$fileName64\">".GOTMLS_strip4java($link).$fileNameJS.($link?"</a>';\n\tdivx.display='block';":"';")."\n\tdivx.appendChild(newli);\n}";
+		$li_js .= "\n$className++;\ndivx=document.getElementById('found_$className');\nif (divx) {\n\tvar newli = document.createElement('li');\n\tnewli.innerHTML='<img src=\"".$GOTMLS_images_path.$imageFile.".gif\" height=16 width=16 alt=\"".$GOTMLS_image_alt[$imageFile]."\" style=\"float: left;\" alt=\"$fileNameJS\" id=\"$imageFile"."_$fileName64\">".GOTMLS_strip4java($link).$fileNameJS.($link?"</a>';\n\tdivx.display='block';":"';")."\n\tdivx.appendChild(newli);\n}";
 	if ($className == "errors")
 		$li_js .= "\ndivx=document.getElementById('wait_$fileName64');\nif (divx) {\n\tdivx.src='$GOTMLS_images_path"."blocked.gif';\n\tdirerrors++;\n}";
 	elseif (is_file($fileName))
@@ -313,7 +313,7 @@ function GOTMLS_readdir($dir, $current_depth = 1) {
 			$GOTMLS_dirs_at_depth[$current_depth] = count($directories);
 			$GOTMLS_dir_at_depth[$current_depth] = 0;
 		} else
-			$GOTMLS_scanfiles[GOTMLS_encode($dir)] = str_replace("\"", "\\\"", $dir);
+			$GOTMLS_scanfiles[GOTMLS_encode($dir)] = GOTMLS_strip4java($dir);
 		foreach ($directories as $directory) {
 			$path = GOTMLS_trailingslashit($dir).$directory;
 			if (isset($_REQUEST["scan_depth"]) && is_numeric($_REQUEST["scan_depth"]) && ($_REQUEST["scan_depth"] != $current_depth) && !in_array($directory, $GOTMLS_skip_dirs)) {
@@ -605,9 +605,11 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 		$GOTMLS_settings_array["exclude_ext"] = $GOTMLS_skip_ext;
 	if (!isset($GOTMLS_settings_array["check_custom"]))
 		$GOTMLS_settings_array["check_custom"] = "";
-	if (isset($_POST["exclude_ext"]) && strlen(trim($_POST["exclude_ext"].' ')) >0) {
-		$GOTMLS_settings_array["exclude_ext"] = preg_split("/[,]+/", trim($_POST["exclude_ext"]), -1, PREG_SPLIT_NO_EMPTY);
-		array_walk($GOTMLS_settings_array["exclude_ext"], "GOTMLS_trim_ar");
+	if (isset($_POST["exclude_ext"])) {
+		if (strlen(trim(str_replace(",","",$_POST["exclude_ext"]).' ')) > 0)
+			$GOTMLS_settings_array["exclude_ext"] = preg_split('/[\s]*([,]+[\s]*)+/', trim($_POST["exclude_ext"]), -1, PREG_SPLIT_NO_EMPTY);
+		else
+			$GOTMLS_settings_array["exclude_ext"] = array();
 	}
 	if (isset($_GET['eli']) && $_GET['eli']=='quarantine')
 		$GOTMLS_skip_ext = $GOTMLS_settings_array['exclude_ext'];
@@ -680,7 +682,12 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 		if ($OB_last_handler != $OB_default_handler)
 			echo "<div class=\"error\">Another Plugin or Theme is using '$OB_last_handler' to hadle output buffers.<br />This prevents actively outputing the buffer on-the-fly and will severely degrade the performance of this (and many other) Plugins.<br />Consider disabling caching and compression plugins (at least during the scanning process).</div>";
 	GOTMLS_display_header('Anti-Malware by <img style="vertical-align: middle;" alt="ELI" src="http://0.gravatar.com/avatar/69ad8428e97469d0dcd64f1f60c07bd8?s=64" /> at GOTMLS.NET', $menu_opts.'</form><br style="clear: left;" /></div></div>');
-	$scan_groups = array("Read Folders"=>"dirs","Read/Write Errors"=>"errors","Scanned Files"=>"scanned","Scanned Folders"=>"dir","Quarantined Items"=>"bad","Known Threats"=>"known","Potential Threats"=>"potential","Skipped Files"=>"skipped","Skipped Folders"=>"skipdirs");
+	$scan_groups = array("Scanned Folders"=>"dir","Scanned Files"=>"scanned","Read/Write Errors"=>"errors","Quarantined Items"=>"bad","Read Folders"=>"dirs","Skipped Folders"=>"skipdirs","Skipped Files"=>"skipped");
+	$check_types = array("known"=>"Known Threats","potential"=>"Potential Threats");
+	if (array_key_exists($_SESSION["check"], $check_types)) {
+		$scan_groups[$check_types[$_SESSION["check"]]] = $_SESSION["check"];
+		unset($check_types[$_SESSION["check"]]);
+	}
 	echo '<script type="text/javascript">
 var percent = 0;
 function update_status(title, time) {
@@ -728,17 +735,18 @@ function update_status(title, time) {
 	$li_js = "return false;";
 	foreach ($scan_groups as $scan_name => $scan_group) {
 		$vars .= ", $scan_group=0";
-		if ($MAX++ == 4) {
-			$found = "Found ";
+		if ($MAX++ == 3) {
 			$fix_button_js = "";
 			echo "/*-->*/\n\tdivHTML += '</ul><ul style=\"text-align: left;\">';\n/*<!--*/";
 		} else {
 			$scan_name = str_replace($found, "", $scan_name);
-			echo "/*-->*/\n\tif ($scan_group > 0) {\n\t\tscan_state = ' href=\"#found_$scan_group\" onclick=\"$li_js showhide(\\'found_$scan_group\\', true);\" class=\"GOTMLS_plugin $scan_group\"';".($scan_group=="known"?"\n\t\tdis='block';":"").($MAX==6||$MAX==7?"\n\tshowhide('found_$scan_group', true);":"")."\n\t} else\n\t\tscan_state = ' class=\"GOTMLS_plugin\"';\n\tdivHTML += '<li class=\"GOTMLS_li\"><a'+scan_state+'>$found'+$scan_group+' '+($scan_group==1?('$scan_name').slice(0,-1):'$scan_name')+'</a></li>';\n/*<!--*/";
+			echo "/*-->*/\n\tif ($scan_group > 0) {\n\t\tscan_state = ' href=\"#found_$scan_group\" onclick=\"$li_js showhide(\\'found_$scan_group\\', true);\" class=\"GOTMLS_plugin $scan_group\"';".($scan_group=="known"?"\n\t\tdis='block';":"").($MAX==count($scan_groups)?"\n\tshowhide('found_$scan_group', true);":"")."\n\t} else\n\t\tscan_state = ' class=\"GOTMLS_plugin\"';\n\tdivHTML += '<li class=\"GOTMLS_li\"><a'+scan_state+'>$found'+$scan_group+' '+($scan_group==1?('$scan_name').slice(0,-1):'$scan_name')+'</a></li>';\n/*<!--*/";
 		}
 		$li_js = "";
-		if ($MAX > 6)
+		if ($MAX > 4)
 			$found = "Skipped ";
+		if ($MAX > 6)
+			$found = "Found ";
 	}
 	echo '/*-->*/
 	document.getElementById("status_counts").innerHTML = divHTML+"</ul>";
@@ -811,7 +819,7 @@ var startTime = 0;
 						echo '<input type="hidden" name="'.$name.'" value="'.htmlspecialchars($value).'">';
 				}
 			}
-			echo '<div id="status_text"><img src="'.$GOTMLS_images_path.'wait.gif" height=16 width=16 alt="..."> Loading Scan, Please Wait ...</div><div id="status_bar"></div><p id="pause_button" style="display: none; position: absolute; text-align: center; margin-left: -30px; padding-left: 50%;"><input type="button" value="Pause" class="button-primary" onclick="pauseresume(this);" style="width: 60px;" id="resume_button" /></p><div id="status_counts"></div><p id="fix_button" style="display: none; text-align: center;"><input id="repair_button" type="submit" value="Automatically Repair SELECTED files Now" class="button-primary" onclick="showhide(\'GOTMLS_iFrame\', true);showhide(\'GOTMLS_iFrame\');showhide(\'div_file\', true);" /></p></div></div>
+			echo '<div id="status_text"><img src="'.$GOTMLS_images_path.'wait.gif" height=16 width=16 alt="..."> Loading Scan, Please Wait ...</div><div id="status_bar"></div><p id="pause_button" style="display: none; position: absolute; text-align: center; margin-left: -30px; padding-left: 50%;"><input type="button" value="Pause" class="button-primary" onclick="pauseresume(this);" id="resume_button" /></p><div id="status_counts"></div><p id="fix_button" style="display: none; text-align: center;"><input id="repair_button" type="submit" value="Automatically Repair SELECTED files Now" class="button-primary" onclick="showhide(\'GOTMLS_iFrame\', true);showhide(\'GOTMLS_iFrame\');showhide(\'div_file\', true);" /></p></div></div>
 			<div class="postbox shadowed-box"><div title="Click to toggle" onclick="showhide(\'GOTMLS-Scan-Details\');" class="handlediv"><br></div><h3 title="Click to toggle" onclick="showhide(\'GOTMLS-Scan-Details\');" style="cursor: pointer;" class="hndle"><span>Scan Details:</span></h3>';
 		}
 		echo '<div id="GOTMLS-Scan-Details" class="inside"><div onmousedown="grabDiv();" onmouseup="releaseDiv();" id="div_file" class="shadowed-box rounded-corners sidebar-box" style="display: none; position: fixed; top: 100px; left: 100px; width: 80%; border: solid #c00; z-index: 112358;"><a class="rounded-corners" name="link_file" style="float: right; padding: 0 4px; margin: 6px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;" href="#found_top" onclick="showhide(\'div_file\');">X</a><h3 style="border-radius: 10px 10px 0 0; -moz-border-radius: 10px 10px 0 0; -webkit-border-radius: 10px 10px 0 0;">Examine Results</h3><div style="width: 100%; height: 400px; position: relative; padding: 0; margin: 0;" class="inside"><br /><br /><center><img src="'.$GOTMLS_images_path.'wait.gif" height=16 width=16 alt="..."> Loading Results, Please Wait ...<br /><br /><input type="button" onclick="showhide(\'GOTMLS_iFrame\', true);" value="It\'s taking too long ... I can\'t wait ... show me the results!" class="button-primary" /></center><iframe id="GOTMLS_iFrame" name="GOTMLS_iFrame" style="top: 0px; left: 0px; width: 100%; height: 400px; background-color: #CCC; position: absolute;"></iframe></div></div><script type="text/javascript">
@@ -849,16 +857,16 @@ for(i=0; i<nodes.length; i++) {
 				echo "<li>$file <span style='float: right; margin-right: 8px;'>($date)</span></li>";
 			echo "</ul>";
 		} elseif ($_REQUEST['scan_what'] > -1) {
-			$dir = implode('/', array_slice($dirs, 0, -1 * (2 + $_REQUEST['scan_what'])));
-			foreach ($scan_groups as $scan_name => $scan_group)
+			$dir = implode(GOTMLS_slash(), array_slice($dirs, 0, -1 * (2 + $_REQUEST['scan_what'])));
+			foreach (array_merge($scan_groups, $check_types) as $scan_name => $scan_group)
 				echo "\n<ul name=\"found_$scan_group\" id=\"found_$scan_group\" class=\"GOTMLS_plugin $scan_group\" style=\"background-color: #ccc; display: none; padding: 0;\"><a class=\"rounded-corners\" name=\"link_$scan_group\" style=\"float: right; padding: 0 4px; margin: 5px 5px 0 30px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;\" href=\"#found_top\" onclick=\"showhide('found_$scan_group');\">X</a><h3>$scan_name</h3>\n".($scan_group=='potential'?'<br /> * NOTE: These are probably not malicious scripts (but it\'s a good place to start looking <u>IF</u> your site is infected and no Known Threats were found).<br /><br />':'<br />').'</ul>';// (<a href=\"javascript:void(0)\" onclick=\"selectWholeGroup('found_$scan_group');\">Select All</a>) (<a href=\"javascript:void(0)\" onclick=\"selectNoneGroup('found_$scan_group');\">Select None</a>)
-			$_SESSION['GOTMLS_LAST_scan_start'] = time();
-			update_option('GOTMLS_LAST_scan_start', $_SESSION['GOTMLS_LAST_scan_start']);
+			$_SESSION["GOTMLS_LAST_scan_start"] = time();
+			update_option("GOTMLS_LAST_scan_start", $_SESSION["GOTMLS_LAST_scan_start"]);
 			while ($OB_last_handler == $OB_default_handler && @ob_end_flush())
 				foreach (ob_list_handlers() as $OB_handler)
 					$OB_last_handler = $OB_handler;
 			@ob_start();
-			if ($_REQUEST['scan_type'] == 'Quick Scan')
+			if ($_REQUEST["scan_type"] == "Quick Scan")
 				$li_js = "\nfunction testComplete() {\n\tif (percent != 100)\n\t\talert('The Quick Scan was unable to finish because of a shortage of memory or a problem accessing a file. Please try using the Complete Scan, it is slower but it will handle these errors better and continue scanning the rest of the files.');\n}\nwindow.onload=testComplete;\n</script>\n<script type=\"text/javascript\">";
 			echo "\n<script type=\"text/javascript\">$li_js\n/*<!--*/";
 			if (is_dir($dir)) {
@@ -867,8 +875,8 @@ for(i=0; i<nodes.length; i++) {
 				if (isset($_POST['scan_only']) && is_array($_POST['scan_only'])) {
 					$GOTMLS_dirs_at_depth[0] = count($_POST['scan_only']);
 					foreach ($_POST['scan_only'] as $only_dir)
-						if (is_dir($dir.'/'.$only_dir))
-							GOTMLS_readdir($dir.'/'.$only_dir);
+						if (is_dir(GOTMLS_trailingslashit($dir).$only_dir))
+							GOTMLS_readdir(GOTMLS_trailingslashit($dir).$only_dir);
 				} else
 					GOTMLS_readdir($dir);
 			} else
@@ -876,11 +884,8 @@ for(i=0; i<nodes.length; i++) {
 			if ($_REQUEST['scan_type'] == 'Quick Scan') 
 				echo GOTMLS_update_status('Completed!', 100);
 			else {
-				echo '
-'.GOTMLS_update_status('Starting Scan ...').'/*-->*/
-var scriptSRC = "'.$GOTMLS_script_URI.'&GOTMLS_scan=";
-var scanfilesArKeys = new Array("'.implode('","', array_keys($GOTMLS_scanfiles)).'");
-var scanfilesArNames = new Array("Scanning '.implode('","Scanning ', $GOTMLS_scanfiles).'");
+				echo GOTMLS_update_status('Starting Scan ...').'/*-->*/';
+				echo "var scriptSRC = '$GOTMLS_script_URI&GOTMLS_scan=';\nvar scanfilesArKeys = new Array('".implode("','", array_keys($GOTMLS_scanfiles))."');\nvar scanfilesArNames = new Array('Scanning ".implode("','Scanning ", $GOTMLS_scanfiles)."');".'
 var scanfilesI = 0;
 var stopScanning;
 var gotStuckOn = "";
@@ -961,7 +966,7 @@ function GOTMLS_stripslashes(&$item, $key) {
 	$item = stripslashes($item);
 }
 function GOTMLS_strip4java($item) {
-	return preg_replace("/(?<!\\\\)'/", "'+\"'\"+'", str_replace("\n", "", $item));
+	return preg_replace("/\\\\/", "\\\\", preg_replace("/(?<!\\\\)'/", "'+\"'\"+'", str_replace("\n", "", $item)));
 }
 function GOTMLS_error_link($errorTXT, $file = '') {
 	global $GOTMLS_script_URI;
@@ -997,7 +1002,7 @@ function GOTMLS_scandir($dir) {
 	$li_js = "\nscanNextDir(-1);\n";
 	if (isset($_GET['GOTMLS_skip_dir']) && $dir == GOTMLS_decode($_GET['GOTMLS_skip_dir'])) {
 		if (isset($_GET['GOTMLS_only_file']) && strlen($_GET['GOTMLS_only_file']))
-			echo GOTMLS_return_threat('errors', 'blocked', $dir.'/'.GOTMLS_decode($_GET['GOTMLS_only_file']), GOTMLS_error_link('Failed to read this file!', $dir.'/'.GOTMLS_decode($_GET['GOTMLS_only_file'])));
+			echo GOTMLS_return_threat('errors', 'blocked', GOTMLS_trailingslashit($dir).GOTMLS_decode($_GET['GOTMLS_only_file']), GOTMLS_error_link('Failed to read this file!', GOTMLS_trailingslashit($dir).GOTMLS_decode($_GET['GOTMLS_only_file'])));
 		else
 			echo GOTMLS_return_threat('errors', 'blocked', $dir, GOTMLS_error_link('Failed to read directory!'));
 	} else {
@@ -1005,14 +1010,14 @@ function GOTMLS_scandir($dir) {
 		if (is_array($files)) {
 			if (isset($_GET['GOTMLS_only_file'])) {
 				if (strlen($_GET['GOTMLS_only_file'])) {
-					$path = str_replace('//', '/', $dir.'/'.GOTMLS_decode($_GET['GOTMLS_only_file']));
+					$path = GOTMLS_trailingslashit($dir).GOTMLS_decode($_GET['GOTMLS_only_file']);
 					if (is_file($path)) {
 						GOTMLS_check_file($path);
 						echo GOTMLS_return_threat('dir', 'checked', $path);
 					}
 				} else {
 					foreach ($files as $file) {
-						$path = str_replace('//', '/', $dir.'/'.$file);
+						$path = GOTMLS_trailingslashit($dir).$file;
 						if (is_file($path)) {
 							if (in_array(GOTMLS_get_ext($file), $GOTMLS_skip_ext) || (@filesize($path)==0) || (@filesize($path)>((isset($_GET['eli'])&&is_numeric($_GET['eli']))?$_GET['eli']:1234567)))
 								echo GOTMLS_return_threat('skipped', 'blocked', $path);
@@ -1024,7 +1029,7 @@ function GOTMLS_scandir($dir) {
 				}
 			} else {
 				foreach ($files as $file) {
-					$path = str_replace('//', '/', $dir.'/'.$file);
+					$path = GOTMLS_trailingslashit($dir).$file;
 					if (is_file($path)) {
 						if (isset($_GET['GOTMLS_skip_file']) && is_array($_GET['GOTMLS_skip_file']) && in_array($path, $_GET['GOTMLS_skip_file'])) {
 							$li_js .= "\n//skipped $path;\n";
