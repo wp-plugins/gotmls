@@ -833,7 +833,7 @@ var startTime = 0;
 			$entries = GOTMLS_getfiles($GOTMLS_quarantine_dir);
 			echo "\n<ul name=\"found_Quarantine\" id=\"found_Quarantine\" class=\"GOTMLS_plugin known\" style=\"background-color: #ccc; padding: 0;\"><h3>";
 			if (is_array($entries)) {
-				echo count($files).' Item'.(count($files)>1?'s':'').' in Quarantine<span style="float: right;">Date Quarantined</span></h3><br />';
+				echo count($entries).' Item'.(count($entries)>1?'s':'').' in Quarantine<span style="float: right;">Date Quarantined</span></h3><br />';
 				sort($entries);
 				foreach ($entries as $entry) {
 					$date = date("Y-m-d H:i",filemtime(GOTMLS_trailingslashit($GOTMLS_quarantine_dir).$entry));
