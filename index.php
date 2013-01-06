@@ -7,9 +7,9 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 1.2.12.30
+Version: 1.2.12.31
 */
-$GOTMLS_Version="1.2.12.30";
+$GOTMLS_Version="1.2.12.31";
 if (__FILE__ == $_SERVER["SCRIPT_FILENAME"]) die('You are not allowed to call this page directly.<p>You could try starting <a href="http://'.$_SERVER["SERVER_NAME"].'">here</a>.');
 $GOTMLS_HeadersError = "";
 function GOTMLS_admin_notices() {
@@ -249,8 +249,8 @@ function GOTMLS_quarantine($file) {
 		$_SESSION['quarantine_dir'] = GOTMLS_trailingslashit($upload['basedir']).'quarantine';
 		if (!is_dir($_SESSION['quarantine_dir']) && !mkdir($_SESSION['quarantine_dir']))
 			$_SESSION['quarantine_dir'] = $upload['basedir'];
-		if (!is_file(GOTMLS_trailingslashit($upload['basedir']).'index.php'))
-			@file_put_contents(GOTMLS_trailingslashit($upload['basedir']).'index.php', '<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>You don\'t have permission to access this directory.</p></body></html>');
+		if (!is_file(GOTMLS_trailingslashit($upload['basedir']).'.htaccess'))
+			@file_put_contents(GOTMLS_trailingslashit($upload['basedir']).'.htaccess', 'Options -Indexes');
 	}
 	return GOTMLS_trailingslashit($_SESSION['quarantine_dir']).GOTMLS_sexagesimal().'.'.GOTMLS_encode($file).'.GOTMLS';
 }
