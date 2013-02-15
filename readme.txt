@@ -5,10 +5,10 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability
-Version: 1.2.12.12
-Stable tag: 1.2.11.15
+Version: 1.3.02.15
+Stable tag: 1.3.02.15
 Requires at least: 2.8
-Tested up to: 3.5
+Tested up to: 3.5.1
 
 This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and it helps you remove them.
 
@@ -22,7 +22,7 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Customize Scan Setting.
 * Run a Quick Scan from the admin menu or a Complete Scan from the Settings Page.
 
-Updated Dec-13th
+Updated Feb-15th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -38,7 +38,7 @@ NOTICE: This plugin make use of a "phone home" feature to check for updates. Thi
 
 = How did I get hacked in the first place? =
 
-This was most likely a random attack on your file-system by a hacker's robot/virus (automated script). This is usually because you are running an older version of WordPress or have installed a Plugin or Theme with vulnerabilities, or because your site is on a shared server with other exploitable sites that got infected. In some cases it's posible that your hosting provider got hacked at a root level and all their clients on that machine got infected.
+This was most likely a random attack on your file-system by a hacker's robot/virus (automated script). This is usually because you are running an older version of WordPress or have installed a Plugin or Theme with vulnerabilities, or because your site is on a shared server with other exploitable sites that got infected. In some cases it's possible that your hosting provider got hacked at a root level and all their clients on that machine got infected.
 
 = What can I do to prevent it from happening again? =
 
@@ -50,7 +50,7 @@ Many of these files may use eval and other powerful PHP function for perfectly l
 
 = How do I know if any of the "Potential Threats" are dangerous? =
 
-Click on the linked filename, then click each numbered link above the file content box to highlight the suspect code. If you cannot tell wheather or not the code is malicious just leave it alone or ask someone else to look at it for you. If you find that it is malicious please send me a copy of the file so that I can add it to the definitions file as a "Know Threats", then it can be automatically removed. If you want me to examine your files please consider making a donation.
+Click on the linked filename, then click each numbered link above the file content box to highlight the suspect code. If you cannot tell whether or not the code is malicious just leave it alone or ask someone else to look at it for you. If you find that it is malicious please send me a copy of the file so that I can add it to the definitions file as a "Know Threats", then it can be automatically removed. If you want me to examine your files please consider making a donation.
 
 = What if the scan gets stuck part way through? =
 
@@ -58,7 +58,7 @@ First just leave it for a while. If there are a lot of files on your server it c
 
 = Why should I register? =
 
-If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to new definitions of "Know Threats" and added features like automatic removal and patches for specific security threats and vulnerabilities like timthumb. Otherwise, this plugin only scans for "Potential Threats" on your site, it would still be up to you to identify the good from the bad and remove them accoudingly. 
+If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to new definitions of "Know Threats" and added features like automatic removal and patches for specific security threats and vulnerabilities like timthumb. Otherwise, this plugin only scans for "Potential Threats" on your site, it would still be up to you to identify the good from the bad and remove them accordingly. 
 
 == Screenshots ==
 
@@ -67,9 +67,27 @@ If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to new 
 
 == Changelog ==
 
+= 1.3.02.15 =
+* Improved security on the Quarantine directory to fix the 500 error on some servers.
+
+= 1.2.12.31 =
+* Fixed count of Quarantined items.
+* Added htaccess security to the Uploads directory.
+
+= 1.2.12.30 =
+* Fixed progress bar bug in the last release.
+* Linked the Quarantined items to the File Examiner.
+
+= 1.2.12.29 =
+* Brought back the TimThumb and htaccess scan categories.
+* Added a scan category for  Backdoor Scripts.
+
+= 1.2.12.14 =
+* Fixed bugs in the last release.
+
 = 1.2.12.12 =
-* Consolodated the Definition Types and added a Whitelist catagory.
-* Completely redesigned the Definition Updates to handle icrimental updates.
+* Consolidated the Definition Types and added a Whitelist category.
+* Completely redesigned the Definition Updates to handle incremental updates.
 * Added "View Quarantine" to the menu.
 
 = 1.2.11.15 =
@@ -170,8 +188,23 @@ If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to new 
 
 == Upgrade Notice ==
 
+= 1.3.02.15 =
+Improved security on the Quarantine directory to fix the 500 error on some servers.
+
+= 1.2.12.31 =
+Fixed count of Quarantined items and added htaccess security to the Uploads directory.
+
+= 1.2.12.30 =
+Fixed progress bar bug and linked the Quarantined items to the File Examiner.
+
+= 1.2.12.29 =
+Brought back the TimThumb and htaccess scan categories and added a category for  Backdoor Scripts.
+
+= 1.2.12.14 =
+Fixed bugs in the last release.
+
 = 1.2.12.12 =
-BETA Release: Consolodated Definition Types and completely redesigned the Definition Updates.
+BETA Release: Consolidated Definition Types and completely redesigned the Definition Updates.
 
 = 1.2.11.15 =
 Enhanced Output Buffer to work with compression enabled and moved the quarantine.
