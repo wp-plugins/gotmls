@@ -7,9 +7,9 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 1.2.12.31
+Version: 1.3.02.15
 */
-$GOTMLS_Version="1.2.12.31";
+$GOTMLS_Version="1.3.02.15";
 if (__FILE__ == $_SERVER["SCRIPT_FILENAME"]) die('You are not allowed to call this page directly.<p>You could try starting <a href="http://'.$_SERVER["SERVER_NAME"].'">here</a>.');
 $GOTMLS_HeadersError = "";
 function GOTMLS_admin_notices() {
@@ -29,8 +29,8 @@ $_SESSION["GOTMLS_debug"] = array();
 $_SESSION["GOTMLS_debug"]["START_microtime"] = microtime(true);
 $GOTMLS_plugin_dir="GOTMLS";
 $GOTMLS_loop_execution_time = 60;
-$GOTMLS_chmod_file = 0664;
-$GOTMLS_chmod_dir = 0775;
+$GOTMLS_chmod_file = 0644;
+$GOTMLS_chmod_dir = 0755;
 /**
  * GOTMLS Main Plugin File
  * @package GOTMLS
@@ -246,11 +246,19 @@ function GOTMLS_explode_dir($dir, $pre = '') {
 function GOTMLS_quarantine($file) {
 	if (!isset($_SESSION['quarantine_dir'])) {
 		$upload = wp_upload_dir();
+		$err403 = '<html><head><title>403 Forbidden</title></head><body><h1>Forbidden</h1><p>You don\'t have permission to access this directory.</p></body></html>';
 		$_SESSION['quarantine_dir'] = GOTMLS_trailingslashit($upload['basedir']).'quarantine';
 		if (!is_dir($_SESSION['quarantine_dir']) && !mkdir($_SESSION['quarantine_dir']))
 			$_SESSION['quarantine_dir'] = $upload['basedir'];
-		if (!is_file(GOTMLS_trailingslashit($upload['basedir']).'.htaccess'))
-			@file_put_contents(GOTMLS_trailingslashit($upload['basedir']).'.htaccess', 'Options -Indexes');
+		if (is_file(GOTMLS_trailingslashit($upload['basedir']).'.htaccess') && file_get_contents(GOTMLS_trailingslashit($upload['basedir']).'.htaccess') == 'Options -Indexes')
+			if (!@unlink(GOTMLS_trailingslashit($upload['basedir']).'.htaccess'))
+				@file_put_contents(GOTMLS_trailingslashit($upload['basedir']).'.htaccess', '');
+		if (!is_file(GOTMLS_trailingslashit($_SESSION['quarantine_dir']).'.htaccess'))
+			@file_put_contents(GOTMLS_trailingslashit($_SESSION['quarantine_dir']).'.htaccess', 'Options -Indexes');
+		if (!is_file(GOTMLS_trailingslashit($upload['basedir']).'index.php'))
+			@file_put_contents(GOTMLS_trailingslashit($upload['basedir']).'index.php', $err403);
+		if (!is_file(GOTMLS_trailingslashit($_SESSION['quarantine_dir']).'index.php'))
+			@file_put_contents(GOTMLS_trailingslashit($_SESSION['quarantine_dir']).'index.php', $err403);
 	}
 	return GOTMLS_trailingslashit($_SESSION['quarantine_dir']).GOTMLS_sexagesimal().'.'.GOTMLS_encode($file).'.GOTMLS';
 }
@@ -678,7 +686,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	$OB_default_handler = "default output handler";
 	foreach (ob_list_handlers() as $OB_last_handler)
 		if ($OB_last_handler != $OB_default_handler)
-			echo "<div class=\"error\">Another Plugin or Theme is using '$OB_last_handler' to hadle output buffers.<br />This prevents actively outputing the buffer on-the-fly and will severely degrade the performance of this (and many other) Plugins.<br />Consider disabling caching and compression plugins (at least during the scanning process).</div>";
+			echo "<div class=\"error\">Another Plugin or Theme is using '$OB_last_handler' to hadle output buffers. <br />This prevents actively outputing the buffer on-the-fly and will severely degrade the performance of this (and many other) Plugins. <br />Consider disabling caching and compression plugins (at least during the scanning process).</div>";
 	GOTMLS_display_header('Anti-Malware by <img style="vertical-align: middle;" alt="ELI" src="http://0.gravatar.com/avatar/69ad8428e97469d0dcd64f1f60c07bd8?s=64" /> at GOTMLS.NET', $menu_opts.'</form><br style="clear: left;" /></div></div>');
 	$scan_groups = array_merge(array("Scanned Files"=>"scanned","Selected Folders"=>"dirs","Scanned Folders"=>"dir","Skipped Folders"=>"skipdirs","Skipped Files"=>"skipped","Read/Write Errors"=>"errors","Quarantined Files"=>"bad"), $GOTMLS_threat_levels);
 	echo '<script type="text/javascript">
@@ -831,9 +839,13 @@ var startTime = 0;
 				$LastScan = date("Y-m-d H:i:s", $LastScan);
 			echo ", Last Scan Finished: $LastScan, Current Time: ".date("Y-m-d H:i:s");
 			$entries = GOTMLS_getfiles($GOTMLS_quarantine_dir);
-			echo "\n<ul name=\"found_Quarantine\" id=\"found_Quarantine\" class=\"GOTMLS_plugin known\" style=\"background-color: #ccc; padding: 0;\"><h3>";
+			echo "\n<form method=post onsubmit=\"return confirm('Are you sure you want to proceed?');\"><ul name=\"found_Quarantine\" id=\"found_Quarantine\" class=\"GOTMLS_plugin known\" style=\"background-color: #ccc; padding: 0;\"><h3>";
+			if (is_array($entries) && ($key = array_search(".htaccess", $entries)))
+				unset($entries[$key]);
+			if (is_array($entries) && ($key = array_search("index.php", $entries)))
+				unset($entries[$key]);
 			if (is_array($entries) && count($entries)) {
-				echo count($entries).' Item'.(count($entries)==1?'':'s').' in Quarantine<span style="float: right;">Date Quarantined</span></h3><br />';
+				echo count($entries).' Item'.(count($entries)==1?'':'s').' in Quarantine<span style="float: right;">Date Quarantined</span></h3><p><b>The following items have been found to contain malicious code, they have been cleaned, and the original infected file contents have been saved here in the Quarantine. The code is safe here and you do not need to do anything further with these files.</b></p> FYI - these files are found in '.$GOTMLS_quarantine_dir;
 				sort($entries);
 				foreach ($entries as $entry) {
 					$date = date("Y-m-d H:i",filemtime(GOTMLS_trailingslashit($GOTMLS_quarantine_dir).$entry));
@@ -851,7 +863,7 @@ var startTime = 0;
 				}
 			} else
 				echo "No Items in Quarantine</h3>";
-			echo "</ul>";
+			echo "</ul></form>";
 		} elseif ($_REQUEST['scan_what'] > -1) {
 			$dir = implode(GOTMLS_slash(), array_slice($dirs, 0, -1 * (2 + $_REQUEST['scan_what'])));
 			foreach ($scan_groups as $scan_name => $scan_group)
@@ -1115,7 +1127,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 			}
 		}
 		if (file_exists(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt'))
-			unlink(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt');
+			@unlink(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt');
 		update_option($GOTMLS_plugin_dir.'_definitions_array', $GOTMLS_definitions_array);
 		if (isset($_SESSION["check"]))
 			unset($_SESSION["check"]);
