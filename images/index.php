@@ -6,9 +6,11 @@
 
 if (!headers_sent($filename, $linenum) && !session_id())
 	@session_start();
+if (!(isset($_SERVER["SCRIPT_FILENAME"]) && "wp-login.php" == substr($_SERVER["SCRIPT_FILENAME"], -12)))
+	$_SESSION["GOTMLS_login_ok"]=true;
 
 /* GOTMLS init Global Variables */
-$GOTMLS_Version="1.3.04.17";
+$GOTMLS_Version="1.3.04.19";
 $_SESSION["GOTMLS_debug"] = array("START_microtime" => microtime(true));
 $GOTMLS_plugin_dir="GOTMLS";
 $GOTMLS_loop_execution_time = 60;
@@ -90,15 +92,14 @@ function GOTMLS_scanfile($file) {
 					$file = GOTMLS_decode($file_date[count($file_date)-2]);
 				else
 					$GOTMLS_file_contents = "";
-			} elseif ($className == "timthumb") {
-				$timthumb = wp_remote_get("http://timthumb.googlecode.com/svn/trunk/timthumb.php");
-				if (is_array($timthumb) && isset($timthumb["body"]) && strlen($timthumb["body"]) > 1000)
-					$GOTMLS_new_contents = $timthumb["body"];
+			} elseif (isset($GOTMLS_threat_files[$className]) && GOTMLS_get_ext($GOTMLS_threat_files[$className]) == "php") {
+				$project = str_replace("_", "-", $className);
+				$source = wp_remote_get("http://$project.googlecode.com/svn/trunk/$project.php");
+				if (is_array($source) && isset($source["body"]) && strlen($source["body"]) > 500)
+					$GOTMLS_new_contents = $source["body"].$GOTMLS_new_contents;
 				else
 					$GOTMLS_file_contents = "";
-			} elseif ($className == "wplogin")
-				$GOTMLS_new_contents = '<?php /*GOTMLS Security Patch*/ if (!session_id()) @session_start(); if (!isset($_SESSION["GOTMLS_login_attempts"])) $_SESSION["GOTMLS_login_attempts"] = 0; if ($_SERVER["REQUEST_METHOD"] == "POST" || isset($_POST["user_login"])) { $_SESSION["GOTMLS_login_attempts"]++; if (!isset($_SESSION["GOTMLS_login_ok"]) || $_SESSION["GOTMLS_login_attempts"] > 3) die("Just what do you think you are doing, Dave?");} else {$_SESSION["GOTMLS_login_ok"]=true;} ?> '."\n".file_get_contents($file);
-			else
+			} else
 				$GOTMLS_new_contents = trim(preg_replace('/[\r\n]+/', "\n", preg_replace('/\<\?php[ \t\n\r]*\?\>/i', "", $GOTMLS_new_contents)));
 			if (strlen($GOTMLS_file_contents) > 0 && (@file_put_contents(GOTMLS_quarantine($file), $GOTMLS_file_contents) || ((is_writable(dirname($file)) || ($chmoded_dir = @chmod(dirname($file), 0777))) && @file_put_contents(GOTMLS_quarantine($file), $GOTMLS_file_contents) && !($chmoded_dir && !@chmod(dirname($file), $GOTMLS_chmod_dir)))) && ((strlen($GOTMLS_new_contents)==0 && @unlink($file)) || (@file_put_contents($file, $GOTMLS_new_contents) || ((is_writable($file) || ($chmoded_file = @chmod($file, 0777))) && @file_put_contents($file, $GOTMLS_new_contents) && !($chmoded_file && !@chmod($file, $GOTMLS_chmod_file)))))) {
 				echo ' Success!';
@@ -174,8 +175,8 @@ function GOTMLS_decode($encoded_string) {
 }
 
 GOTMLS_set_global($GOTMLS_default_ext, "ieonly.");
-$GOTMLS_threat_files = array("wplogin"=>"wp-login.php","timthumb"=>"thumb.php","htaccess"=>".htaccess");
-$GOTMLS_threat_levels = array("WP-Login Exploits"=>"wplogin","TimThumb Exploits"=>"timthumb","htaccess Threats"=>"htaccess","Backdoor Scripts"=>"backdoor","Known Threats"=>"known","Potential Threats"=>"potential");
+$GOTMLS_threat_files = array("htaccess"=>".htaccess","timthumb"=>"thumb.php","wp_login"=>"wp-login.php");
+$GOTMLS_threat_levels = array("htaccess Threats"=>"htaccess","TimThumb Exploits"=>"timthumb","Backdoor Scripts"=>"backdoor","Known Threats"=>"known","WP-Login Exploits"=>"wp_login","Potential Threats"=>"potential");
 $GOTMLS_skip_ext = array("png", "jpg", "jpeg", "gif", "bmp", "tif", "tiff", "exe", "zip", "pdf", "css", "mo", "psd", "so");
 $GOTMLS_skip_dirs = array(".", "..");
 $GOTMLS_image_alt = array("wait"=>"...", "checked"=>"&#x2714;", "blocked"=>"X", "question"=>"?", "threat"=>"!");

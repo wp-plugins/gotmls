@@ -7,7 +7,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 1.3.04.17
+Version: 1.3.04.19
 */
 
 if (__FILE__ == $_SERVER["SCRIPT_FILENAME"]) die('You are not allowed to call this page directly.<p>You could try starting <a href="http://'.$_SERVER["SERVER_NAME"].'">here</a>.');
@@ -118,7 +118,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 .inside p {margin: 10px;}
 .GOTMLS_li, .GOTMLS_plugin li {list-style: none;}
 .GOTMLS_plugin {margin: 5px; background: #cfc; border: 1px solid #0f0; padding: 0 5px; border-radius: 3px;}
-.GOTMLS_plugin.known, .GOTMLS_plugin.backdoor, .GOTMLS_plugin.htaccess, .GOTMLS_plugin.wplogin, .GOTMLS_plugin.timthumb, .GOTMLS_plugin.errors {background: #f99; border: 1px solid #f00;}
+.GOTMLS_plugin.known, .GOTMLS_plugin.backdoor, .GOTMLS_plugin.htaccess, .GOTMLS_plugin.wp_login, .GOTMLS_plugin.timthumb, .GOTMLS_plugin.errors {background: #f99; border: 1px solid #f00;}
 .GOTMLS_plugin.potential, .GOTMLS_plugin.skipdirs, .GOTMLS_plugin.skipped {background: #ffc; border: 1px solid #fc6;}
 .GOTMLS ul li {margin-left: 20px;}
 .GOTMLS h2 {margin: 0 0 10px;}
@@ -355,8 +355,8 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 		$GOTMLS_settings_array['check_htaccess'] = $_POST['check_htaccess'];
 	if (isset($_POST['check_timthumb']) && is_numeric($_POST['check_timthumb']) && $_POST['check_timthumb'] != $GOTMLS_settings_array['check_timthumb'])
 		$GOTMLS_settings_array['check_timthumb'] = $_POST['check_timthumb'];
-	if (isset($_POST['check_wplogin']) && is_numeric($_POST['check_wplogin']) && $_POST['check_wplogin'] != $GOTMLS_settings_array['check_wplogin'])
-		$GOTMLS_settings_array['check_wplogin'] = $_POST['check_wplogin'];
+	if (isset($_POST['check_wp_login']) && is_numeric($_POST['check_wp_login']) && $_POST['check_wp_login'] != $GOTMLS_settings_array['check_wp_login'])
+		$GOTMLS_settings_array['check_wp_login'] = $_POST['check_wp_login'];
 	if (isset($_POST['check_known']) && is_numeric($_POST['check_known']) && $_POST['check_known'] != $GOTMLS_settings_array['check_known'])
 		$GOTMLS_settings_array['check_known'] = $_POST['check_known'];
 	if (isset($_POST['check_potential']) && is_numeric($_POST['check_potential']) && $_POST['check_potential'] != $GOTMLS_settings_array['check_potential'])
@@ -463,7 +463,7 @@ function update_status(title, time) {
 			echo "/*-->*/\n\tif ($scan_group > 0) {\n\t\tscan_state = ' href=\"#found_$scan_group\" onclick=\"$li_js showhide(\\'found_$scan_group\\', true);\" class=\"GOTMLS_plugin $scan_group\"';$fix_button_js".($MAX>6?"\n\tshowhide('found_$scan_group', true);":"")."\n\t} else\n\t\tscan_state = ' class=\"GOTMLS_plugin$potential_threat\"';\n\tdivHTML += '<li class=\"GOTMLS_li\"><a'+scan_state+'>$found'+$scan_group+' '+($scan_group==1?('$scan_name').slice(0,-1):'$scan_name')+'</a></li>';\n/*<!--*/";
 		}
 		$li_js = "";
-		if ($MAX > 10)
+		if ($MAX > 11)
 			$fix_button_js = "";
 	}
 	echo '/*-->*/

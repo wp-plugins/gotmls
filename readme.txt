@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability, block, brute force, wp-login, patch
-Version: 1.3.04.17
-Stable tag: 1.3.04.17
+Version: 1.3.04.19
+Stable tag: 1.3.04.19
 Requires at least: 2.8
 Tested up to: 3.5.1
 
@@ -23,7 +23,7 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Customize Scan Setting.
 * Run a Quick Scan from the admin menu or a Complete Scan from the Settings Page.
 
-Updated Apr-17th
+Updated Apr-19th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -70,6 +70,9 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 1.3.04.19 =
+* Fixed a major bug in yesterdays release broke the login page on some sites.
 
 = 1.3.04.17 =
 * Added a patch for the wp-login.php brute force attack that has been going around.
@@ -196,6 +199,9 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.3.04.19 =
+Fixed a major bug in yesterdays release broke the login page on some sites.
 
 = 1.3.04.17 =
 Added a patch for the wp-login.php brute force attack and fixed a few other small bugs.
