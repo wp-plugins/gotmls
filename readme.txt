@@ -4,9 +4,9 @@ Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
-Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability
-Version: 1.3.02.15
-Stable tag: 1.3.02.15
+Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability, block, brute force, wp-login, patch
+Version: 1.3.05.11
+Stable tag: 1.3.05.11
 Requires at least: 2.8
 Tested up to: 3.5.1
 
@@ -19,10 +19,11 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Automatic removal of "Known Threats".
 * Download definitions of new threat as they are discovered.
 * Automatically upgrade vulnerable versions of timthumb to patch security holes.
+* Automatically upgrade wp-login.php to block brute force attempts.
 * Customize Scan Setting.
 * Run a Quick Scan from the admin menu or a Complete Scan from the Settings Page.
 
-Updated Feb-15th
+Updated May-11th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -36,13 +37,9 @@ NOTICE: This plugin make use of a "phone home" feature to check for updates. Thi
 
 == Frequently Asked Questions ==
 
-= How did I get hacked in the first place? =
+= Why should I register? =
 
-This was most likely a random attack on your file-system by a hacker's robot/virus (automated script). This is usually because you are running an older version of WordPress or have installed a Plugin or Theme with vulnerabilities, or because your site is on a shared server with other exploitable sites that got infected. In some cases it's possible that your hosting provider got hacked at a root level and all their clients on that machine got infected.
-
-= What can I do to prevent it from happening again? =
-
-There is no sure-fire way to protect your site from any kind of hack attempt. That said, some of the basic steps should include: hardening your password, keeping all your sites up-to-date, and regular scans with Anti-Malware software like [GOTMLS.NET](http://gotmls.net/)
+If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to new definitions of New Threats and added features like automatic removal and patches for specific security threats and vulnerabilities like old versions of timthumb and brute force attaks on wp-login. Otherwise, this plugin only scans for "Potential Threats" on your site, it would then be up to you to identify the good from the bad and remove them accordingly. 
 
 = Why can't I automatically remove the "Potential Threats" in yellow? =
 
@@ -56,16 +53,34 @@ Click on the linked filename, then click each numbered link above the file conte
 
 First just leave it for a while. If there are a lot of files on your server it could take quite a while and could sometimes appear to not be moving along at all even if it really is working. If, after a while, it still seems really stuck then try the Complete Scan or try running the scan again. If it stops in the exact same place then you may want to try to figure out what file in that folder is causing it to hang or avoid scanning that folder all together. If you figure it out let me know what it was and I will try and make the program find it's own way around that problem.
 
-= Why should I register? =
+= How did I get hacked in the first place? =
 
-If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to new definitions of "Know Threats" and added features like automatic removal and patches for specific security threats and vulnerabilities like timthumb. Otherwise, this plugin only scans for "Potential Threats" on your site, it would still be up to you to identify the good from the bad and remove them accordingly. 
+This was most likely a random attack on your file-system by a hacker's robot/virus (automated script). This is usually because you are running an older version of WordPress or have installed a Plugin or Theme with vulnerabilities, or because your site is on a shared server with other exploitable sites that got infected. In some cases it's possible that your hosting provider got hacked at a root level and all their clients on that machine got infected.
+
+= What can I do to prevent it from happening again? =
+
+There is no sure-fire way to protect your site from any kind of hack attempt. That said, some of the basic steps should include: hardening your password, keeping all your sites up-to-date, and regular scans with Anti-Malware software like [GOTMLS.NET](http://gotmls.net/)
 
 == Screenshots ==
 
-1. The menu showing Anti-Malware.
-2. An example scan that found some threats.
+1. The menu showing Anti-Malware options.
+2. The Scan Setting page in the admin.
+3. An example scan that found some threats.
+4. The results window when "Automatic Repair" fixes threats.
+5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 1.3.05.11 =
+* Added ability to whitelist files.
+
+= 1.3.04.19 =
+* Fixed a major bug in yesterdays release broke the login page on some sites.
+
+= 1.3.04.17 =
+* Added a patch for the wp-login.php brute force attack that has been going around.
+* Created a process to restore files from the Quarantine.
+* Fixed a few other small bugs including path issues on Winblows server.
 
 = 1.3.02.15 =
 * Improved security on the Quarantine directory to fix the 500 error on some servers.
@@ -80,7 +95,7 @@ If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to new 
 
 = 1.2.12.29 =
 * Brought back the TimThumb and htaccess scan categories.
-* Added a scan category for  Backdoor Scripts.
+* Added a scan category for Backdoor Scripts.
 
 = 1.2.12.14 =
 * Fixed bugs in the last release.
@@ -187,6 +202,15 @@ If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to new 
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.3.05.11 =
+Added ability to whitelist files.
+
+= 1.3.04.19 =
+Fixed a major bug in yesterdays release broke the login page on some sites.
+
+= 1.3.04.17 =
+Added a patch for the wp-login.php brute force attack and fixed a few other small bugs.
 
 = 1.3.02.15 =
 Improved security on the Quarantine directory to fix the 500 error on some servers.
