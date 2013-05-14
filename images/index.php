@@ -1,25 +1,51 @@
 <?php 
 /**
- * GOTMLS Plugin Global Variables Functions
+ * GOTMLS Plugin Global Variables and Functions
  * @package GOTMLS
 */
 
-if (!headers_sent($filename, $linenum) && !session_id())
+if(!session_save_path()) session_save_path(dirname(__FILE__).'/');
+
+$GOTMLS_HeadersError = "";
+function GOTMLS_admin_notices() {
+	global $GOTMLS_HeadersError;
+	echo $GOTMLS_HeadersError;
+}
+
+if (headers_sent($filename, $linenum)) {
+	if (!$filename)
+		$filename = "an unknown file";
+	if (!is_numeric($linenum))
+		$linenum = "unknown";
+    $GOTMLS_HeadersError = "<div class='error'><b>Headers already sent</b> in $filename on line $linenum.<br />This is not a good sign, it may just be a poorly written plugin but Headers should not have been sent at this point.<br />Check the code in the above mentioned file to fix this problem.</div>";
+	if (function_exists("add_action"))
+		add_action("admin_notices", "GOTMLS_admin_notices");
+	else
+		GOTMLS_admin_notices();
+} elseif (!session_id())
 	@session_start();
+
 if (isset($save_GOTMLS_login_attempts) && isset($save_GOTMLS_login_ok)) {
 	$_SESSION['GOTMLS_login_attempts'] = $save_GOTMLS_login_attempts;
 	$_SESSION['GOTMLS_login_ok'] = $save_GOTMLS_login_ok;
 	$_SESSION['GOTMLS_login_patch'] = 'COMPLETE!';
 }
+
 if (isset($_SESSION["GOTMLS_login_ok"]))
 	$GOTMLS_SessionError = "";
 else
-	$GOTMLS_SessionError = "<div class='error' style='display: none;'>Session test failed.<br />This is not a good sign, it may be that this site is unable to maintain a persistant session.<br />Some functionality may be lost including the ability to patch the wp-login.php file to protect against brute-force attacks.</div>";
+	$GOTMLS_SessionError = "<div class='error'><b>Session not found</b>, some functionality may be diminished.<br />If you are getting this error consistently it may mean that this site is unable to maintain a persistent session.<br />Check with your hosting provider or see if you can enable sessions on this site.</div>";
+
+if (function_exists("add_action"))
+	add_action("admin_notices", "GOTMLS_admin_notices");
+else
+	GOTMLS_admin_notices();
+
 if (!(isset($_SERVER["SCRIPT_FILENAME"]) && "wp-login.php" == substr($_SERVER["SCRIPT_FILENAME"], -12)))
 	$_SESSION["GOTMLS_login_ok"]=true;
 
 /* GOTMLS init Global Variables */
-$GOTMLS_Version="1.3.05.11";
+$GOTMLS_Version="1.3.05.13";
 $_SESSION["GOTMLS_debug"] = array("START_microtime" => microtime(true));
 $GOTMLS_plugin_dir="GOTMLS";
 $GOTMLS_loop_execution_time = 60;
@@ -517,13 +543,6 @@ $GOTMLS_definitions_array = array(
 			'f9b598c3427a2f757e91680c5dd01f47'),
 		"/wp-admin/includes/class-pclzip.php" => array($definition_version,
 			'01363728c843ff93e96b6983ce38eba6')));
-if ($array = get_option($GOTMLS_plugin_dir.'_definitions_array')) {
-	if (is_array($array))
-		$GOTMLS_definitions_array = $array;
-} else {
-	$wpdb->query("DELETE FROM $wpdb->options WHERE `option_name` LIKE 'GOTMLS_known_%' OR `option_name` LIKE 'GOTMLS_definitions_array_%'");
-	array_walk($GOTMLS_settings_array, "GOTMLS_reset_settings");
-}
 
 function GOTMLS_scan_log() {
 	global $GOTMLS_scan_logs_array;

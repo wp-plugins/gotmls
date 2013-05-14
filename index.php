@@ -7,10 +7,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 1.3.05.11
+Version: 1.3.05.13
 */
-
-if (__FILE__ == $_SERVER["SCRIPT_FILENAME"]) die('You are not allowed to call this page directly.<p>You could try starting <a href="http://'.$_SERVER["SERVER_NAME"].'">here</a>.');
 
 /**
  * GOTMLS Main Plugin File
@@ -34,21 +32,7 @@ if (__FILE__ == $_SERVER["SCRIPT_FILENAME"]) die('You are not allowed to call th
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-$GOTMLS_HeadersError = "";
-function GOTMLS_admin_notices() {
-	global $GOTMLS_HeadersError;
-	echo $GOTMLS_HeadersError;
-}
-
-if (headers_sent($filename, $linenum)) {
-	if (!$filename)
-		$filename = "an unknown file";
-	if (!is_numeric($linenum))
-		$linenum = "unknown";
-    $GOTMLS_HeadersError = "<div class=\"error\">Headers already sent in $filename on line $linenum.<br />This is not a good sign, it may just be a poorly written plugin but Headers should not have been sent at this point.<br />Check the code in the above mentioned file to fix this problem.</div>";
-	add_action("admin_notices", "GOTMLS_admin_notices");
-} elseif (!session_id())
-	@session_start();
+if (__FILE__ == $_SERVER["SCRIPT_FILENAME"]) die('You are not allowed to call this page directly.<p>You could try starting <a href="http://'.$_SERVER["SERVER_NAME"].'">here</a>.');
 
 include_once(trailingslashit(dirname(__FILE__))."images/index.php");
 $GOTMLS_images_path = plugins_url("/images/", __FILE__);
@@ -360,11 +344,11 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 		$GOTMLS_settings_array['check_known'] = $_POST['check_known'];
 	if (isset($_POST['check_potential']) && is_numeric($_POST['check_potential']) && $_POST['check_potential'] != $GOTMLS_settings_array['check_potential'])
 		$GOTMLS_settings_array['check_potential'] = $_POST['check_potential'];
-	$scan_opts = '><form method="POST" name="GOTMLS_Form" action="'.str_replace('&scan_type=', '&last_type=', $GOTMLS_script_URI).'"><input type="hidden" name="scan_type" id="scan_type" value="Quick Scan" /><p><b>What to scan:</b></p>';
+	$scan_opts = '><form method="POST" name="GOTMLS_Form" action="'.str_replace('&scan_type=', '&last_type=', $GOTMLS_script_URI).'"><input type="hidden" name="scan_type" id="scan_type" value="Quick Scan" /><div style="float: left;"><b>What to scan:</b></div><div style="float: left;">';
 	$scan_optjs = "<script type=\"text/javascript\">\nfunction showOnly(what) {\n";
 	foreach ($GOTMLS_scan_groups as $mg => $GOTMLS_scan_group) {
 		$scan_optjs .= "document.getElementById('only$mg').style.display = 'none';\n";
-		$scan_opts .= '<div style="position: relative; float: left; padding: 2px 0px 4px 30px;" id="scan_group_div_'.$mg.'"><input type="radio" name="scan_what" id="not-only'.$mg.'" value="'.$mg.'"'.($GOTMLS_settings_array['scan_what']==$mg?' checked':'').' /><a style="text-decoration: none;" href="#scan_what" onclick="showOnly(\''.$mg.'\');document.getElementById(\'not-only'.$mg.'\').checked=true;">'.$GOTMLS_scan_group.'</a><br /><div class="rounded-corners" style="position: absolute; display: none; background-color: #CCF; padding: 10px; z-index: 10;" id="only'.$mg.'"><a class="rounded-corners" style="float: right; padding: 0 4px; margin: 0 0 0 30px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;" href="#scan_what" onclick="showhide(\'only'.$mg.'\');">X</a><b>Only&nbsp;Scan&nbsp;These&nbsp;Folders:</b>';
+		$scan_opts .= '<div style="position: relative; float: right; padding: 2px 0px 4px 30px;" id="scan_group_div_'.$mg.'"><input type="radio" name="scan_what" id="not-only'.$mg.'" value="'.$mg.'"'.($GOTMLS_settings_array['scan_what']==$mg?' checked':'').' /><a style="text-decoration: none;" href="#scan_what" onclick="showOnly(\''.$mg.'\');document.getElementById(\'not-only'.$mg.'\').checked=true;">'.$GOTMLS_scan_group.'</a><br /><div class="rounded-corners" style="position: absolute; display: none; background-color: #CCF; padding: 10px; z-index: 10;" id="only'.$mg.'"><div style="position: relative; padding: 0 40px 0 0;"><a class="rounded-corners" style="position: absolute; right: 0; margin: 0; padding: 0 4px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;" href="#scan_what" onclick="showhide(\'only'.$mg.'\');">X</a><b>Only&nbsp;Scan&nbsp;These&nbsp;Folders:</b></div>';
 		$dir = implode(GOTMLS_slash(), array_slice($dirs, 0, -1 * (2 + $mg)));
 		$files = GOTMLS_getfiles($dir);
 		if (is_array($files))
@@ -374,7 +358,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 		$scan_opts .= '</div></div>';
 	}
 	$scan_optjs .= "document.getElementById('only'+what).style.display = 'block';\n}\n</script>";
-	$scan_opts .= $scan_optjs.'<br style="clear: left;" /><p><b>Scan Depth:</b> (how far do you want to drill down from your starting directory)</p><div style="padding: 0 30px;"><input type="text" value="'.$GOTMLS_settings_array["scan_depth"].'" name="scan_depth"> (-1 is infinite depth)</div><p><b>What to look for:</b></p><div style="padding: 0 30px;">';//.print_r($GOTMLS_definitions_array,1).'</pre>';
+	$scan_opts .= $scan_optjs.'</div><div style="float: left;" id="scanwhatfolder"></div><br style="clear: left;" /><p><b>Scan Depth:</b> (how far do you want to drill down from your starting directory)</p><div style="padding: 0 30px;"><input type="text" value="'.$GOTMLS_settings_array["scan_depth"].'" name="scan_depth"> (-1 is infinite depth)</div><p><b>What to look for:</b></p><div style="padding: 0 30px;">';//.print_r($GOTMLS_definitions_array,1).'</pre>';
 //	$potential_threat = array(, '(Find and Automatially Repair files infected with malicious code)</a><div class="rounded-corners" style="display: none; background-color: #CCF; padding: 10px; z-index: 10;" id="dont_check_known"><a class="rounded-corners" style="float: right; padding: 0 4px; margin: 0 0 0 30px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;" href="#check_known_div_0" onclick="showhide(\'dont_check_known\');">X</a><b>Don\'t&nbsp;Scan&nbsp;for&nbsp;These&nbsp;Patterns:</b>');
 	foreach ($GOTMLS_threat_levels as $threat_name=>$threat_level) {
 		$scan_opts .= '<div style="padding: 0;" id="check_'.$threat_level.'_div">';
@@ -707,6 +691,13 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 		$GOTMLS_settings_array["dont_check"] = array();
 	if (isset($_REQUEST["dont_check"]) && is_array($_REQUEST["dont_check"]) && count($_REQUEST["dont_check"]))
 		$GOTMLS_settings_array["dont_check"] = $_REQUEST["dont_check"];
+	if ($array = get_option($GOTMLS_plugin_dir.'_definitions_array')) {
+		if (is_array($array))
+			$GOTMLS_definitions_array = $array;
+	} else {
+		$wpdb->query("DELETE FROM $wpdb->options WHERE `option_name` LIKE 'GOTMLS_known_%' OR `option_name` LIKE 'GOTMLS_definitions_array_%'");
+		array_walk($GOTMLS_settings_array, "GOTMLS_reset_settings");
+	}
 	foreach ($GOTMLS_definitions_array as $threat_level=>$definition_names)
 		foreach ($definition_names as $definition_name=>$definition_version)
 			if (is_array($definition_version))
