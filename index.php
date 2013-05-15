@@ -7,7 +7,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 1.3.05.13
+Version: 1.3.05.14
 */
 
 /**
@@ -667,7 +667,7 @@ function GOTMLS_set_plugin_row_meta($links_array, $plugin_file) {
 }
 
 function GOTMLS_init() {
-	global $GOTMLS_settings_array, $GOTMLS_url, $GOTMLS_onLoad, $GOTMLS_threat_levels, $wpdb, $GOTMLS_threats_found, $GOTMLS_settings_array, $GOTMLS_definitions_versions, $GOTMLS_definitions_array, $GOTMLS_plugin_dir, $GOTMLS_local_images_path, $GOTMLS_images_path, $GOTMLS_file_contents, $GOTMLS_script_URI, $GOTMLS_skip_ext;
+	global $GOTMLS_update_home, $GOTMLS_updated_definition_path, $GOTMLS_settings_array, $GOTMLS_url, $GOTMLS_onLoad, $GOTMLS_threat_levels, $wpdb, $GOTMLS_threats_found, $GOTMLS_settings_array, $GOTMLS_definitions_versions, $GOTMLS_definitions_array, $GOTMLS_plugin_dir, $GOTMLS_local_images_path, $GOTMLS_images_path, $GOTMLS_file_contents, $GOTMLS_script_URI, $GOTMLS_skip_ext;
 $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_microtime"]).' GOTMLS_init_start'] = GOTMLS_memory_usage(true);
 	if (!isset($GOTMLS_settings_array["scan_what"]))
 		$GOTMLS_settings_array["scan_what"] = 2;
@@ -750,9 +750,21 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 		$_SESSION["check"] = $GOTMLS_threat_levels;
 	if (isset($_POST["GOTMLS_fix"]) && !is_array($_POST["GOTMLS_fix"]))
 		$_POST["GOTMLS_fix"] = array($_POST["GOTMLS_fix"]=>1);
-	if (isset($_GET["GOTMLS_scan"])) {
+	if (isset($_POST['GOTMLS_whitelist']) && isset($_POST['GOTMLS_chksum'])) {
+		$file = GOTMLS_decode($_POST['GOTMLS_whitelist']);
+		$chksum = explode("O", $_POST['GOTMLS_chksum']."O");
+		if (strlen($chksum[0]) == 32 && strlen($chksum[1]) == 32 && is_file($file) && md5(@file_get_contents($file)) == $chksum[0]) {
+			if (true)
+				$GOTMLS_definitions_array["whitelist"][$file] = array("A0002", $chksum[0]);
+			else
+				unset($GOTMLS_definitions_array["whitelist"][$file]);
+			update_option("GOTMLS_definitions_array", $GOTMLS_definitions_array);
+			die("<html><body>Added $file to Whitelist!<br /><iframe style='width: 90%; height: 350px;' src='$GOTMLS_update_home$GOTMLS_updated_definition_path?whitelist=".$_POST['GOTMLS_whitelist']."&hash=$chksum[0]&key=$chksum[1]'></iframe></body></html>");
+		} else echo "<li>Invalid Data!</li>";
+	} elseif (isset($_GET["GOTMLS_scan"])) {
 		$file = GOTMLS_decode($_GET["GOTMLS_scan"]);
 		if (is_dir($file)) {
+			@header("Content-type: text/javascript");
 			if (isset($GOTMLS_settings_array["exclude_ext"]) && is_array($GOTMLS_settings_array["exclude_ext"]))
 				$GOTMLS_skip_ext = $GOTMLS_settings_array["exclude_ext"];
 			die(GOTMLS_scandir($file));
@@ -825,8 +837,7 @@ window.parent.showhide("GOTMLS_iFrame", true);
 $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_microtime"]).' GOTMLS_init_end'] = GOTMLS_memory_usage(true);
 }
 
-if (is_admin() && isset($_GET["GOTMLS_scan"]) && file_exists(GOTMLS_decode($_GET["GOTMLS_scan"])) && is_dir(GOTMLS_decode($_GET["GOTMLS_scan"]))) {
-	@header("Content-type: text/javascript");
+if (function_exists('is_admin') && is_admin() && ((isset($_POST['GOTMLS_whitelist']) && isset($_POST['GOTMLS_chksum'])) || (isset($_GET["GOTMLS_scan"]) && is_dir(GOTMLS_decode($_GET["GOTMLS_scan"]))))) {
 	@set_time_limit($GOTMLS_loop_execution_time-5);
 	GOTMLS_init();
 	die("\n//PHP to Javascript Error!\n");

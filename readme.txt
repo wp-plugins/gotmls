@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability, block, brute force, wp-login, patch
-Version: 1.3.05.13
-Stable tag: 1.3.05.13
+Version: 1.3.05.14
+Stable tag: 1.3.05.14
 Requires at least: 2.8
 Tested up to: 3.5.1
 
@@ -19,11 +19,11 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Automatic removal of "Known Threats".
 * Download definitions of new threat as they are discovered.
 * Automatically upgrade vulnerable versions of timthumb to patch security holes.
-* Automatically upgrade wp-login.php to block brute force attempts.
+* Automatically patch wp-login.php to block brute-force attacks.
 * Customize Scan Setting.
 * Run a Quick Scan from the admin menu or a Complete Scan from the Settings Page.
 
-Updated May-13th
+Updated May-14th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -39,7 +39,7 @@ NOTICE: This plugin make use of a "phone home" feature to check for updates. Thi
 
 = Why should I register? =
 
-If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to new definitions of New Threats and added features like automatic removal and patches for specific security threats and vulnerabilities like old versions of timthumb and brute force attaks on wp-login. Otherwise, this plugin only scans for "Potential Threats" on your site, it would then be up to you to identify the good from the bad and remove them accordingly. 
+If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to new definitions of New Threats and added features like automatic removal and patches for specific security threats and vulnerabilities like old versions of timthumb and brute-force attacks on wp-login.php. Otherwise, this plugin only scans for "Potential Threats" on your site, it would then be up to you to identify the good from the bad and remove them accordingly. 
 
 = Why can't I automatically remove the "Potential Threats" in yellow? =
 
@@ -70,6 +70,9 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 1.3.05.14 =
+* Fixed a bug in the Add to Whitelist feature so the you do not need to update the definitions after whitelisting a file.
 
 = 1.3.05.13 =
 * Fixed two bugs in the last release.
@@ -205,6 +208,9 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.3.05.14 =
+Fixed a bug in the Add to Whitelist feature so the you do not need to update the definitions after whitelisting a file.
 
 = 1.3.05.13 =
 Fixed two bugs in the last release.

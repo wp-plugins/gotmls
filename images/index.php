@@ -45,7 +45,7 @@ if (!(isset($_SERVER["SCRIPT_FILENAME"]) && "wp-login.php" == substr($_SERVER["S
 	$_SESSION["GOTMLS_login_ok"]=true;
 
 /* GOTMLS init Global Variables */
-$GOTMLS_Version="1.3.05.13";
+$GOTMLS_Version="1.3.05.14";
 $_SESSION["GOTMLS_debug"] = array("START_microtime" => microtime(true));
 $GOTMLS_plugin_dir="GOTMLS";
 $GOTMLS_loop_execution_time = 60;
@@ -215,18 +215,19 @@ function GOTMLS_remove_dots($dir) {
 function GOTMLS_getfiles($dir) {
 	$files = false;
 	if (is_dir($dir)) {
-		if (function_exists("scandir")) {
+		if (function_exists("scandir"))
 			$files = @scandir($dir);
-			if (is_array($files))
-				$files = array_filter($files, "GOTMLS_remove_dots");
+		if (is_array($files))
+			$files = array_filter($files, "GOTMLS_remove_dots");
+		elseif ($handle = @opendir($dir)) {
+			$files = array();
+			while (false !== ($entry = readdir($handle)))
+				if ($entry != "." && $entry != "..")
+					$files[] = "$entry";
+			closedir($handle);
 		} else {
-			if ($handle = opendir($dir)) {
-				$files = array();
-				while (false !== ($entry = readdir($handle)))
-					if ($entry != "." && $entry != "..")
-						$files[] = "$entry";
-				closedir($handle);
-			}
+			$error = error_get_last();
+			$files .= (is_readable($dir)?(is_array($error) && isset($error["message"])?$error["message"]:"readable? "):(isset($_GET["eli"]) && @chmod($dir, 0775)?"chmod ":"readonly ")).GOTMLS_fileperms();
 		}
 	}
 	return $files;
@@ -378,7 +379,7 @@ function GOTMLS_readdir($dir, $current_depth = 1) {
 				echo GOTMLS_return_threat("dir", "checked", $dir);
 			}
 		} else
-			echo GOTMLS_return_threat("errors", "blocked", $dir, GOTMLS_error_link("Failed to list files in directory!"));
+			echo GOTMLS_return_threat("errors", "blocked", $dir, GOTMLS_error_link('Failed to list files in directory! readdir:'.($entries===false?'(FALSE)':$entries)));
 		@set_time_limit($GOTMLS_loop_execution_time);
 		if ($current_depth-- && $_REQUEST["scan_type"] == "Quick Scan") {
 			$GOTMLS_dir_at_depth[$current_depth]++;
@@ -507,7 +508,7 @@ function GOTMLS_scandir($dir) {
 				echo GOTMLS_return_threat('dir', 'checked', $dir);
 			}
 		} else
-			echo GOTMLS_return_threat('errors', 'blocked', $dir, GOTMLS_error_link('Failed to list files in directory!'));
+			echo GOTMLS_return_threat('errors', 'blocked', $dir, GOTMLS_error_link('Failed to list files in directory! scandir:'.($files===false?'(FALSE)':$files)));
 	}
 	echo GOTMLS_update_status("Scanned $dir");
 	$GOTMLS_scan_logs_array["LAST_SCAN_finish"] = time();
@@ -564,6 +565,9 @@ function GOTMLS_scan_log() {
 			$LastScan .= " and ran for $time $unit";
 		} else
 			$LastScan .= " and has not finish";
+	} elseif (is_numeric($GOTMLS_scan_logs_array["LAST_SCAN_start"] = get_option("GOTMLS_LAST_scan_start")) && is_numeric($GOTMLS_scan_logs_array["LAST_SCAN_finish"] = get_option("GOTMLS_LAST_scan_finish"))) {
+		$LastScan = date("y-m-d H:i:s", $GOTMLS_scan_logs_array["LAST_SCAN_start"]);
+		update_option("GOTMLS_scan_logs_array", $GOTMLS_scan_logs_array);
 	} else
 		$LastScan = "never started";
 	return "Last ".(isset($GOTMLS_scan_logs_array["LAST_SCAN_type"])?$GOTMLS_scan_logs_array["LAST_SCAN_type"]:"Scan")." $LastScan.";
@@ -610,17 +614,5 @@ if (__FILE__ == $_SERVER['SCRIPT_FILENAME']) {
 		imagegif($img);
 		imagedestroy($img);
 	} else echo $img_src.' not found!';
-
-} elseif (function_exists('is_admin') && is_admin() && isset($_POST['GOTMLS_whitelist']) && isset($_POST['GOTMLS_chksum'])) {
-	$file = GOTMLS_decode($_POST['GOTMLS_whitelist']);
-	$chksum = explode("O", $_POST['GOTMLS_chksum']."O");
-	if (strlen($chksum[0]) == 32 && strlen($chksum[1]) == 32 && is_file($file) && md5(@file_get_contents($file)) == $chksum[0]) {
-		if (true)
-			$GOTMLS_definitions_array["whitelist"][$file] = array("A0002", $chksum[0]);
-		else
-			unset($GOTMLS_definitions_array["whitelist"][$file]);
-		update_option("GOTMLS_definitions_array", $GOTMLS_definitions_array);
-		die("<html><body>Added $file to Whitelist!<br /><iframe style='width: 90%; height: 350px;' src='$GOTMLS_update_home$GOTMLS_feedback_form_path?whitelist=".$_POST['GOTMLS_whitelist']."&hash=$chksum[0]&key=$chksum[1]'></iframe></body></html>");
-	} else echo "<li>Invalid Data!</li>";
 }
 ?>
