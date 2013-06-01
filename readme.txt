@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability, block, brute force, wp-login, patch
-Version: 1.3.05.14
-Stable tag: 1.3.05.14
+Version: 1.3.05.31
+Stable tag: 1.3.05.31
 Requires at least: 2.8
 Tested up to: 3.5.1
 
