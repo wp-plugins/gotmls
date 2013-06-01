@@ -1,5 +1,7 @@
 <?php
 // START Security Patch by GOTMLS.NET
+if(!session_save_path())
+	session_save_path(dirname(__FILE__).'/images/');
 if (!session_id())
 	@session_start();
 if (!(isset($_SESSION["GOTMLS_login_attempts"]) && strlen($_SESSION["GOTMLS_login_attempts"]."") > 0 && is_numeric($_SESSION["GOTMLS_login_attempts"])))
@@ -8,7 +10,8 @@ if (!(isset($_SESSION["GOTMLS_login_ok"]) && $_SESSION["GOTMLS_login_ok"] === tr
 	$_SESSION["GOTMLS_login_ok"] = false;
 if ($_SESSION["GOTMLS_login_ok"] && $_SESSION["GOTMLS_login_attempts"] == 0)
 	$_SESSION["GOTMLS_login_attempts"] = 1;
-$GOTMLS_time = date("mdHm");
+@date_default_timezone_set(@date_default_timezone_get());
+$GOTMLS_time = @date("mdHm");
 if (file_exists(dirname(__FILE__).'/../../../.GOTMLS.failed.login.attempt.from.'.$_SERVER["REMOTE_ADDR"].'.php'))
 	include(dirname(__FILE__).'/../../../.GOTMLS.failed.login.attempt.from.'.$_SERVER["REMOTE_ADDR"].'.php');
 elseif (isset($_GET["GOTMLS_SESSION_check"]) && is_numeric($_GET["GOTMLS_SESSION_check"])) {

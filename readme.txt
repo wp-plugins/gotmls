@@ -49,6 +49,10 @@ Many of these files may use eval and other powerful PHP function for perfectly l
 
 Click on the linked filename, then click each numbered link above the file content box to highlight the suspect code. If you cannot tell whether or not the code is malicious just leave it alone or ask someone else to look at it for you. If you find that it is malicious please send me a copy of the file so that I can add it to the definitions file as a "Know Threats", then it can be automatically removed. If you want me to examine your files please consider making a donation.
 
+= Why does the wp-login.php file show up as a vulnerability (even on a fresh install of WordPress)? =
+
+The WordPress Login page is susceptible to a brute-force attack (just like any other login page). These types of attacks are becoming more prevalent these days and can sometimes cause your server to become slow or unresponsive, even if the attacks do not succeed in gaining access to your site. This plugin can apply a patch that will block access to the WordPress Login page whenever this type of attack is detected. For more information on this subject [read my blog](http://gotmls.net/tag/wp-login-php/).
+
 = What if the scan gets stuck part way through? =
 
 First just leave it for a while. If there are a lot of files on your server it could take quite a while and could sometimes appear to not be moving along at all even if it really is working. If, after a while, it still seems really stuck then try the Complete Scan or try running the scan again. If it stops in the exact same place then you may want to try to figure out what file in that folder is causing it to hang or avoid scanning that folder all together. If you figure it out let me know what it was and I will try and make the program find it's own way around that problem.
@@ -70,6 +74,9 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 1.3.05.31 =
+* Downgraded the WP-Login threat and changed it to an opt-in fix.
 
 = 1.3.05.14 =
 * Fixed a bug in the Add to Whitelist feature so the you do not need to update the definitions after whitelisting a file.
@@ -208,6 +215,9 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 1.3.05.31 =
+Downgraded the WP-Login threat and changed it to an opt-in fix.
 
 = 1.3.05.14 =
 Fixed a bug in the Add to Whitelist feature so the you do not need to update the definitions after whitelisting a file.
