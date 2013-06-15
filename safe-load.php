@@ -26,12 +26,12 @@ elseif (isset($_GET["GOTMLS_SESSION_check"]) && is_numeric($_GET["GOTMLS_SESSION
 				die('SESSION FAILURE: No way to login.');
 		}
 	} else
-		die('SESSION TEST PASSED! You should be able to login if you "Open the Pod bay doors".');
+		die('SESSION TEST PASSED! You should be able to login now.');
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST" || isset($_POST["user_login"])) {
 	$_SESSION["GOTMLS_login_attempts"]++;
 	if ($_SESSION["GOTMLS_login_attempts"] < 2 || $_SESSION["GOTMLS_login_attempts"] > 6)
-		die("<html><head><title>Login Error</title></head><body style='margin-top: 0;'><!-- ".$_SESSION["GOTMLS_login_attempts"]." -->\n".'<div id="help-meta" style="background-color: #CCCCCC; display: none; margin: 0 15px; padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;">This message is shown whenever a possible brute-force attack is detected. To have another shot at logging in tell Hal to open the pod bay doors.<br><iframe src="wp-login.php?GOTMLS_SESSION_check='.str_replace('.','',$_SERVER["REMOTE_ADDR"]).'" style="width: 100%; height: 35px; margin: 10px 0;"></iframe></div><div style="background-color: #CCCCCC; margin: 0 25px; float: right; padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;"><a onclick="hbox=document.getElementById(\'help-meta\');if (hbox.style.display==\'block\') hbox.style.display=\'none\'; else hbox.style.display=\'block\';" href="#help-meta">Help</a></div><br>'."\n<p>Just what do you think you are doing, Dave?</p><p><a href='wp-login.php'>Open the Pod bay doors, HAL!</a></p></body></html>");
+		die("<html><head><title>Login Error</title></head><body style='margin-top: 0;'><!-- ".$_SESSION["GOTMLS_login_attempts"]." -->\n".'<div id="help-meta" style="background-color: #CCCCCC; display: none; margin: 0 15px; padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;">This message is shown whenever a possible brute-force attack is detected. Click the link below to have another shot at logging in.<br><iframe src="wp-login.php?GOTMLS_SESSION_check='.str_replace('.','',$_SERVER["REMOTE_ADDR"]).'" style="width: 100%; height: 35px; margin: 10px 0;"></iframe></div><div style="background-color: #CCCCCC; margin: 0 25px; float: right; padding: 10px; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;"><a onclick="hbox=document.getElementById(\'help-meta\');if (hbox.style.display==\'block\') hbox.style.display=\'none\'; else hbox.style.display=\'block\';" href="#help-meta">Help</a></div><br>'."\n<p>Just what do you think you are doing?</p><p><a href='wp-login.php'>Open the login page to try again</a></p></body></html>");
 } else {
 	$_SESSION["GOTMLS_login_ok"] = true;
 	$_SESSION["GOTMLS_login_attempts"] = 1;
