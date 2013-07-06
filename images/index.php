@@ -97,6 +97,30 @@ function GOTMLS_fileperms($file) {
 	return $info;
 }
 
+if (!function_exists('array_replace_recursive')) {
+	//create this function for PHP versions older that 5.0
+	function array_replace_recursive($array, $array1) {
+		function GOTMLS_recurse($array, $array1) {
+			foreach ($array1 as $key => $value) {
+				if (!isset($array[$key]) || (isset($array[$key]) && !is_array($array[$key])))
+					$array[$key] = array();
+				if (is_array($value))
+					$value = GOTMLS_recurse($array[$key], $value);
+				$array[$key] = $value;
+			}
+			return $array;
+		}
+		$args = func_get_args();
+		$array = $args[0];
+		if (!is_array($array))
+			return $array;
+		for ($i = 1; $i < count($args); $i++)
+			if (is_array($args[$i]))
+				$array = GOTMLS_recurse($array, $args[$i]);
+		return $array;
+	}
+}
+
 function GOTMLS_get_ext($filename) {
 	$nameparts = explode(".", ".$filename");
 	return strtolower($nameparts[(count($nameparts)-1)]);
