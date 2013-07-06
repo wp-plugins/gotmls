@@ -7,7 +7,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 1.3.05.31
+Version: 3.07.05
 */
 
 /**
@@ -68,7 +68,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 }
 
 function GOTMLS_display_header($pTitle, $optional_box = "") {
-	global $GOTMLS_url, $GOTMLS_onLoad, $GOTMLS_loop_execution_time, $_SERVER_REQUEST_URI, $GOTMLS_plugin_dir, $GOTMLS_update_home, $GOTMLS_plugin_home, $GOTMLS_updated_images_path, $GOTMLS_images_path, $GOTMLS_definitions_versions, $GOTMLS_Version, $wp_version, $current_user, $GOTMLS_updated_definition_path, $GOTMLS_SessionError;
+	global $GOTMLS_url, $GOTMLS_onLoad, $GOTMLS_loop_execution_time, $_SERVER_REQUEST_URI, $GOTMLS_plugin_dir, $GOTMLS_update_home, $GOTMLS_plugin_home, $GOTMLS_updated_images_path, $GOTMLS_images_path, $GOTMLS_definitions_versions, $GOTMLS_Version, $wp_version, $current_user, $GOTMLS_updated_definition_path, $GOTMLS_SessionError, $GOTMLS_protocol;
 	get_currentuserinfo();
 $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_microtime"]).' GOTMLS_display_header_start'] = GOTMLS_memory_usage(true);
 	$GOTMLS_url_parts = explode('/', $GOTMLS_url);
@@ -88,6 +88,9 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 		$Update_Link .= wp_nonce_url(self_admin_url('update.php?action=upgrade-plugin&plugin=').$file, 'upgrade-plugin_'.$file);
 	}
 	$Update_Link .= "\">$new_version</a></div>";
+	$Definition_Updates = '?div=Definition_Updates';
+	foreach ($GOTMLS_definitions_versions as $definition_name=>$definition_version)
+		$Definition_Updates .= "&ver[$definition_name]=$definition_version";
 	echo '
 .rounded-corners {margin: 10px; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; border: 1px solid #000;}
 .shadowed-box {box-shadow: -3px 3px 3px #666; -moz-box-shadow: -3px 3px 3px #666; -webkit-box-shadow: -3px 3px 3px #666;}
@@ -108,7 +111,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 #pastDonations li {list-style: none;}
 #main-section {margin-right: 310px;}
 #main-page-title {
-	background: url("http://1.gravatar.com/avatar/5feb789dd3a292d563fea3b885f786d6?s=64&r=G") no-repeat scroll 0 0 transparent;
+	background: url("'.$GOTMLS_protocol.'://1.gravatar.com/avatar/5feb789dd3a292d563fea3b885f786d6?s=64&r=G") no-repeat scroll 0 0 transparent;
 	line-height: 22px;
     margin: 10px 0 0;
     padding: 0 0 0 84px;}
@@ -148,7 +151,7 @@ function checkupdateserver(server, divid) {
 		'.$Update_Link.'
 	</div>
 	<script type="text/javascript">
-		stopCheckingUpdates = checkupdateserver("'.$GOTMLS_plugin_home.$GOTMLS_updated_images_path.'?js='.$ver_info.'", "findUpdates", "'.str_replace("wordpress", "wp", $GOTMLS_plugin_home).$GOTMLS_updated_images_path.'?js='.$ver_info.'");
+		stopCheckingUpdates = checkupdateserver("'.$GOTMLS_plugin_home.$GOTMLS_updated_images_path.'?js='.$ver_info.'", "findUpdates", "'.str_replace("://", "://www.", $GOTMLS_plugin_home).$GOTMLS_updated_images_path.'?js='.$ver_info.'");
 	</script>
 	<div id="definitionupdates" class="stuffbox shadowed-box"><h3 class="hndle"><span>Definition Updates ('.$definition_version.')</span></h3>
 		<script type="text/javascript">
@@ -228,10 +231,7 @@ Register your Key now and get instant access to new definition files as new thre
 			setDivNAtext();
 			'.$GOTMLS_onLoad.'
 		}
-		stopCheckingDefinitions = checkupdateserver("'.$GOTMLS_update_home.$GOTMLS_updated_definition_path.'?div=Definition_Updates';
-	foreach ($GOTMLS_definitions_versions as $definition_name=>$definition_version)
-		echo "&ver[$definition_name]=$definition_version";
-	echo '&js='.$ver_info.'", "Definition_Updates");
+		stopCheckingDefinitions = checkupdateserver("'.$GOTMLS_update_home.$GOTMLS_updated_definition_path.$Definition_Updates.'&js='.$ver_info.'", "Definition_Updates", "'.str_replace("://", "://www.", $GOTMLS_update_home).$GOTMLS_updated_definition_path.$Definition_Updates.'&js='.$ver_info.'");
 		if (divNAtext)
 			loadGOTMLS();
 		else
@@ -289,7 +289,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 }
 
 function GOTMLS_settings() {
-	global $GOTMLS_scan_logs_array, $GOTMLS_quarantine_dir, $GOTMLS_definitions_array, $GOTMLS_threat_levels, $GOTMLS_script_URI, $GOTMLS_scanfiles, $GOTMLS_plugin_dir, $GOTMLS_images_path, $GOTMLS_loop_execution_time, $GOTMLS_skip_ext, $GOTMLS_skip_dirs, $GOTMLS_settings_array, $GOTMLS_dirs_at_depth, $GOTMLS_dir_at_depth;
+	global $GOTMLS_scan_logs_array, $GOTMLS_quarantine_dir, $GOTMLS_definitions_array, $GOTMLS_threat_levels, $GOTMLS_script_URI, $GOTMLS_scanfiles, $GOTMLS_plugin_dir, $GOTMLS_images_path, $GOTMLS_loop_execution_time, $GOTMLS_skip_ext, $GOTMLS_skip_dirs, $GOTMLS_settings_array, $GOTMLS_dirs_at_depth, $GOTMLS_dir_at_depth, $GOTMLS_protocol;
 $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_microtime"]).' GOTMLS_Settings_start'] = GOTMLS_memory_usage(true);
 	$GOTMLS_menu_groups = array("Main Menu Item placed below <b>Comments</b> and above <b>Appearance</b>","Main Menu Item placed below <b>Settings</b>","Sub-Menu inside the <b>Tools</b> Menu Item");
 	$GOTMLS_scan_groups = array();
@@ -386,8 +386,8 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	$OB_default_handler = "default output handler";
 	foreach (ob_list_handlers() as $OB_last_handler)
 		if ($OB_last_handler != $OB_default_handler)
-			echo "<div class=\"error\">Another Plugin or Theme is using '$OB_last_handler' to hadle output buffers. <br />This prevents actively outputing the buffer on-the-fly and will severely degrade the performance of this (and many other) Plugins. <br />Consider disabling caching and compression plugins (at least during the scanning process).</div>";
-	GOTMLS_display_header('Anti-Malware by <img style="vertical-align: middle;" alt="ELI" src="http://0.gravatar.com/avatar/69ad8428e97469d0dcd64f1f60c07bd8?s=64" /> at GOTMLS.NET', $menu_opts.'</form><br style="clear: left;" /></div></div>');
+			echo "<div class=\"error\">Another Plugin or Theme is using '$OB_last_handler' to handle output buffers. <br />This prevents actively outputing the buffer on-the-fly and will severely degrade the performance of this (and many other) Plugins. <br />Consider disabling caching and compression plugins (at least during the scanning process).</div>";
+	GOTMLS_display_header('Anti-Malware by <img style="vertical-align: middle;" alt="ELI" src="'.$GOTMLS_protocol.'://0.gravatar.com/avatar/69ad8428e97469d0dcd64f1f60c07bd8?s=64" /> at GOTMLS.NET', $menu_opts.'</form><br style="clear: left;" /></div></div>');
 	$scan_groups = array_merge(array("Scanned Files"=>"scanned","Selected Folders"=>"dirs","Scanned Folders"=>"dir","Skipped Folders"=>"skipdirs","Skipped Files"=>"skipped","Read/Write Errors"=>"errors","Quarantined Files"=>"bad"), $GOTMLS_threat_levels);
 	echo '<script type="text/javascript">
 var percent = 0;
@@ -707,32 +707,22 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 				if (!isset($GOTMLS_definitions_versions[$threat_level]) || $definition_version[0] > $GOTMLS_definitions_versions[$threat_level])
 					$GOTMLS_definitions_versions[$threat_level] = $definition_version[0];
 	if (isset($_POST["UPDATE_definitions_array"])) {
-		$GOTnew_definitions = explode("-+====+-", '-+====+-'.GOTMLS_decode($_POST["UPDATE_definitions_array"]));
+		$GOTnew_definitions = maybe_unserialize(GOTMLS_decode($_POST["UPDATE_definitions_array"]));
 		GOTMLS_set_global($GOTMLS_onLoad, "check_for_updates('Downloaded Definitions');");
 	} elseif (file_exists(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt'))
-		$GOTnew_definitions = explode("-+====+-", '-+====+-'.GOTMLS_decode(file_get_contents(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt')));
+		$GOTnew_definitions = maybe_unserialize(GOTMLS_decode(file_get_contents(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt')));
 	if (isset($GOTnew_definitions) && is_array($GOTnew_definitions)) {
-		for ($type = 1; $type < count($GOTnew_definitions); $type++) {
-			$GOTnew_type = explode("-+===+-", '-+===+-'.$GOTnew_definitions[$type]);
-			for ($definition = 2; $definition < count($GOTnew_type); $definition++) {
-				$GOTnew_definition = explode("-+==+-", '-+==+-'.$GOTnew_type[$definition]);
-				if (count($GOTnew_definition) == 3 && ($array = explode("-+=+-", $GOTnew_definition[2]))) {
-					if (is_array($array) && count($array) > 1 && (!(isset($GOTMLS_definitions_array[$GOTnew_type[1]][$GOTnew_definition[1]]) && is_array($GOTMLS_definitions_array[$GOTnew_type[1]][$GOTnew_definition[1]])) || $array[0] > $GOTMLS_definitions_array[$GOTnew_type[1]][$GOTnew_definition[1]][0])) {
-						if (strlen($array[1]) > 2)
-							$GOTMLS_definitions_array[$GOTnew_type[1]][$GOTnew_definition[1]] = $array;
-						else
-							unset($GOTMLS_definitions_array[$GOTnew_type[1]][$GOTnew_definition[1]]);
-						if ($array[0] > $GOTMLS_definitions_versions[$GOTnew_type[1]])
-							$GOTMLS_definitions_versions[$GOTnew_type[1]] = $array[0];
-					}
-				}
-			}
-		}
+		$GOTMLS_definitions_array = array_replace_recursive($GOTMLS_definitions_array, $GOTnew_definitions);//array_merge_recursive
 		if (file_exists(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt'))
 			@unlink(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt');
 		update_option($GOTMLS_plugin_dir.'_definitions_array', $GOTMLS_definitions_array);
 		if (isset($_SESSION["check"]))
 			unset($_SESSION["check"]);
+		foreach ($GOTMLS_definitions_array as $threat_level=>$definition_names)
+			foreach ($definition_names as $definition_name=>$definition_version)
+				if (is_array($definition_version))
+					if (!isset($GOTMLS_definitions_versions[$threat_level]) || $definition_version[0] > $GOTMLS_definitions_versions[$threat_level])
+						$GOTMLS_definitions_versions[$threat_level] = $definition_version[0];
 	}
 	asort($GOTMLS_definitions_versions);
 	if (isset($_REQUEST["check"]) && is_array($_REQUEST["check"]))
@@ -759,7 +749,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 		if (strlen($chksum[0]) == 32 && strlen($chksum[1]) == 32 && is_file($file) && md5(@file_get_contents($file)) == $chksum[0]) {
 			$filesize = @filesize($file);
 			if (true)
-				$GOTMLS_definitions_array["whitelist"][$file] = array("A0002", $chksum[0]);
+				$GOTMLS_definitions_array["whitelist"][$file] = array("A0002", $chksum[0].'O'.$filesize);
 			else
 				unset($GOTMLS_definitions_array["whitelist"][$file]);
 			update_option("GOTMLS_definitions_array", $GOTMLS_definitions_array);

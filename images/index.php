@@ -42,7 +42,7 @@ else
 	GOTMLS_admin_notices();
 
 /* GOTMLS init Global Variables */
-$GOTMLS_Version="1.3.05.31";
+$GOTMLS_Version="3.07.05";
 $_SESSION["GOTMLS_debug"] = array("START_microtime" => microtime(true));
 $GOTMLS_plugin_dir="GOTMLS";
 $GOTMLS_loop_execution_time = 60;
@@ -134,11 +134,21 @@ function GOTMLS_scanfile($file) {
 	$threat_link = "";
 	$className = "scanned";
 	$clean_file = GOTMLS_encode($file);
-	if (file_exists($file) && ($GOTMLS_file_contents = @file_get_contents($file))) {
-		foreach ($GOTMLS_definitions_array["whitelist"] as $whitelist_file=>$non_threats)
-			if (is_array($non_threats) && count($non_threats) > 1 && substr($file, (-1 * strlen($whitelist_file))) == str_replace("\\", "/", $whitelist_file) && strlen(array_shift($non_threats)) == 5)
-				if (in_array(md5($GOTMLS_file_contents), $non_threats))
+	if (is_file($file) && ($filesize = filesize($file)) && ($GOTMLS_file_contents = @file_get_contents($file))) {
+		foreach ($GOTMLS_definitions_array["whitelist"] as $whitelist_file=>$non_threats) {
+			if (is_array($non_threats) && count($non_threats) > 1 && substr(str_replace("\\", "/", $file), (-1 * strlen($whitelist_file))) == str_replace("\\", "/", $whitelist_file)) {
+				if (in_array(md5($GOTMLS_file_contents).'O'.$filesize, array_keys($non_threats)))
 					return GOTMLS_return_threat($className, "checked.gif?$className", $file, $threat_link);
+				elseif (in_array(md5($GOTMLS_file_contents), $non_threats)) {
+					if (!(isset($GOTMLS_definitions_array["whitelist"][''.GOTMLS_get_ext($file)][0]) && $GOTMLS_definitions_array["whitelist"][''.GOTMLS_get_ext($file)][0] >= $non_threats[0]))
+						$GOTMLS_definitions_array["whitelist"][''.GOTMLS_get_ext($file)][0] = $non_threats[0];
+					$GOTMLS_definitions_array["whitelist"][''.GOTMLS_get_ext($file)][md5($GOTMLS_file_contents).'O'.$filesize] = $non_threats[0];
+					unset($GOTMLS_definitions_array["whitelist"][$whitelist_file]);
+					update_option("GOTMLS_definitions_array", $GOTMLS_definitions_array);
+					return GOTMLS_return_threat($className, "checked.gif?$className", $file, $threat_link);
+				}
+			}
+		}
 		$GOTMLS_new_contents = $GOTMLS_file_contents;
 		if (isset($_SESSION["check_custom"]) && strlen($_SESSION["check_custom"]) && isset($_GET['eli']) && substr($_SESSION["check_custom"], 0, 1) == '/' && ($found = GOTMLS_check_threat($_SESSION["check_custom"]))) //don't use this without registration
 			$className = "known";
@@ -547,8 +557,21 @@ function GOTMLS_reset_settings($item, $key) {
 $GOTMLS_quarantine_dir = dirname(GOTMLS_quarantine(__FILE__));
 GOTMLS_set_global($GOTMLS_default_ext, "com");
 GOTMLS_set_global($GOTMLS_encode, substr($GOTMLS_default_ext, 0, 2));
-$GOTMLS_plugin_home = "http://wordpress.$GOTMLS_default_ext/";
-$GOTMLS_update_home = "http://gotmls.net/";
+if(!isset($_SERVER["SERVER_NAME"]) || !$_SERVER["SERVER_NAME"]) {
+	if(!isset($_ENV["SERVER_NAME"]))
+		getenv("SERVER_NAME");
+	$_SERVER["SERVER_NAME"] = $_ENV["SERVER_NAME"];
+}
+if(!isset($_SERVER["SERVER_PORT"]) || !$_SERVER["SERVER_PORT"]) {
+	if(!isset($_ENV["SERVER_PORT"]))
+		getenv("SERVER_PORT");
+	$_SERVER["SERVER_PORT"] = $_ENV["SERVER_PORT"];
+}
+$GOTMLS_protocol = "http";
+if ((isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == 1)) || 'ssl'.$_SERVER["SERVER_PORT"] == 'ssl443')
+	$GOTMLS_protocol .= "s";
+$GOTMLS_plugin_home = $GOTMLS_protocol."://wordpress.$GOTMLS_default_ext/";
+$GOTMLS_update_home = $GOTMLS_protocol."://gotmls.net/";
 $GOTMLS_images_path = $_SERVER["REQUEST_URI"]."/images/";
 $GOTMLS_local_images_path = dirname(__FILE__)."/";
 $GOTMLS_updated_images_path = "wp-content/plugins/update/images/";
@@ -566,6 +589,15 @@ $GOTMLS_definitions_array = array(
 			'f9b598c3427a2f757e91680c5dd01f47'),
 		"/wp-admin/includes/class-pclzip.php" => array($definition_version,
 			'01363728c843ff93e96b6983ce38eba6')));
+
+function GOTMLS_file_put_contents($file, &$content) {
+	if ($fp = fopen($file, 'w')) {
+		fwrite($fp, $content);
+		fclose($fp);
+		return true;
+	} else
+		return false;
+}
 
 function GOTMLS_scan_log() {
 	global $GOTMLS_scan_logs_array;
