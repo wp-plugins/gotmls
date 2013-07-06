@@ -42,7 +42,7 @@ else
 	GOTMLS_admin_notices();
 
 /* GOTMLS init Global Variables */
-$GOTMLS_Version="3.07.05";
+$GOTMLS_Version="3.07.06";
 $_SESSION["GOTMLS_debug"] = array("START_microtime" => microtime(true));
 $GOTMLS_plugin_dir="GOTMLS";
 $GOTMLS_loop_execution_time = 60;

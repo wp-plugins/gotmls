@@ -7,7 +7,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 3.07.05
+Version: 3.07.06
 */
 
 /**
@@ -712,7 +712,10 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	} elseif (file_exists(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt'))
 		$GOTnew_definitions = maybe_unserialize(GOTMLS_decode(file_get_contents(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt')));
 	if (isset($GOTnew_definitions) && is_array($GOTnew_definitions)) {
-		$GOTMLS_definitions_array = array_replace_recursive($GOTMLS_definitions_array, $GOTnew_definitions);//array_merge_recursive
+		if (function_exists("array_replace_recursive"))
+			$GOTMLS_definitions_array = array_replace_recursive($GOTMLS_definitions_array, $GOTnew_definitions);	
+		else
+			$GOTMLS_definitions_array = array_merge_recursive($GOTMLS_definitions_array, $GOTnew_definitions);
 		if (file_exists(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt'))
 			@unlink(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt');
 		update_option($GOTMLS_plugin_dir.'_definitions_array', $GOTMLS_definitions_array);
