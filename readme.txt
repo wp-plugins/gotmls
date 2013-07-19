@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability, block, brute force, wp-login, patch
-Version: 3.07.05
-Stable tag: 1.3.05.31
+Version: 3.07.19
+Stable tag: 3.07.19
 Requires at least: 2.8
 Tested up to: 3.5.1
 
@@ -23,7 +23,7 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Customize Scan Setting.
 * Run a Quick Scan from the admin menu or a Complete Scan from the Settings Page.
 
-Updated July-5th
+Updated July-19th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -75,7 +75,10 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 
 == Changelog ==
 
-= 3.07.05 =
+= 3.06.19 =
+* Fixed a few bug in the Whitelist definition feature.
+
+= 3.07.06 =
 * Added SSL support for definition updates and registration form.
 * Upgraded the Whitelist feature so the it could not contain duplicates.
 
@@ -220,7 +223,10 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 
 == Upgrade Notice ==
 
-= 3.07.05 =
+= 3.06.19 =
+Fixed a few bug in the Whitelist definition feature.
+
+= 3.07.06 =
 Added SSL support for definition updates and upgraded the Whitelist feature.
 
 = 1.3.05.31 =

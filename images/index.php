@@ -42,7 +42,7 @@ else
 	GOTMLS_admin_notices();
 
 /* GOTMLS init Global Variables */
-$GOTMLS_Version="3.07.05";
+$GOTMLS_Version="3.07.19";
 $_SESSION["GOTMLS_debug"] = array("START_microtime" => microtime(true));
 $GOTMLS_plugin_dir="GOTMLS";
 $GOTMLS_loop_execution_time = 60;
@@ -97,6 +97,30 @@ function GOTMLS_fileperms($file) {
 	return $info;
 }
 
+if (!function_exists('array_replace_recursive')) {
+	//create this function for PHP versions older that 5.0
+	function array_replace_recursive($array, $array1) {
+		function GOTMLS_recurse($array, $array1) {
+			foreach ($array1 as $key => $value) {
+				if (!isset($array[$key]) || (isset($array[$key]) && !is_array($array[$key])))
+					$array[$key] = array();
+				if (is_array($value))
+					$value = GOTMLS_recurse($array[$key], $value);
+				$array[$key] = $value;
+			}
+			return $array;
+		}
+		$args = func_get_args();
+		$array = $args[0];
+		if (!is_array($array))
+			return $array;
+		for ($i = 1; $i < count($args); $i++)
+			if (is_array($args[$i]))
+				$array = GOTMLS_recurse($array, $args[$i]);
+		return $array;
+	}
+}
+
 function GOTMLS_get_ext($filename) {
 	$nameparts = explode(".", ".$filename");
 	return strtolower($nameparts[(count($nameparts)-1)]);
@@ -136,13 +160,18 @@ function GOTMLS_scanfile($file) {
 	$clean_file = GOTMLS_encode($file);
 	if (is_file($file) && ($filesize = filesize($file)) && ($GOTMLS_file_contents = @file_get_contents($file))) {
 		foreach ($GOTMLS_definitions_array["whitelist"] as $whitelist_file=>$non_threats) {
-			if (is_array($non_threats) && count($non_threats) > 1 && substr(str_replace("\\", "/", $file), (-1 * strlen($whitelist_file))) == str_replace("\\", "/", $whitelist_file)) {
-				if (in_array(md5($GOTMLS_file_contents).'O'.$filesize, array_keys($non_threats)))
+			if (isset($non_threats[0])) {
+				$updated = $non_threats[0];
+				unset($non_threats[0]);
+			} else
+				$updated = "A0002";
+			if (is_array($non_threats) && count($non_threats) && substr(str_replace("\\", "/", $file), (-1 * strlen($whitelist_file))) == str_replace("\\", "/", $whitelist_file)) {
+				if (in_array(md5($GOTMLS_file_contents).'O'.$filesize, array_keys($non_threats), true))
 					return GOTMLS_return_threat($className, "checked.gif?$className", $file, $threat_link);
-				elseif (in_array(md5($GOTMLS_file_contents), $non_threats)) {
-					if (!(isset($GOTMLS_definitions_array["whitelist"][''.GOTMLS_get_ext($file)][0]) && $GOTMLS_definitions_array["whitelist"][''.GOTMLS_get_ext($file)][0] >= $non_threats[0]))
-						$GOTMLS_definitions_array["whitelist"][''.GOTMLS_get_ext($file)][0] = $non_threats[0];
-					$GOTMLS_definitions_array["whitelist"][''.GOTMLS_get_ext($file)][md5($GOTMLS_file_contents).'O'.$filesize] = $non_threats[0];
+				elseif (in_array(md5($GOTMLS_file_contents), $non_threats, true)) {
+					if (!(isset($GOTMLS_definitions_array["whitelist"][''.GOTMLS_get_ext($file)][0]) && $GOTMLS_definitions_array["whitelist"][''.GOTMLS_get_ext($file)][0] >= $updated))
+						$GOTMLS_definitions_array["whitelist"][''.GOTMLS_get_ext($file)][0] = $updated;
+					$GOTMLS_definitions_array["whitelist"][''.GOTMLS_get_ext($file)][md5($GOTMLS_file_contents).'O'.$filesize] = $updated;
 					unset($GOTMLS_definitions_array["whitelist"][$whitelist_file]);
 					update_option("GOTMLS_definitions_array", $GOTMLS_definitions_array);
 					return GOTMLS_return_threat($className, "checked.gif?$className", $file, $threat_link);
