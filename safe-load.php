@@ -1,7 +1,6 @@
 <?php
 // START Security Patch by GOTMLS.NET
-if(!session_save_path())
-	session_save_path(dirname(__FILE__).'/images/');
+//if(!session_save_path())	session_save_path(dirname(__FILE__).'/images/');
 if (!session_id())
 	@session_start();
 if (!(isset($_SESSION["GOTMLS_login_attempts"]) && strlen($_SESSION["GOTMLS_login_attempts"]."") > 0 && is_numeric($_SESSION["GOTMLS_login_attempts"])))
