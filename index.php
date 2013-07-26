@@ -7,7 +7,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 3.07.05
+Version: 3.07.27
 */
 
 /**
@@ -302,7 +302,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	if (!isset($GOTMLS_settings_array["scan_depth"]))
 		$GOTMLS_settings_array["scan_depth"] = -1;
 	if (isset($_POST["check"]))
-		$_SESSION["check"] = $_POST["check"];
+		$_SESSION["GOTMLS"]["check"] = $_POST["check"];
 	if (!(isset($GOTMLS_settings_array["exclude_ext"]) && is_array($GOTMLS_settings_array["exclude_ext"])))
 		$GOTMLS_settings_array["exclude_ext"] = $GOTMLS_skip_ext;
 	if (!isset($GOTMLS_settings_array["check_custom"]))
@@ -333,7 +333,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 		$GOTMLS_settings_array["scan_what"] = $_POST["scan_what"];
 	if (isset($_POST["check_custom"]) && $_POST["check_custom"] != $GOTMLS_settings_array["check_custom"]) {
 		$GOTMLS_settings_array["check_custom"] = stripslashes($_POST["check_custom"]);
-		$_SESSION["check_custom"] = $GOTMLS_settings_array["check_custom"];
+		$_SESSION["GOTMLS"]["check_custom"] = $GOTMLS_settings_array["check_custom"];
 	}
 	if (isset($_POST["scan_depth"]) && is_numeric($_POST["scan_depth"]) && $_POST["scan_depth"] != $GOTMLS_settings_array["scan_depth"])
 		$GOTMLS_settings_array["scan_depth"] = $_POST["scan_depth"];
@@ -366,10 +366,10 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	foreach ($GOTMLS_threat_levels as $threat_name=>$threat_level) {
 		$scan_opts .= '<div style="padding: 0;" id="check_'.$threat_level.'_div">';
 		if (isset($GOTMLS_definitions_array[$threat_level]))
-			$scan_opts .= '<input type="checkbox" name="check[]" id="check_'.$threat_level.'_Yes" value="'.$threat_level.'"'.(in_array($threat_level,$_SESSION["check"])?' checked':'').' /> <a style="text-decoration: none;" href="#check_'.$threat_level.'_div_0" onclick="document.getElementById(\'check_'.$threat_level.'_Yes\').checked=true;//showhide(\'dont_check_'.$threat_level.'\');">';
+			$scan_opts .= '<input type="checkbox" name="check[]" id="check_'.$threat_level.'_Yes" value="'.$threat_level.'"'.(in_array($threat_level,$_SESSION["GOTMLS"]["check"])?' checked':'').' /> <a style="text-decoration: none;" href="#check_'.$threat_level.'_div_0" onclick="document.getElementById(\'check_'.$threat_level.'_Yes\').checked=true;//showhide(\'dont_check_'.$threat_level.'\');">';
 		else
 			$scan_opts .= '<a title="Download Definition Updates to Use this feature"><img src="'.$GOTMLS_images_path.'blocked.gif" height=16 width=16 alt="X">';
-//					if ($_SESSION["check"] != "potential")
+//					if ($_SESSION["GOTMLS"]["check"] != "potential")
 		$scan_opts .= "<b>$threat_name</b></a>";
 		if (!isset($GOTMLS_definitions_array[$threat_level]))
 			$scan_opts .= '<br /><div style="padding: 14px;" id="check_'.$threat_level.'_div_NA">Registration of your Installation Key is required for this feature</div>';//'<br /><input type="checkbox" name="dont_check[]" value="'.htmlspecialchars($threat_name).'"'.(in_array($threat_name, $GOTMLS_settings_array["dont_check"])?' checked /><script>showhide("dont_check_'.(count($potential_threat)?'known':'potential').'", true);</script>':' />').$threat_name;
@@ -442,7 +442,7 @@ function update_status(title, time) {
 			$found = "Found ";
 			$fix_button_js = "\n\t\tdis='block';";
 		} else {
-			if ($found && !in_array($scan_group, $_SESSION["check"]))
+			if ($found && !in_array($scan_group, $_SESSION["GOTMLS"]["check"]))
 				$potential_threat = ' potential" title="You are not currently scanning for this type of threat!';
 			else
 				$potential_threat = "";
@@ -655,11 +655,8 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 }
 
 function GOTMLS_set_plugin_action_links($links_array, $plugin_file) {
-	if ($plugin_file == substr(__file__, (-1 * strlen($plugin_file))) && strlen($plugin_file) > 10) {
-		$_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_microtime"]).' GOTMLS_set_plugin_action_links'] = GOTMLS_memory_usage(true);
-		$base_page = "admin.php";
-		$links_array = array_merge(array('<a href="'.$base_page.'?page=GOTMLS-settings&scan_type=Quick+Scan">Quick Scan</a>', '<a href="'.$base_page.'?page=GOTMLS-settings">Settings</a>'), $links_array);
-	}
+	if ($plugin_file == substr(__file__, (-1 * strlen($plugin_file))) && strlen($plugin_file) > 10)
+		$links_array = array_merge(array('<a href="admin.php?page=GOTMLS-settings&scan_type=Quick+Scan">Quick Scan</a>', '<a href="admin.php?page=GOTMLS-settings">Settings</a>'), $links_array);
 	return $links_array;
 }
 
@@ -683,9 +680,9 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 			$_REQUEST["scan_depth"] = $GOTMLS_settings_array["scan_depth"];
 	}//$GOTMLS_settings_array["check_custom"] = stripslashes($_POST["check_custom"]);
 	if (isset($GOTMLS_settings_array["check_custom"]) && strlen($GOTMLS_settings_array["check_custom"]))
-		$_SESSION["check_custom"] = $GOTMLS_settings_array["check_custom"];
+		$_SESSION["GOTMLS"]["check_custom"] = $GOTMLS_settings_array["check_custom"];
 	else
-		$_SESSION["check_custom"] = "";
+		$_SESSION["GOTMLS"]["check_custom"] = "";
 	if (isset($GOTMLS_settings_array["scan_level"]) && is_numeric($GOTMLS_settings_array["scan_level"]))
 		$scan_level = intval($GOTMLS_settings_array["scan_level"]);
 	else
@@ -712,12 +709,12 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	} elseif (file_exists(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt'))
 		$GOTnew_definitions = maybe_unserialize(GOTMLS_decode(file_get_contents(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt')));
 	if (isset($GOTnew_definitions) && is_array($GOTnew_definitions)) {
-		$GOTMLS_definitions_array = array_replace_recursive($GOTMLS_definitions_array, $GOTnew_definitions);//array_merge_recursive
+		$GOTMLS_definitions_array = array_replace_recursive($GOTMLS_definitions_array, $GOTnew_definitions);	
 		if (file_exists(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt'))
 			@unlink(GOTMLS_trailingslashit(dirname(__FILE__)).'definitions_update.txt');
 		update_option($GOTMLS_plugin_dir.'_definitions_array', $GOTMLS_definitions_array);
-		if (isset($_SESSION["check"]))
-			unset($_SESSION["check"]);
+		if (isset($_SESSION["GOTMLS"]["check"]))
+			unset($_SESSION["GOTMLS"]["check"]);
 		foreach ($GOTMLS_definitions_array as $threat_level=>$definition_names)
 			foreach ($definition_names as $definition_name=>$definition_version)
 				if (is_array($definition_version))
@@ -726,7 +723,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	}
 	asort($GOTMLS_definitions_versions);
 	if (isset($_REQUEST["check"]) && is_array($_REQUEST["check"]))
-		$_SESSION["check"] = $_REQUEST["check"];
+		$_SESSION["GOTMLS"]["check"] = $_REQUEST["check"];
 /*	$threat_names = array_keys($GOTMLS_definitions_array["known"]);
 	foreach ($threat_names as $threat_name) {
 		if (isset($GOTMLS_definitions_array["known"][$threat_name]) && is_array($GOTMLS_definitions_array["known"][$threat_name]) && count($GOTMLS_definitions_array["known"][$threat_name]) > 1) {
@@ -734,13 +731,13 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 				$GOTMLS_definitions_version = $GOTMLS_definitions_array["known"][$threat_name][0];
 			if (!(count($GOTMLS_settings_array["dont_check"]) && in_array($threat_name, $GOTMLS_settings_array["dont_check"]))) {
 				$GOTMLS_threat_levels[$threat_name] = count($GOTMLS_definitions_array["known"][$threat_name]);
-				if (!isset($_SESSION["check"]) && $GOTMLS_threat_levels[$threat_name] > 2)
-					$_SESSION["check"] = "known";
+				if (!isset($_SESSION["GOTMLS"]["check"]) && $GOTMLS_threat_levels[$threat_name] > 2)
+					$_SESSION["GOTMLS"]["check"] = "known";
 			}
 		}
 	}*/
-	if (!isset($_SESSION["check"]))//	foreach ($GOTMLS_threat_levels as $threat_level)
-		$_SESSION["check"] = $GOTMLS_threat_levels;
+	if (!isset($_SESSION["GOTMLS"]["check"]))//	foreach ($GOTMLS_threat_levels as $threat_level)
+		$_SESSION["GOTMLS"]["check"] = $GOTMLS_threat_levels;
 	if (isset($_POST["GOTMLS_fix"]) && !is_array($_POST["GOTMLS_fix"]))
 		$_POST["GOTMLS_fix"] = array($_POST["GOTMLS_fix"]=>1);
 	if (isset($_POST['GOTMLS_whitelist']) && isset($_POST['GOTMLS_chksum'])) {
@@ -748,9 +745,11 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 		$chksum = explode("O", $_POST['GOTMLS_chksum']."O");
 		if (strlen($chksum[0]) == 32 && strlen($chksum[1]) == 32 && is_file($file) && md5(@file_get_contents($file)) == $chksum[0]) {
 			$filesize = @filesize($file);
-			if (true)
-				$GOTMLS_definitions_array["whitelist"][$file] = array("A0002", $chksum[0].'O'.$filesize);
-			else
+			if (true) {
+				if (!isset($GOTMLS_definitions_array["whitelist"][$file][0]))
+					$GOTMLS_definitions_array["whitelist"][$file][0] = "A0002";
+				$GOTMLS_definitions_array["whitelist"][$file][$chksum[0].'O'.$filesize] = "A0002";
+			} else
 				unset($GOTMLS_definitions_array["whitelist"][$file]);
 			update_option("GOTMLS_definitions_array", $GOTMLS_definitions_array);
 			die("<html><body>Added $file to Whitelist!<br /><iframe style='width: 90%; height: 350px;' src='$GOTMLS_update_home$GOTMLS_updated_definition_path?whitelist=".$_POST['GOTMLS_whitelist']."&hash=$chksum[0]&size=$filesize&key=$chksum[1]'></iframe></body></html>");
@@ -830,16 +829,17 @@ window.parent.showhide("GOTMLS_iFrame", true);
 	update_option($GOTMLS_plugin_dir.'_settings_array', $GOTMLS_settings_array);
 $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_microtime"]).' GOTMLS_init_end'] = GOTMLS_memory_usage(true);
 }
-
-if (function_exists('is_admin') && is_admin() && ((isset($_POST['GOTMLS_whitelist']) && isset($_POST['GOTMLS_chksum'])) || (isset($_GET["GOTMLS_scan"]) && is_dir(GOTMLS_decode($_GET["GOTMLS_scan"]))))) {
+if (function_exists("is_admin") && is_admin() && ((isset($_POST['GOTMLS_whitelist']) && isset($_POST['GOTMLS_chksum'])) || (isset($_GET["GOTMLS_scan"]) && is_dir(GOTMLS_decode($_GET["GOTMLS_scan"]))))) {
 	@set_time_limit($GOTMLS_loop_execution_time-5);
+	GOTMLS_loaded();
 	GOTMLS_init();
 	die("\n//PHP to Javascript Error!\n");
 } else {
 	add_filter("plugin_row_meta", $GOTMLS_plugin_dir.'_set_plugin_row_meta', 1, 2);
 	add_filter("plugin_action_links", $GOTMLS_plugin_dir.'_set_plugin_action_links', 1, 2);
+	add_action("plugins_loaded", "GOTMLS_loaded");
+	add_action("admin_notices", "GOTMLS_admin_notices");
 	add_action("admin_menu", "GOTMLS_menu");
 	$init = add_action("admin_init", $GOTMLS_plugin_dir.'_init');
 }
-$_SESSION["GOTMLS_debug"]["START_memory_usage"] = GOTMLS_memory_usage(true);
 ?>

@@ -5,10 +5,10 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability, block, brute force, wp-login, patch
-Version: 3.07.05
-Stable tag: 1.3.05.31
+Version: 3.07.27
+Stable tag: 3.07.27
 Requires at least: 2.8
-Tested up to: 3.5.1
+Tested up to: 3.5.2
 
 This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and it helps you remove them.
 
@@ -23,7 +23,7 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Customize Scan Setting.
 * Run a Quick Scan from the admin menu or a Complete Scan from the Settings Page.
 
-Updated July-5th
+Updated July-26th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -75,7 +75,16 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 
 == Changelog ==
 
-= 3.07.05 =
+= 3.07.27 =
+* Fixed a session bug in the progress bar related to the last release.
+
+= 3.07.26 =
+* Fixed a session bug that conflicted with jigoshop. (Thanks dragonflyfla)
+
+= 3.07.19 =
+* Fixed a few bug in the Whitelist definition feature.
+
+= 3.07.06 =
 * Added SSL support for definition updates and registration form.
 * Upgraded the Whitelist feature so the it could not contain duplicates.
 
@@ -149,13 +158,8 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 * Improved error handling during the scan.
 * Fixed update checker script.
 
-= 1.2.09.21 =
-* BETA version (finished and replaced by version 1.2.10.05).
-
 = 1.2.09.15 =
 * Fixed major bug in unregistered scan definition interpretation that causes many false positives.
-
-= 1.2.09.14 =
 * Moved the File Viewer and Automatic Fix process into an iFrame to decrease scan time and memory usage.
 * Enhanced the Automatic Fix process for better success with read-only files.
 * Improved code cleanup process and general efficiency of the scan.
@@ -220,7 +224,16 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 
 == Upgrade Notice ==
 
-= 3.07.05 =
+= 3.07.27 =
+Fixed a session bug in the progress bar related to the last release.
+
+= 3.07.26 =
+Fixed a session bug that conflicted with jigoshop. (Thanks dragonflyfla)
+
+= 3.07.19 =
+Fixed a few bug in the Whitelist definition feature.
+
+= 3.07.06 =
 Added SSL support for definition updates and upgraded the Whitelist feature.
 
 = 1.3.05.31 =
@@ -277,14 +290,8 @@ Completely revamped the scan engine, enhanced the Automatic Fix results, and fix
 = 1.2.09.22 =
 Enhanced the iFrame for the File Viewer and Automatic Fix process and improved error handling.
 
-= 1.2.09.21 =
-BETA version (finished and replaced by version 1.2.10.05).
-
 = 1.2.09.15 =
-Fixed major bug in unregistered scan definition interpretation that causes many false positives.
-
-= 1.2.09.14 =
-Moved the File Viewer and Automatic Fix into an iFrame for efficiency and enhanced for better success with read-only files.
+Fixed major bug in unregistered scan definition interpretation and moved the File Viewer and Automatic Fix into an iFrame for efficiency and enhanced for better success with read-only files.
 
 = 1.2.08.31 =
 Encoded definition update to broaden server compatibility and improved the code cleanup expression after threat removal.
