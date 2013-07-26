@@ -7,7 +7,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 3.07.26
+Version: 3.07.27
 */
 
 /**
@@ -829,14 +829,15 @@ window.parent.showhide("GOTMLS_iFrame", true);
 	update_option($GOTMLS_plugin_dir.'_settings_array', $GOTMLS_settings_array);
 $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_microtime"]).' GOTMLS_init_end'] = GOTMLS_memory_usage(true);
 }
-add_action("plugins_loaded", "GOTMLS_loaded");
-if (function_exists('is_admin') && is_admin() && ((isset($_POST['GOTMLS_whitelist']) && isset($_POST['GOTMLS_chksum'])) || (isset($_GET["GOTMLS_scan"]) && is_dir(GOTMLS_decode($_GET["GOTMLS_scan"]))))) {
+if (function_exists("is_admin") && is_admin() && ((isset($_POST['GOTMLS_whitelist']) && isset($_POST['GOTMLS_chksum'])) || (isset($_GET["GOTMLS_scan"]) && is_dir(GOTMLS_decode($_GET["GOTMLS_scan"]))))) {
 	@set_time_limit($GOTMLS_loop_execution_time-5);
+	GOTMLS_loaded();
 	GOTMLS_init();
 	die("\n//PHP to Javascript Error!\n");
 } else {
 	add_filter("plugin_row_meta", $GOTMLS_plugin_dir.'_set_plugin_row_meta', 1, 2);
 	add_filter("plugin_action_links", $GOTMLS_plugin_dir.'_set_plugin_action_links', 1, 2);
+	add_action("plugins_loaded", "GOTMLS_loaded");
 	add_action("admin_notices", "GOTMLS_admin_notices");
 	add_action("admin_menu", "GOTMLS_menu");
 	$init = add_action("admin_init", $GOTMLS_plugin_dir.'_init');

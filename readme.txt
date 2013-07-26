@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability, block, brute force, wp-login, patch
-Version: 3.07.26
-Stable tag: 3.07.26
+Version: 3.07.27
+Stable tag: 3.07.27
 Requires at least: 2.8
 Tested up to: 3.5.2
 
@@ -74,6 +74,9 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 3.07.27 =
+* Fixed a session bug in the progress bar related to the last release.
 
 = 3.07.26 =
 * Fixed a session bug that conflicted with jigoshop. (Thanks dragonflyfla)
@@ -220,6 +223,9 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 3.07.27 =
+Fixed a session bug in the progress bar related to the last release.
 
 = 3.07.26 =
 Fixed a session bug that conflicted with jigoshop. (Thanks dragonflyfla)
