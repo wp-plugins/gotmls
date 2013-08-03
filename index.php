@@ -7,7 +7,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 3.07.27
+Version: 3.08.02
 */
 
 /**
@@ -39,8 +39,8 @@ $GOTMLS_images_path = plugins_url("/images/", __FILE__);
 
 function GOTMLS_install() {
 	global $wp_version;
-	if (version_compare($wp_version, "2.6", "<"))
-		die(__("This Plugin requires WordPress version 2.6 or higher"));
+	if (version_compare($wp_version, "3.0", "<"))
+		die(__("This Plugin requires WordPress version 3.0 or higher"));
 }
 register_activation_hook(__FILE__, "GOTMLS_install");
 
@@ -53,16 +53,19 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	}
 	$GOTMLS_Full_plugin_logo_URL = GOTMLS_trailingslashit($GOTMLS_images_path).'GOTMLS-16x16.gif';
 	$base_page = "$GOTMLS_plugin_dir-settings";
+	$user_can = "edit_files";
 	if ($GOTMLS_settings_array["menu_group"] == 2)
-		add_submenu_page("tools.php", __("Anti-Malware Settings/Scan Page"), __("<span style=\"background: url('$GOTMLS_Full_plugin_logo_URL') no-repeat; vertical-align: middle; border: 0 none; display: inline-block; height: 16px; width: 16px;\"></span> Anti-Malware"), "administrator", $base_page, str_replace("-", "_", $base_page));
+		add_submenu_page("tools.php", __("Anti-Malware Settings/Scan Page"), __("<span style=\"background: url('$GOTMLS_Full_plugin_logo_URL') no-repeat; vertical-align: middle; border: 0 none; display: inline-block; height: 16px; width: 16px;\"></span> Anti-Malware"), $user_can, $base_page, str_replace("-", "_", $base_page));
 	else {
-		if (!function_exists("add_object_page") || $GOTMLS_settings_array["menu_group"] == 1)
-			add_menu_page(__("Anti-Malware Settings/Scan"), __("Anti-Malware"), "administrator", $base_page, $GOTMLS_plugin_dir.'_settings', $GOTMLS_Full_plugin_logo_URL);
+		if (is_multisite() && $GOTMLS_settings_array["menu_group"] > 2)
+			$user_can = "manage_network";
+		if (!function_exists("add_object_page") || $GOTMLS_settings_array["menu_group"])
+			add_menu_page(__("Anti-Malware Settings/Scan"), __("Anti-Malware"), $user_can, $base_page, $GOTMLS_plugin_dir.'_settings', $GOTMLS_Full_plugin_logo_URL);
 		else
-			add_object_page(__("Anti-Malware Settings/Scan"), __("Anti-Malware"), "administrator", $base_page, $GOTMLS_plugin_dir.'_settings', $GOTMLS_Full_plugin_logo_URL);
-		add_submenu_page($base_page, __("Anti-Malware Settings"), __("Scan Settings"), "administrator", $base_page, $GOTMLS_plugin_dir.'_settings');
-		add_submenu_page($base_page, __("Anti-Malware Quick Scan"), __("Run Quick Scan"), "administrator", "$base_page&scan_type=Quick+Scan", $GOTMLS_plugin_dir.'_settings');
-		add_submenu_page($base_page, __("Anti-Malware Quarantine"), __("View Quarantine"), "administrator", "$base_page&scan_type=Quarantine", $GOTMLS_plugin_dir.'_settings');
+			add_object_page(__("Anti-Malware Settings/Scan"), __("Anti-Malware"), $user_can, $base_page, $GOTMLS_plugin_dir.'_settings', $GOTMLS_Full_plugin_logo_URL);
+		add_submenu_page($base_page, __("Anti-Malware Settings"), __("Scan Settings"), $user_can, $base_page, $GOTMLS_plugin_dir.'_settings');
+		add_submenu_page($base_page, __("Anti-Malware Quick Scan"), __("Run Quick Scan"), $user_can, "$base_page&scan_type=Quick+Scan", $GOTMLS_plugin_dir.'_settings');
+		add_submenu_page($base_page, __("Anti-Malware Quarantine"), __("View Quarantine"), $user_can, "$base_page&scan_type=Quarantine", $GOTMLS_plugin_dir.'_settings');
 	}
 $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_microtime"]).' GOTMLS_menu_end'] = GOTMLS_memory_usage(true);
 }
@@ -292,6 +295,8 @@ function GOTMLS_settings() {
 	global $GOTMLS_scan_logs_array, $GOTMLS_quarantine_dir, $GOTMLS_definitions_array, $GOTMLS_threat_levels, $GOTMLS_script_URI, $GOTMLS_scanfiles, $GOTMLS_plugin_dir, $GOTMLS_images_path, $GOTMLS_loop_execution_time, $GOTMLS_skip_ext, $GOTMLS_skip_dirs, $GOTMLS_settings_array, $GOTMLS_dirs_at_depth, $GOTMLS_dir_at_depth, $GOTMLS_protocol;
 $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_microtime"]).' GOTMLS_Settings_start'] = GOTMLS_memory_usage(true);
 	$GOTMLS_menu_groups = array("Main Menu Item placed below <b>Comments</b> and above <b>Appearance</b>","Main Menu Item placed below <b>Settings</b>","Sub-Menu inside the <b>Tools</b> Menu Item");
+	if (is_multisite() && current_user_can("manage_network"))
+		$GOTMLS_menu_groups[] = "ONLY SHOW for <b>Network Admins</b>";
 	$GOTMLS_scan_groups = array();
 	$dirs = GOTMLS_explode_dir(__file__);
 	$scan_level = intval($GOTMLS_settings_array["scan_level"]);
@@ -840,6 +845,7 @@ if (function_exists("is_admin") && is_admin() && ((isset($_POST['GOTMLS_whitelis
 	add_action("plugins_loaded", "GOTMLS_loaded");
 	add_action("admin_notices", "GOTMLS_admin_notices");
 	add_action("admin_menu", "GOTMLS_menu");
+	add_action("network_admin_menu", "GOTMLS_menu");
 	$init = add_action("admin_init", $GOTMLS_plugin_dir.'_init');
 }
 ?>

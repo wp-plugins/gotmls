@@ -5,10 +5,10 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability, block, brute force, wp-login, patch
-Version: 3.07.27
-Stable tag: 3.07.27
-Requires at least: 2.8
-Tested up to: 3.5.2
+Version: 3.08.02
+Stable tag: 3.08.02
+Requires at least: 3.0
+Tested up to: 3.6
 
 This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and it helps you remove them.
 
@@ -21,9 +21,9 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Automatically upgrade vulnerable versions of timthumb to patch security holes.
 * Automatically patch wp-login.php to block brute-force attacks.
 * Customize Scan Setting.
-* Run a Quick Scan from the admin menu or a Complete Scan from the Settings Page.
+* Run a Quick Scan or a Complete Scan from the Settings Page.
 
-Updated July-26th
+Updated August-2nd
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -74,6 +74,9 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 3.08.02 =
+* Added support for multisite network admin menu and the ability to restrict admin access.
 
 = 3.07.27 =
 * Fixed a session bug in the progress bar related to the last release.
@@ -223,6 +226,9 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 3.08.02 =
+Added support for multisite network admin menu and the ability to restrict admin access.
 
 = 3.07.27 =
 Fixed a session bug in the progress bar related to the last release.
