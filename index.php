@@ -7,7 +7,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 3.08.02
+Version: 3.08.31
 */
 
 /**
@@ -53,7 +53,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	}
 	$GOTMLS_Full_plugin_logo_URL = GOTMLS_trailingslashit($GOTMLS_images_path).'GOTMLS-16x16.gif';
 	$base_page = "$GOTMLS_plugin_dir-settings";
-	$user_can = "edit_files";
+	$user_can = "activate_plugins";
 	if ($GOTMLS_settings_array["menu_group"] == 2)
 		add_submenu_page("tools.php", __("Anti-Malware Settings/Scan Page"), __("<span style=\"background: url('$GOTMLS_Full_plugin_logo_URL') no-repeat; vertical-align: middle; border: 0 none; display: inline-block; height: 16px; width: 16px;\"></span> Anti-Malware"), $user_can, $base_page, str_replace("-", "_", $base_page));
 	else {
@@ -302,16 +302,8 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	$scan_level = intval($GOTMLS_settings_array["scan_level"]);
 	for ($SL=0;$SL<$scan_level;$SL++)
 		$GOTMLS_scan_groups[] = '<b>'.implode(GOTMLS_slash(), array_slice($dirs, -1 * (3 + $SL), 1)).'</b>';
-	if (!isset($GOTMLS_settings_array["scan_what"]))
-		$GOTMLS_settings_array["scan_what"] = 2;
-	if (!isset($GOTMLS_settings_array["scan_depth"]))
-		$GOTMLS_settings_array["scan_depth"] = -1;
 	if (isset($_POST["check"]))
 		$_SESSION["GOTMLS"]["check"] = $_POST["check"];
-	if (!(isset($GOTMLS_settings_array["exclude_ext"]) && is_array($GOTMLS_settings_array["exclude_ext"])))
-		$GOTMLS_settings_array["exclude_ext"] = $GOTMLS_skip_ext;
-	if (!isset($GOTMLS_settings_array["check_custom"]))
-		$GOTMLS_settings_array["check_custom"] = "";
 	if (isset($_POST["exclude_ext"])) {
 		if (strlen(trim(str_replace(",","",$_POST["exclude_ext"]).' ')) > 0)
 			$GOTMLS_settings_array["exclude_ext"] = preg_split('/[\s]*([,]+[\s]*)+/', trim(str_replace('.', ',', $_POST["exclude_ext"])), -1, PREG_SPLIT_NO_EMPTY);
@@ -322,8 +314,6 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 		$GOTMLS_skip_ext = $GOTMLS_settings_array['exclude_ext'];
 	else
 		$GOTMLS_skip_ext = array_merge($GOTMLS_settings_array['exclude_ext'], array('gotmls'));
-	if (!(isset($GOTMLS_settings_array['exclude_dir']) && is_array($GOTMLS_settings_array['exclude_dir'])))
-		$GOTMLS_settings_array["exclude_dir"] = array();
 	if (isset($_POST["exclude_dir"])) {
 		if (strlen(trim(str_replace(",","",$_POST["exclude_dir"]).' ')) > 0)
 			$GOTMLS_settings_array["exclude_dir"] = preg_split('/[\s]*([,]+[\s]*)+/', trim($_POST["exclude_dir"]), -1, PREG_SPLIT_NO_EMPTY);

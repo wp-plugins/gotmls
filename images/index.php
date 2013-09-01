@@ -37,7 +37,7 @@ if (!function_exists("add_action")) {
 	GOTMLS_admin_notices();
 }
 /* GOTMLS init Global Variables */
-$GOTMLS_Version="3.08.02";
+$GOTMLS_Version="3.08.31";
 $GOTMLS_plugin_dir="GOTMLS";
 $GOTMLS_loop_execution_time = 60;
 $GOTMLS_chmod_file = octdec(0644);
@@ -51,7 +51,21 @@ $GOTMLS_threats_found = array();
 $GOTMLS_dir_at_depth = array();
 $GOTMLS_dirs_at_depth = array();
 $GOTMLS_scanfiles = array();
+$GOTMLS_skip_ext = array("png", "jpg", "jpeg", "gif", "bmp", "tif", "tiff", "exe", "zip", "pdf", "css", "mo", "psd", "so");
+$GOTMLS_skip_dirs = array(".", "..");
 $GOTMLS_settings_array = get_option($GOTMLS_plugin_dir.'_settings_array', array());
+if (!isset($GOTMLS_settings_array["menu_group"]))
+	$GOTMLS_settings_array["menu_group"] = 0;
+if (!isset($GOTMLS_settings_array["scan_what"]))
+	$GOTMLS_settings_array["scan_what"] = 2;
+if (!isset($GOTMLS_settings_array["scan_depth"]))
+	$GOTMLS_settings_array["scan_depth"] = -1;
+if (!(isset($GOTMLS_settings_array["exclude_ext"]) && is_array($GOTMLS_settings_array["exclude_ext"])))
+	$GOTMLS_settings_array["exclude_ext"] = $GOTMLS_skip_ext;
+if (!isset($GOTMLS_settings_array["check_custom"]))
+	$GOTMLS_settings_array["check_custom"] = "";
+if (!(isset($GOTMLS_settings_array['exclude_dir']) && is_array($GOTMLS_settings_array['exclude_dir'])))
+	$GOTMLS_settings_array["exclude_dir"] = array();
 $GOTMLS_scan_logs_array = get_option($GOTMLS_plugin_dir.'_scan_logs_array', array());
 $GOTMLS_total_percent = 0;
 
@@ -279,8 +293,6 @@ function GOTMLS_decode($encoded_string) {
 GOTMLS_set_global($GOTMLS_default_ext, "ieonly.");
 $GOTMLS_threat_files = array("htaccess"=>".htaccess","timthumb"=>"thumb.php","wp_login"=>"/wp-login.php");
 $GOTMLS_threat_levels = array("htaccess Threats"=>"htaccess","TimThumb Exploits"=>"timthumb","Backdoor Scripts"=>"backdoor","Known Threats"=>"known","WP-Login Vulnerability "=>"wp_login","Potential Threats"=>"potential");
-$GOTMLS_skip_ext = array("png", "jpg", "jpeg", "gif", "bmp", "tif", "tiff", "exe", "zip", "pdf", "css", "mo", "psd", "so");
-$GOTMLS_skip_dirs = array(".", "..");
 $GOTMLS_image_alt = array("wait"=>"...", "checked"=>"&#x2714;", "blocked"=>"X", "question"=>"?", "threat"=>"!");
 GOTMLS_set_global($GOTMLS_encode, '/[\?\-a-z\: \.\=\/A-Z\&\_]/');
 $_SERVER_REQUEST_URI = str_replace('&amp;', '&', htmlspecialchars( $_SERVER["REQUEST_URI"] , ENT_QUOTES ) );

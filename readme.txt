@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability, block, brute force, wp-login, patch
-Version: 3.08.02
-Stable tag: 3.08.02
+Version: 3.08.31
+Stable tag: 3.08.31
 Requires at least: 3.0
 Tested up to: 3.6
 
@@ -18,12 +18,12 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 
 * Automatic removal of "Known Threats".
 * Download definitions of new threat as they are discovered.
-* Automatically upgrade vulnerable versions of timthumb to patch security holes.
+* Automatically upgrade vulnerable versions of timthumb scripts.
 * Automatically patch wp-login.php to block brute-force attacks.
 * Customize Scan Setting.
 * Run a Quick Scan or a Complete Scan from the Settings Page.
 
-Updated August-2nd
+Updated August-31st
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -74,6 +74,9 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 3.08.31 =
+* Fixed undefined index bug with menu_group item in settings array.
 
 = 3.08.02 =
 * Added support for multisite network admin menu and the ability to restrict admin access.
@@ -226,6 +229,9 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 3.08.31 =
+Fixed undefined index bug with menu_group item in settings array.
 
 = 3.08.02 =
 Added support for multisite network admin menu and the ability to restrict admin access.
