@@ -8,7 +8,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 3.11.28
+Version: 3.12.27
 */
 
 /**
@@ -39,7 +39,7 @@ include_once(trailingslashit(dirname(__FILE__))."images/index.php");
 $GOTMLS_images_path = plugins_url("/images/", __FILE__);
 
 function GOTMLS_load_lang() {
-	load_plugin_textdomain('gotmls', false, 'gotmls/laguages/');
+	load_plugin_textdomain('gotmls', false, 'gotmls/languages');
 }
 add_action('plugins_loaded', 'GOTMLS_load_lang');
 
@@ -47,7 +47,7 @@ function GOTMLS_install() {
 	global $wp_version;
 	$require_version = "3.0";
 	if (version_compare($wp_version, $require_version, "<"))
-		die(sprintf(__("This Plugin requires WordPress version %s or higher"), $require_version));
+		die(sprintf(__("This Plugin requires WordPress version %s or higher",'gotmls'), $require_version));
 }
 register_activation_hook(__FILE__, "GOTMLS_install");
 
@@ -62,7 +62,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	$base_page = "$GOTMLS_plugin_dir-settings";
 	$user_can = "activate_plugins";
 	$pluginTitle = "Anti-Malware";
-	$pageTitle = "$pluginTitle ".__("Settings/Scan Page");
+	$pageTitle = "$pluginTitle ".__("Settings/Scan Page",'gotmls');
 	if ($GOTMLS_settings_array["menu_group"] == 2)
 		add_submenu_page("tools.php", $pageTitle, "<span style=\"background: url('$GOTMLS_Full_plugin_logo_URL') no-repeat; vertical-align: middle; border: 0 none; display: inline-block; height: 16px; width: 16px;\"></span> $pluginTitle", $user_can, $base_page, str_replace("-", "_", $base_page));
 	else {
@@ -72,11 +72,11 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 			add_menu_page($pageTitle, $pluginTitle, $user_can, $base_page, $GOTMLS_plugin_dir.'_settings', $GOTMLS_Full_plugin_logo_URL);
 		else
 			add_object_page($pageTitle, $pluginTitle, $user_can, $base_page, $GOTMLS_plugin_dir.'_settings', $GOTMLS_Full_plugin_logo_URL);
-		$ScanSettings = __("Scan Settings");
+		$ScanSettings = __("Scan Settings",'gotmls');
 		add_submenu_page($base_page, "$pluginTitle $ScanSettings", $ScanSettings, $user_can, $base_page, $GOTMLS_plugin_dir.'_settings');
-		$RunQuickScan = __("Run Quick Scan");
+		$RunQuickScan = __("Run Quick Scan",'gotmls');
 		add_submenu_page($base_page, "$pluginTitle $RunQuickScan", $RunQuickScan, $user_can, "$base_page&scan_type=Quick+Scan", $GOTMLS_plugin_dir.'_settings');
-		$ViewQuarantine = __("View Quarantine");
+		$ViewQuarantine = __("View Quarantine",'gotmls');
 		add_submenu_page($base_page, "$pluginTitle $ViewQuarantine", $ViewQuarantine, $user_can, "$base_page&scan_type=Quarantine", $GOTMLS_plugin_dir.'_settings');
 	}
 $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_microtime"]).' GOTMLS_menu_end'] = GOTMLS_memory_usage(true);
@@ -90,7 +90,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	$wait_img_URL = $GOTMLS_images_path.'wait.gif';
 	$definition_version = array_pop(array_slice($GOTMLS_definitions_versions, count($GOTMLS_definitions_versions)-1));
 	if (isset($_GET["check_site"]) && $_GET["check_site"] == 1)
-		echo '<br /><br /><div class="updated" id="check_site" style="z-index: 1234567; position: absolute; top: 1px; left: 1px; margin: 15px;"><img src="'.$GOTMLS_images_path.'checked.gif" height=16 width=16 alt="&#x2714;"> '.__("Tested your site. It appears we didn't break anything").' ;-)</div><script type="text/javascript">window.parent.document.getElementById("check_site_warning").style.backgroundColor=\'#0C0\';</script><iframe style="width: 230px; height: 110px; position: absolute; right: 4px; bottom: 4px; border: none;" scrolling="no" src="http://wordpress.org/extend/plugins/GOTMLS/stats/?compatibility[version]='.$wp_version.'&compatibility[topic_version]='.$GOTMLS_Version.'&compatibility[compatible]=1#compatibility-works"></iframe><a target="_blank" href="http://wordpress.org/extend/plugins/gotmls/faq/?compatibility[version]='.$wp_version.'&compatibility[topic_version]='.$GOTMLS_Version.'&compatibility[compatible]=1#compatibility-works"><span style="width: 234px; height: 82px; position: absolute; right: 4px; bottom: 36px;"></span><span style="width: 345px; height: 32px; position: absolute; right: 84px; bottom: 4px;">Vote "Works" on WordPress.org -&gt;</span></a><style>#footer, #GOTMLS-Settings, #right-sidebar, #admin-page-container, #wpadminbar, #adminmenuback, #adminmenuwrap, #adminmenu {display: none !important;} #wpbody-content {padding-bottom: 0;} #wpcontent, #footer {margin-left: 5px !important;}';
+		echo '<br /><br /><div class="updated" id="check_site" style="z-index: 1234567; position: absolute; top: 1px; left: 1px; margin: 15px;"><img src="'.$GOTMLS_images_path.'checked.gif" height=16 width=16 alt="&#x2714;"> '.__("Tested your site. It appears we didn't break anything",'gotmls').' ;-)</div><script type="text/javascript">window.parent.document.getElementById("check_site_warning").style.backgroundColor=\'#0C0\';</script><iframe style="width: 230px; height: 110px; position: absolute; right: 4px; bottom: 4px; border: none;" scrolling="no" src="http://wordpress.org/extend/plugins/GOTMLS/stats/?compatibility[version]='.$wp_version.'&compatibility[topic_version]='.$GOTMLS_Version.'&compatibility[compatible]=1#compatibility-works"></iframe><a target="_blank" href="http://wordpress.org/extend/plugins/gotmls/faq/?compatibility[version]='.$wp_version.'&compatibility[topic_version]='.$GOTMLS_Version.'&compatibility[compatible]=1#compatibility-works"><span style="width: 234px; height: 82px; position: absolute; right: 4px; bottom: 36px;"></span><span style="width: 345px; height: 32px; position: absolute; right: 84px; bottom: 4px;">Vote "Works" on WordPress.org -&gt;</span></a><style>#footer, #GOTMLS-Settings, #right-sidebar, #admin-page-container, #wpadminbar, #adminmenuback, #adminmenuwrap, #adminmenu {display: none !important;} #wpbody-content {padding-bottom: 0;} #wpcontent, #footer {margin-left: 5px !important;}';
 	else
 		echo '<style>#right-sidebar {float: right; margin-right: 10px; width: 290px;}';
 	$ver_info = $GOTMLS_Version.'&p='.$GOTMLS_plugin_dir.'&wp='.$wp_version.'&ts='.date("YmdHis").'&key='.md5($GOTMLS_url).'&d='.ur1encode($GOTMLS_url);
@@ -99,7 +99,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	$file = "gotmls/index.php";
 	$current = get_site_transient("update_plugins");
 	if (isset($current->response[$file]->new_version)) {
-		$new_version = sprintf(__("Upgrade to %s now!"), $current->response[$file]->new_version).'<br /><br />';
+		$new_version = sprintf(__("Upgrade to %s now!",'gotmls'), $current->response[$file]->new_version).'<br /><br />';
 		$Update_Link .= wp_nonce_url(self_admin_url('update.php?action=upgrade-plugin&plugin=').$file, 'upgrade-plugin_'.$file);
 	}
 	$Update_Link .= "\">$new_version</a></div>";
@@ -144,7 +144,7 @@ function showhide(id) {
 	}
 }
 function cancelserver(divid) {
-	document.getElementById(divid).innerHTML = "<div class=\'updated\'>'.__("Could not find server!").'</div>";
+	document.getElementById(divid).innerHTML = "<div class=\'updated\'>'.__("Could not find server!",'gotmls').'</div>";
 }
 function checkupdateserver(server, divid) {
 	var updatescript = document.createElement("script");
@@ -161,14 +161,14 @@ function checkupdateserver(server, divid) {
 '.$GOTMLS_SessionError.'
 <h1 id="main-page-title">'.$pTitle.'</h1>
 <div id="right-sidebar" class="metabox-holder">
-	<div id="pluginupdates" class="shadowed-box stuffbox"><h3 class="hndle"><span>'.__("Plugin Updates for WP").' '.$wp_version.'</span></h3>
-		<div id="findUpdates" class="inside"><center>'.__("Searching for updates ...").'<br /><img src="'.$wait_img_URL.'" height=16 width=16 alt="Wait..." /><br /><input type="button" value="Cancel" onclick="cancelserver(\'findUpdates\');" /></center></div>
+	<div id="pluginupdates" class="shadowed-box stuffbox"><h3 class="hndle"><span>'.__("Plugin Updates for WP",'gotmls').' '.$wp_version.'</span></h3>
+		<div id="findUpdates" class="inside"><center>'.__("Searching for updates ...",'gotmls').'<br /><img src="'.$wait_img_URL.'" height=16 width=16 alt="Wait..." /><br /><input type="button" value="Cancel" onclick="cancelserver(\'findUpdates\');" /></center></div>
 		'.$Update_Link.'
 	</div>
 	<script type="text/javascript">
 		stopCheckingUpdates = checkupdateserver("'.$GOTMLS_plugin_home.$GOTMLS_updated_images_path.'?js='.$ver_info.'", "findUpdates", "'.str_replace("://", "://www.", $GOTMLS_plugin_home).$GOTMLS_updated_images_path.'?js='.$ver_info.'");
 	</script>
-	<div id="definitionupdates" class="stuffbox shadowed-box"><h3 class="hndle"><span>'.__("Definition Updates").' ('.$definition_version.')</span></h3>
+	<div id="definitionupdates" class="stuffbox shadowed-box"><h3 class="hndle"><span>'.__("Definition Updates",'gotmls').' ('.$definition_version.')</span></h3>
 		<script type="text/javascript">
 		function check_for_updates(chk) {
 			if (auto_img = document.getElementById("autoUpdateDownload")) {
@@ -178,7 +178,7 @@ function checkupdateserver(server, divid) {
 		}
 		function check_for_donation(chk) {
 			if (document.getElementById("autoUpdateDownload").src.replace(/^.+\?/,"")=="0") {
-				alert(chk+"\\n\\n'.__("Please make a donation for the use of this wonderful feature!").'");
+				alert(chk+"\\n\\n'.__("Please make a donation for the use of this wonderful feature!",'gotmls').'");
 				if ('.str_replace("-", "", GOTMLS_sexagesimal($definition_version)).'0 > 10000000001 && chk.substr(0, 3) == "Fix")
 					window.open("'.$GOTMLS_update_home.'donate/?donation-key='.md5($GOTMLS_url).'&donation-source="+chk, "_blank");
 			} else
@@ -187,11 +187,11 @@ function checkupdateserver(server, divid) {
 		function sinupFormValidate(form) {
 			var error = "";
 			if(form["first_name"].value == "")	
-				error += "'.__("First Name is a required field!").'\n";
+				error += "'.__("First Name is a required field!",'gotmls').'\n";
 			if(form["last_name"].value == "")		
-				error += "'.__("Last Name is a required field!").'\n";
+				error += "'.__("Last Name is a required field!",'gotmls').'\n";
 			if(form["user_email"].value == "")
-				error += "'.__("Email Address is a required field!").'\n";
+				error += "'.__("Email Address is a required field!",'gotmls').'\n";
 			else {
 				if (uem = document.getElementById("register_user_login"))
 					uem.value = form["user_email"].value;
@@ -199,9 +199,9 @@ function checkupdateserver(server, divid) {
 					uem.value = "/donate/?email="+form["user_email"].value.replace("@", "%40");
 			}
 			if(form["user_url"].value == "")
-				error += "'.__("Your WordPress Site URL is a required field!").'\n";
+				error += "'.__("Your WordPress Site URL is a required field!",'gotmls').'\n";
 			if(form["installation_key"].value == "")
-				error += "'.__("Plugin Installation Key is a required field!").'\n";
+				error += "'.__("Plugin Installation Key is a required field!",'gotmls').'\n";
 			if(error != "") {
 				alert(error);
 				return false;
@@ -216,25 +216,25 @@ function checkupdateserver(server, divid) {
 		</script>
 	<form id="updateform" method="post" name="updateform" action="'.$_SERVER_REQUEST_URI.'">
 		<img style="display: none; float: right; margin-right: 14px;" src="'.$GOTMLS_images_path.'checked.gif" height=16 width=16 alt="definitions file updated" id="autoUpdateDownload" onclick="downloadUpdates(\'UpdateDownload\');">
-		<div id="Definition_Updates" class="inside"><center>'.__("Searching for updates ...").'<br /><img src="'.$wait_img_URL.'" height=16 width=16 alt="Wait..." /><br /><input type="button" value="Cancel" onclick="cancelserver(\'Definition_Updates\');" /></center></div>
+		<div id="Definition_Updates" class="inside"><center>'.__("Searching for updates ...",'gotmls').'<br /><img src="'.$wait_img_URL.'" height=16 width=16 alt="Wait..." /><br /><input type="button" value="Cancel" onclick="cancelserver(\'Definition_Updates\');" /></center></div>
 		<div id="autoUpdateForm" style="display: none;" class="inside">
-		<input type="submit" name="auto_update" value="'.__("Download new definitions!").'"> 
+		<input type="submit" name="auto_update" value="'.__("Download new definitions!",'gotmls').'"> 
 		</div>
 	</form>
 		<div id="registerKeyForm" style="display: none;" class="inside">
-'.__("Register your Key now and get instant access to new definition files as new threats are discovered.<p>*All fields are required and I will NOT share your registration information with anyone.</p>").'
+'.__("Register your Key now and get instant access to new definition files as new threats are discovered.<p>*All fields are required and I will NOT share your registration information with anyone.</p>",'gotmls').'
 <form id="registerform" onsubmit="return sinupFormValidate(this);" action="'.$GOTMLS_update_home.'wp-login.php?action=register" method="post" name="registerform"><input type="hidden" name="redirect_to" id="register_redirect_to" value="/donate/"><input type="hidden" name="user_login" id="register_user_login" value="">
-<div>'.__("Your Full Name:").'</div>
+<div>'.__("Your Full Name:",'gotmls').'</div>
 <div style="float: left; width: 50%;"><input style="width: 100%;" id="first_name" type="text" name="first_name" value="'.$current_user->user_firstname.'" /></div>
 <div style="float: left; width: 50%;"><input style="width: 100%;" id="last_name" type="text" name="last_name" value="'.$current_user->user_lastname.'" /></div>
 <div style="clear: left; width: 100%;">
-<div>'.__("A password will be e-mailed to this address:").'</div>
+<div>'.__("A password will be e-mailed to this address:",'gotmls').'</div>
 <input style="width: 100%;" id="user_email" type="text" name="user_email" value="'.$current_user->user_email.'" /></div>
 <div>
-<div>'.__("Your WordPress Site URL:").'</div>
+<div>'.__("Your WordPress Site URL:",'gotmls').'</div>
 <input style="width: 100%;" id="user_url" type="text" name="user_url" value="'.$GOTMLS_url.'" readonly /></div>
 <div>
-<div>'.__("Plugin Installation Key:").'</div>
+<div>'.__("Plugin Installation Key:",'gotmls').'</div>
 <input style="width: 100%;" id="installation_key" type="text" name="installation_key" value="'.md5($GOTMLS_url).'" readonly /><input id="old_key" type="hidden" name="old_key" value="'.md5($GOTMLS_url_parts[2]).'" /></div>
 <input style="width: 100%;" id="wp-submit" type="submit" name="wp-submit" value="Register Now!" /></form></div>
 	</div>
@@ -251,7 +251,7 @@ function checkupdateserver(server, divid) {
 		else
 			divNAtext=true;
 	</script>
-	<div id="pluginlinks" class="shadowed-box stuffbox"><h3 class="hndle"><span>'.__("Plugin Links").'</span></h3>
+	<div id="pluginlinks" class="shadowed-box stuffbox"><h3 class="hndle"><span>'.__("Plugin Links",'gotmls').'</span></h3>
 		<div class="inside">
 			<div id="pastDonations"></div>
 			<form name="ppdform" id="ppdform" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
@@ -275,7 +275,7 @@ function checkupdateserver(server, divid) {
 			<input type="hidden" name="page_style" value="GOTMLS">
 			<input type="hidden" name="return" value="'.$GOTMLS_update_home.'donate/?paid='.md5($GOTMLS_url).'">
 			<input type="hidden" name="cancel_return" value="'.$GOTMLS_update_home.'donate/?cancel='.md5($GOTMLS_url).'">
-			<input type="image" id="pp_button" src="'.$GOTMLS_images_path.'btn_donateCC_WIDE.gif" border="0" name="submitc" alt="'.__("Make a Donation with PayPal").'">
+			<input type="image" id="pp_button" src="'.$GOTMLS_images_path.'btn_donateCC_WIDE.gif" border="0" name="submitc" alt="'.__("Make a Donation with PayPal",'gotmls').'">
 			<div>
 				<ul class="sidebar-links">
 					<li style="float: right;"><b>on <a target="_blank" href="http://profiles.wordpress.org/scheeeli">WordPress.org</a></b><ul class="sidebar-links">
@@ -305,9 +305,9 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 function GOTMLS_settings() {
 	global $GOTMLS_scan_logs_array, $GOTMLS_quarantine_dir, $GOTMLS_definitions_array, $GOTMLS_threat_levels, $GOTMLS_script_URI, $GOTMLS_scanfiles, $GOTMLS_plugin_dir, $GOTMLS_images_path, $GOTMLS_loop_execution_time, $GOTMLS_skip_ext, $GOTMLS_skip_dirs, $GOTMLS_settings_array, $GOTMLS_dirs_at_depth, $GOTMLS_dir_at_depth, $GOTMLS_protocol;
 $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_microtime"]).' GOTMLS_Settings_start'] = GOTMLS_memory_usage(true);
-	$GOTMLS_menu_groups = array(__("Main Menu Item placed below <b>Comments</b> and above <b>Appearance</b>"),__("Main Menu Item placed below <b>Settings</b>"),__("Sub-Menu inside the <b>Tools</b> Menu Item"));
+	$GOTMLS_menu_groups = array(__("Main Menu Item placed below <b>Comments</b> and above <b>Appearance</b>",'gotmls'),__("Main Menu Item placed below <b>Settings</b>",'gotmls'),__("Sub-Menu inside the <b>Tools</b> Menu Item",'gotmls'));
 	if (is_multisite() && current_user_can("manage_network"))
-		$GOTMLS_menu_groups[] = __("ONLY SHOW for <b>Network Admins</b>");
+		$GOTMLS_menu_groups[] = __("ONLY SHOW for <b>Network Admins</b>",'gotmls');
 	$GOTMLS_scan_groups = array();
 	$dirs = GOTMLS_explode_dir(__file__);
 	$scan_level = intval($GOTMLS_settings_array["scan_level"]);
@@ -358,7 +358,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	$scan_optjs = "<script type=\"text/javascript\">\nfunction showOnly(what) {\n";
 	foreach ($GOTMLS_scan_groups as $mg => $GOTMLS_scan_group) {
 		$scan_optjs .= "document.getElementById('only$mg').style.display = 'none';\n";
-		$scan_opts .= '<div style="position: relative; float: right; padding: 2px 0px 4px 30px;" id="scan_group_div_'.$mg.'"><input type="radio" name="scan_what" id="not-only'.$mg.'" value="'.$mg.'"'.($GOTMLS_settings_array['scan_what']==$mg?' checked':'').' /><a style="text-decoration: none;" href="#scan_what" onclick="showOnly(\''.$mg.'\');document.getElementById(\'not-only'.$mg.'\').checked=true;">'.$GOTMLS_scan_group.'</a><br /><div class="rounded-corners" style="position: absolute; display: none; background-color: #CCF; padding: 10px; z-index: 10;" id="only'.$mg.'"><div style="position: relative; padding: 0 40px 0 0;"><a class="rounded-corners" style="position: absolute; right: 0; margin: 0; padding: 0 4px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;" href="#scan_what" onclick="showhide(\'only'.$mg.'\');">X</a><b>'.str_replace(" ", "&nbsp;", __("Only Scan These Folders:")).'</b></div>';
+		$scan_opts .= '<div style="position: relative; float: right; padding: 2px 0px 4px 30px;" id="scan_group_div_'.$mg.'"><input type="radio" name="scan_what" id="not-only'.$mg.'" value="'.$mg.'"'.($GOTMLS_settings_array['scan_what']==$mg?' checked':'').' /><a style="text-decoration: none;" href="#scan_what" onclick="showOnly(\''.$mg.'\');document.getElementById(\'not-only'.$mg.'\').checked=true;">'.$GOTMLS_scan_group.'</a><br /><div class="rounded-corners" style="position: absolute; display: none; background-color: #CCF; padding: 10px; z-index: 10;" id="only'.$mg.'"><div style="position: relative; padding: 0 40px 0 0;"><a class="rounded-corners" style="position: absolute; right: 0; margin: 0; padding: 0 4px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;" href="#scan_what" onclick="showhide(\'only'.$mg.'\');">X</a><b>'.str_replace(" ", "&nbsp;", __("Only Scan These Folders:",'gotmls')).'</b></div>';
 		$dir = implode(GOTMLS_slash(), array_slice($dirs, 0, -1 * (2 + $mg)));
 		$files = GOTMLS_getfiles($dir);
 		if (is_array($files))
@@ -368,24 +368,24 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 		$scan_opts .= '</div></div>';
 	}
 	$scan_optjs .= "document.getElementById('only'+what).style.display = 'block';\n}\n</script>";
-	$scan_opts = '><form method="POST" name="GOTMLS_Form" action="'.str_replace('&scan_type=', '&last_type=', $GOTMLS_script_URI).'"><input type="hidden" name="scan_type" id="scan_type" value="Quick Scan" /><div style="float: left;"><b>'.__("What to scan:").'</b></div><div style="float: left;">'.$scan_opts.$scan_optjs.'</div><div style="float: left;" id="scanwhatfolder"></div><br style="clear: left;" /><p><b>'.__("Scan Depth:").'</b> ('.__("how far do you want to drill down from your starting directory").')</p><div style="padding: 0 30px;"><input type="text" value="'.$GOTMLS_settings_array["scan_depth"].'" name="scan_depth"> ('.__("-1 is infinite depth").')</div><p><b>'.__("What to look for:").'</b></p><div style="padding: 0 30px;">';//.print_r(array('<pre>',$GOTMLS_settings_array,'</pre>'),1);
+	$scan_opts = '><form method="POST" name="GOTMLS_Form" action="'.str_replace('&scan_type=', '&last_type=', $GOTMLS_script_URI).'"><input type="hidden" name="scan_type" id="scan_type" value="Quick Scan" /><div style="float: left;"><b>'.__("What to scan:",'gotmls').'</b></div><div style="float: left;">'.$scan_opts.$scan_optjs.'</div><div style="float: left;" id="scanwhatfolder"></div><br style="clear: left;" /><p><b>'.__("Scan Depth:",'gotmls').'</b> ('.__("how far do you want to drill down from your starting directory?",'gotmls').')</p><div style="padding: 0 30px;"><input type="text" value="'.$GOTMLS_settings_array["scan_depth"].'" name="scan_depth"> ('.__("-1 is infinite depth",'gotmls').')</div><p><b>'.__("What to look for:",'gotmls').'</b></p><div style="padding: 0 30px;">';//.print_r(array('<pre>',$GOTMLS_settings_array,'</pre>'),1);
 //	$potential_threat = array(, '('.__("Find and Automatially Repair files infected with malicious code").')</a><div class="rounded-corners" style="display: none; background-color: #CCF; padding: 10px; z-index: 10;" id="dont_check_known"><a class="rounded-corners" style="float: right; padding: 0 4px; margin: 0 0 0 30px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;" href="#check_known_div_0" onclick="showhide(\'dont_check_known\');">X</a><b>Don\'t&nbsp;Scan&nbsp;for&nbsp;These&nbsp;Patterns:</b>');
 	foreach ($GOTMLS_threat_levels as $threat_name=>$threat_level) {
 		$scan_opts .= '<div style="padding: 0;" id="check_'.$threat_level.'_div">';
 		if (isset($GOTMLS_definitions_array[$threat_level]))
 			$scan_opts .= '<input type="checkbox" name="check[]" id="check_'.$threat_level.'_Yes" value="'.$threat_level.'"'.(in_array($threat_level,$_SESSION["GOTMLS"]["check"])?' checked':'').' /> <a style="text-decoration: none;" href="#check_'.$threat_level.'_div_0" onclick="document.getElementById(\'check_'.$threat_level.'_Yes\').checked=true;//showhide(\'dont_check_'.$threat_level.'\');">';
 		else
-			$scan_opts .= '<a title="'.__("Download Definition Updates to Use this feature").'"><img src="'.$GOTMLS_images_path.'blocked.gif" height=16 width=16 alt="X">';
+			$scan_opts .= '<a title="'.__("Download Definition Updates to Use this feature",'gotmls').'"><img src="'.$GOTMLS_images_path.'blocked.gif" height=16 width=16 alt="X">';
 //					if ($_SESSION["GOTMLS"]["check"] != "potential")
 		$scan_opts .= "<b>$threat_name</b></a>";
 		if (!isset($GOTMLS_definitions_array[$threat_level]))
-			$scan_opts .= '<br /><div style="padding: 14px;" id="check_'.$threat_level.'_div_NA">'.__("Registration of your Installation Key is required for this feature").'</div>';//'<br /><input type="checkbox" name="dont_check[]" value="'.htmlspecialchars($threat_name).'"'.(in_array($threat_name, $GOTMLS_settings_array["dont_check"])?' checked /><script>showhide("dont_check_'.(count($potential_threat)?'known':'potential').'", true);</script>':' />').$threat_name;
+			$scan_opts .= '<br /><div style="padding: 14px;" id="check_'.$threat_level.'_div_NA">'.__("Registration of your Installation Key is required for this feature",'gotmls').'</div>';//'<br /><input type="checkbox" name="dont_check[]" value="'.htmlspecialchars($threat_name).'"'.(in_array($threat_name, $GOTMLS_settings_array["dont_check"])?' checked /><script>showhide("dont_check_'.(count($potential_threat)?'known':'potential').'", true);</script>':' />').$threat_name;
 		$scan_opts .= '</div>';
 	}
-	if (isset($_GET['eli'])) $scan_opts .= '<div style="padding: 10px;"><b>'.__("Custom RegExp:").'</b> ('.__("For very advanced users only. Do not use this without talking to Eli first. If used incorrectly you could easily break your site.").')<br /><input type="text" name="check_custom" style="width: 100%;" value="'.htmlspecialchars($GOTMLS_settings_array["check_custom"]).'" /></div>';//still testing this option
-	$scan_opts .= '</div><p>'.__("<b>Skip files with the following extentions:</b>(a comma separated list of file extentions to be excluded from the scan)").'</p><div style="padding: 0 30px;"><input type="text" name="exclude_ext" value="'.implode(",", $GOTMLS_settings_array["exclude_ext"]).'" style="width: 100%;" /></div><p>'.__("<b>Skip directories with the following names:</b>(a comma separated list of folders to be excluded from the scan)").'</p><div style="padding: 0 30px;"><input type="text" name="exclude_dir" value="'.implode(",", $GOTMLS_settings_array["exclude_dir"]).'" style="width: 100%;" /></div><p style="text-align: right;"><input type="submit" onclick="document.getElementById(\'scan_type\').value=this.value;" id="complete_scan" value="Complete Scan" class="button-primary" />&nbsp;<input type="submit" onclick="document.getElementById(\'scan_type\').value=this.value;" id="quick_scan" value="Quick Scan" class="button-primary" /></p></form></div></div>';
+	if (isset($_GET['eli'])) $scan_opts .= '<div style="padding: 10px;"><b>'.__("Custom RegExp:",'gotmls').'</b> ('.__("For very advanced users only. Do not use this without talking to Eli first. If used incorrectly you could easily break your site.",'gotmls').')<br /><input type="text" name="check_custom" style="width: 100%;" value="'.htmlspecialchars($GOTMLS_settings_array["check_custom"]).'" /></div>';//still testing this option
+	$scan_opts .= '</div><p>'.__("<b>Skip files with the following extentions:</b> (a comma separated list of file extentions to be excluded from the scan)",'gotmls').'</p><div style="padding: 0 30px;"><input type="text" name="exclude_ext" value="'.implode(",", $GOTMLS_settings_array["exclude_ext"]).'" style="width: 100%;" /></div><p>'.__("<b>Skip directories with the following names:</b> (a comma separated list of folders to be excluded from the scan)",'gotmls').'</p><div style="padding: 0 30px;"><input type="text" name="exclude_dir" value="'.implode(",", $GOTMLS_settings_array["exclude_dir"]).'" style="width: 100%;" /></div><p style="text-align: right;"><input type="submit" onclick="document.getElementById(\'scan_type\').value=this.value;" id="complete_scan" value="Complete Scan" class="button-primary" />&nbsp;<input type="submit" onclick="document.getElementById(\'scan_type\').value=this.value;" id="quick_scan" value="Quick Scan" class="button-primary" /></p></form></div></div>';
 	$menu_opts = '<div class="stuffbox shadowed-box">
-	<h3 class="hndle"><span>'.__("Menu Item Placement Options").'</span></h3>
+	<h3 class="hndle"><span>'.__("Menu Item Placement Options",'gotmls').'</span></h3>
 	<div class="inside"><form method="POST" name="GOTMLS_menu_Form">';
 	foreach ($GOTMLS_menu_groups as $mg => $GOTMLS_menu_group)
 		$menu_opts .= '<div style="padding: 4px;" id="menu_group_div_'.$mg.'"><input type="radio" name="GOTMLS_menu_group" value="'.$mg.'"'.($GOTMLS_settings_array["menu_group"]==$mg?' checked':'').' onchange="document.GOTMLS_menu_Form.submit();" />'.$GOTMLS_menu_group.'</div>';
@@ -393,9 +393,9 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	$OB_default_handlers = array("default output handler", "zlib output compression");
 	foreach (ob_list_handlers() as $OB_last_handler)
 		if (!in_array($OB_last_handler, $OB_default_handlers))
-			echo '<div class="error">'.sprintf(__("Another Plugin or Theme is using '%s' to handle output buffers. <br />This prevents actively outputing the buffer on-the-fly and will severely degrade the performance of this (and many other) Plugins. <br />Consider disabling caching and compression plugins (at least during the scanning process)."), $OB_last_handler).'</div>';
+			echo '<div class="error">'.sprintf(__("Another Plugin or Theme is using '%s' to handle output buffers. <br />This prevents actively outputing the buffer on-the-fly and will severely degrade the performance of this (and many other) Plugins. <br />Consider disabling caching and compression plugins (at least during the scanning process).",'gotmls'), $OB_last_handler).'</div>';
 	GOTMLS_display_header('Anti-Malware by <img style="vertical-align: middle;" alt="ELI" src="'.$GOTMLS_protocol.'://0.gravatar.com/avatar/69ad8428e97469d0dcd64f1f60c07bd8?s=64" /> at GOTMLS.NET', $menu_opts.'</form><br style="clear: left;" /></div></div>');
-	$scan_groups = array_merge(array(__("Scanned Files")=>"scanned",__("Selected Folders")=>"dirs",__("Scanned Folders")=>"dir",__("Skipped Folders")=>"skipdirs",__("Skipped Files")=>"skipped",__("Read/Write Errors")=>"errors",__("Quarantined Files")=>"bad"), $GOTMLS_threat_levels);
+	$scan_groups = array_merge(array(__("Scanned Files",'gotmls')=>"scanned",__("Selected Folders",'gotmls')=>"dirs",__("Scanned Folders",'gotmls')=>"dir",__("Skipped Folders",'gotmls')=>"skipdirs",__("Skipped Files",'gotmls')=>"skipped",__("Read/Write Errors",'gotmls')=>"errors",__("Quarantined Files",'gotmls')=>"bad"), $GOTMLS_threat_levels);
 	echo '<script type="text/javascript">
 var percent = 0;
 function update_status(title, time) {
@@ -408,7 +408,7 @@ function update_status(title, time) {
 	if (percent == 100) {
 		showhide("pause_button", true);
 		showhide("pause_button");
-		title = "<b>'.__("Scan Complete!").'</b>";
+		title = "<b>'.__("Scan Complete!",'gotmls').'</b>";
 	} else
 		scan_state = "99F";
 	if (sdir) {
@@ -450,7 +450,7 @@ function update_status(title, time) {
 			$fix_button_js = "\n\t\tdis='block';";
 		} else {
 			if ($found && !in_array($scan_group, $_SESSION["GOTMLS"]["check"]))
-				$potential_threat = ' potential" title="'.__("You are not currently scanning for this type of threat!");
+				$potential_threat = ' potential" title="'.__("You are not currently scanning for this type of threat!",'gotmls');
 			else
 				$potential_threat = "";
 			echo "/*-->*/\n\tif ($scan_group > 0) {\n\t\tscan_state = ' href=\"#found_$scan_group\" onclick=\"$li_js showhide(\\'found_$scan_group\\', true);\" class=\"GOTMLS_plugin $scan_group\"';$fix_button_js".($MAX>6?"\n\tshowhide('found_$scan_group', true);":"")."\n\t} else\n\t\tscan_state = ' class=\"GOTMLS_plugin$potential_threat\"';\n\tdivHTML += '<li class=\"GOTMLS_li\"><a'+scan_state+'>$found'+$scan_group+' '+($scan_group==1?('$scan_name').slice(0,-1):'$scan_name')+'</a></li>';\n/*<!--*/";
@@ -511,7 +511,7 @@ var startTime = 0;
 </script>
 <div class="metabox-holder GOTMLS" style="width: 100%;" id="GOTMLS-Settings"><div class="postbox shadowed-box">
 	<div title="Click to toggle" onclick="showhide(\'GOTMLS-Settings-Form\');" class="handlediv"><br></div>
-	<h3 title="Click to toggle" onclick="showhide(\'GOTMLS-Settings-Form\');" style="cursor: pointer;" class="hndle"><span>'.__("Scan Settings").'</span></h3>
+	<h3 title="Click to toggle" onclick="showhide(\'GOTMLS-Settings-Form\');" style="cursor: pointer;" class="hndle"><span>'.__("Scan Settings",'gotmls').'</span></h3>
 	<div id="GOTMLS-Settings-Form" class="inside"';
 	if ((isset($_REQUEST['scan_type']) && ($_REQUEST['scan_type'] == 'Quarantine')) || (isset($_REQUEST['scan_what']) && is_numeric($_REQUEST['scan_what']))) {
 		if (!isset($_REQUEST['scan_type']))
@@ -530,10 +530,10 @@ var startTime = 0;
 						echo '<input type="hidden" name="'.$name.'" value="'.htmlspecialchars($value).'">';
 				}
 			}
-			echo '<div id="status_text"><img src="'.$GOTMLS_images_path.'wait.gif" height=16 width=16 alt="..."> '.__("Loading Scan, Please Wait ...").'</div><div id="status_bar"></div><p id="pause_button" style="display: none; position: absolute; text-align: center; margin-left: -30px; padding-left: 50%;"><input type="button" value="Pause" class="button-primary" onclick="pauseresume(this);" id="resume_button" /></p><div id="status_counts"></div><p id="fix_button" style="display: none; text-align: center;"><input id="repair_button" type="submit" value="'.__("Automatically Fix SELECTED Files Now").'" class="button-primary" onclick="showhide(\'GOTMLS_iFrame\', true);showhide(\'GOTMLS_iFrame\');showhide(\'div_file\', true);" /></p></div></div>
-			<div class="postbox shadowed-box"><div title="Click to toggle" onclick="showhide(\'GOTMLS-Scan-Details\');" class="handlediv"><br></div><h3 title="Click to toggle" onclick="showhide(\'GOTMLS-Scan-Details\');" style="cursor: pointer;" class="hndle"><span>'.__("Scan Details:").'</span></h3>';
+			echo '<div id="status_text"><img src="'.$GOTMLS_images_path.'wait.gif" height=16 width=16 alt="..."> '.__("Loading Scan, Please Wait ...",'gotmls').'</div><div id="status_bar"></div><p id="pause_button" style="display: none; position: absolute; text-align: center; margin-left: -30px; padding-left: 50%;"><input type="button" value="Pause" class="button-primary" onclick="pauseresume(this);" id="resume_button" /></p><div id="status_counts"></div><p id="fix_button" style="display: none; text-align: center;"><input id="repair_button" type="submit" value="'.__("Automatically Fix SELECTED Files Now",'gotmls').'" class="button-primary" onclick="showhide(\'GOTMLS_iFrame\', true);showhide(\'GOTMLS_iFrame\');showhide(\'div_file\', true);" /></p></div></div>
+			<div class="postbox shadowed-box"><div title="Click to toggle" onclick="showhide(\'GOTMLS-Scan-Details\');" class="handlediv"><br></div><h3 title="Click to toggle" onclick="showhide(\'GOTMLS-Scan-Details\');" style="cursor: pointer;" class="hndle"><span>'.__("Scan Details:",'gotmls').'</span></h3>';
 		}
-		echo '<div id="GOTMLS-Scan-Details" class="inside"><div onmousedown="grabDiv();" onmouseup="releaseDiv();" id="div_file" class="shadowed-box rounded-corners sidebar-box" style="display: none; position: fixed; top: 100px; left: 100px; width: 80%; border: solid #c00; z-index: 112358;"><a class="rounded-corners" name="link_file" style="float: right; padding: 0 4px; margin: 6px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;" href="#found_top" onclick="showhide(\'div_file\');">X</a><h3 style="border-radius: 10px 10px 0 0; -moz-border-radius: 10px 10px 0 0; -webkit-border-radius: 10px 10px 0 0;">Examine Results</h3><div style="width: 100%; height: 400px; position: relative; padding: 0; margin: 0;" class="inside"><br /><br /><center><img src="'.$GOTMLS_images_path.'wait.gif" height=16 width=16 alt="..."> '.__("Loading Results, Please Wait ...").'<br /><br /><input type="button" onclick="showhide(\'GOTMLS_iFrame\', true);" value="It\'s taking too long ... I can\'t wait ... show me the results!" class="button-primary" /></center><iframe id="GOTMLS_iFrame" name="GOTMLS_iFrame" style="top: 0px; left: 0px; width: 100%; height: 400px; background-color: #CCC; position: absolute;"></iframe></div></div><script type="text/javascript">
+		echo '<div id="GOTMLS-Scan-Details" class="inside"><div onmousedown="grabDiv();" onmouseup="releaseDiv();" id="div_file" class="shadowed-box rounded-corners sidebar-box" style="display: none; position: fixed; top: 100px; left: 100px; width: 80%; border: solid #c00; z-index: 112358;"><a class="rounded-corners" name="link_file" style="float: right; padding: 0 4px; margin: 6px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;" href="#found_top" onclick="showhide(\'div_file\');">X</a><h3 style="border-radius: 10px 10px 0 0; -moz-border-radius: 10px 10px 0 0; -webkit-border-radius: 10px 10px 0 0;">Examine Results</h3><div style="width: 100%; height: 400px; position: relative; padding: 0; margin: 0;" class="inside"><br /><br /><center><img src="'.$GOTMLS_images_path.'wait.gif" height=16 width=16 alt="..."> '.__("Loading Results, Please Wait ...",'gotmls').'<br /><br /><input type="button" onclick="showhide(\'GOTMLS_iFrame\', true);" value="It\'s taking too long ... I can\'t wait ... show me the results!" class="button-primary" /></center><iframe id="GOTMLS_iFrame" name="GOTMLS_iFrame" style="top: 0px; left: 0px; width: 100%; height: 400px; background-color: #CCC; position: absolute;"></iframe></div></div><script type="text/javascript">
 		setDiv("div_file");
 		function checkAllFiles(check) {
 			var checkboxes = new Array(); 
@@ -558,7 +558,7 @@ var startTime = 0;
 			if (is_array($entries) && ($key = array_search("index.php", $entries)))
 				unset($entries[$key]);
 			if (is_array($entries) && count($entries)) {
-				echo (count($entries)?'<input type="checkbox" onchange="checkAllFiles(this.checked); document.getElementById(\'fix_button\').style.display = \'block\';"> Check all ':'').count($entries).' Item'.(count($entries)==1?'':'s').' in Quarantine<span style="float: right;">Date Quarantined</span></h3><p id="fix_button" style="display: none; float: right;"><input id="repair_button" type="submit" value="'.__("Restore SELECTED files from Quarantine").'" class="button-primary" onclick="if (confirm(\''.__("Are you sure you want to overwrite the previously cleaned files with the selected files in the Quarantine?").'\')) { setvalAllFiles(1); showhide(\'GOTMLS_iFrame\', true); showhide(\'GOTMLS_iFrame\'); showhide(\'div_file\', true); } else return false;" /><br /><input id="delete_button" type="submit" class="button-primary" value="'.__("Delete SELECTED files from Quarantine").'" style="background-color: #C33; color: #FFF; background-image: linear-gradient(to bottom, #C22, #933); border-color: #933 #933 #900; box-shadow: 0 1px 0 rgba(230, 120, 120, 0.5) inset; text-decoration: none; text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1); margin-top: 10px;" onclick="if (confirm(\''.__("Are you sure you want to permanently delete the selected files in the Quarantine?").'\')) { setvalAllFiles(2); showhide(\'GOTMLS_iFrame\', true); showhide(\'GOTMLS_iFrame\'); showhide(\'div_file\', true); } else return false;" /></p>'.__("<p><b>The following items have been found to contain malicious code, they have been cleaned, and the original infected file contents have been saved here in the Quarantine. The code is safe here and you do not need to do anything further with these files.</b></p> FYI - these files are found in:").' '.$GOTMLS_quarantine_dir;
+				echo (count($entries)?'<input type="checkbox" onchange="checkAllFiles(this.checked); document.getElementById(\'fix_button\').style.display = \'block\';"> Check all ':'').count($entries).' Item'.(count($entries)==1?'':'s').' in Quarantine<span style="float: right;">Date Quarantined</span></h3><p id="fix_button" style="display: none; float: right;"><input id="repair_button" type="submit" value="'.__("Restore SELECTED files from Quarantine",'gotmls').'" class="button-primary" onclick="if (confirm(\''.__("Are you sure you want to overwrite the previously cleaned files with the selected files in the Quarantine?",'gotmls').'\')) { setvalAllFiles(1); showhide(\'GOTMLS_iFrame\', true); showhide(\'GOTMLS_iFrame\'); showhide(\'div_file\', true); } else return false;" /><br /><input id="delete_button" type="submit" class="button-primary" value="'.__("Delete SELECTED files from Quarantine",'gotmls').'" style="background-color: #C33; color: #FFF; background-image: linear-gradient(to bottom, #C22, #933); border-color: #933 #933 #900; box-shadow: 0 1px 0 rgba(230, 120, 120, 0.5) inset; text-decoration: none; text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1); margin-top: 10px;" onclick="if (confirm(\''.__("Are you sure you want to permanently delete the selected files in the Quarantine?",'gotmls').'\')) { setvalAllFiles(2); showhide(\'GOTMLS_iFrame\', true); showhide(\'GOTMLS_iFrame\'); showhide(\'div_file\', true); } else return false;" /></p>'.__("<p><b>The following items have been found to contain malicious code, they have been cleaned, and the original infected file contents have been saved here in the Quarantine. The code is safe here and you do not need to do anything further with these files.</b></p> FYI - these files are found in:",'gotmls').' '.$GOTMLS_quarantine_dir;
 				sort($entries);
 				foreach ($entries as $entry) {
 					$file = GOTMLS_trailingslashit($GOTMLS_quarantine_dir).$entry;
@@ -577,12 +577,12 @@ var startTime = 0;
 					echo "</a> <span style='float: right; margin-right: 8px;'>(20$date[0]-$date[1]-$date[2] at $date[3]:$date[4])</span></li>";
 				}
 			} else
-				echo __("No Items in Quarantine").'</h3>';
+				echo __("No Items in Quarantine",'gotmls').'</h3>';
 			echo "</ul>";//</form>";
 		} elseif ($_REQUEST['scan_what'] > -1) {
 			$dir = implode(GOTMLS_slash(), array_slice($dirs, 0, -1 * (2 + $_REQUEST['scan_what'])));
 			foreach ($scan_groups as $scan_name => $scan_group)
-				echo "\n<ul name=\"found_$scan_group\" id=\"found_$scan_group\" class=\"GOTMLS_plugin $scan_group\" style=\"background-color: #ccc; display: none; padding: 0;\"><a class=\"rounded-corners\" name=\"link_$scan_group\" style=\"float: right; padding: 0 4px; margin: 5px 5px 0 30px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;\" href=\"#found_top\" onclick=\"showhide('found_$scan_group');\">X</a><h3>$scan_name</h3>\n".($scan_group=='potential'?'<p> &nbsp; * '.__("NOTE: These are probably not malicious scripts (but it's a good place to start looking <u>IF</u> your site is infected and no Known Threats were found).").'</p>':($scan_group=='wp_login'?'<p> &nbsp; * '.__("NOTE: Your WordPress Login page is susceptible to a brute-force attack (just like any other login page). These types of attacks are becoming more prevalent these days and can sometimes cause your server to become slow or unresponsive, even if the attacks do not succeed in gaining access to your site. Applying this patch will block access to the WordPress Login page whenever this type of attack is detected. For more information on this subject").' <a target="_blank" href="http://gotmls.net/tag/wp-login-php/">'.__("read my blog").'</a>.</p>':'<br />')).'</ul>';// (<a href=\"javascript:void(0)\" onclick=\"selectWholeGroup('found_$scan_group');\">Select All</a>) (<a href=\"javascript:void(0)\" onclick=\"selectNoneGroup('found_$scan_group');\">Select None</a>)
+				echo "\n<ul name=\"found_$scan_group\" id=\"found_$scan_group\" class=\"GOTMLS_plugin $scan_group\" style=\"background-color: #ccc; display: none; padding: 0;\"><a class=\"rounded-corners\" name=\"link_$scan_group\" style=\"float: right; padding: 0 4px; margin: 5px 5px 0 30px; line-height: 16px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;\" href=\"#found_top\" onclick=\"showhide('found_$scan_group');\">X</a><h3>$scan_name</h3>\n".($scan_group=='potential'?'<p> &nbsp; * '.__("NOTE: These are probably not malicious scripts (but it's a good place to start looking <u>IF</u> your site is infected and no Known Threats were found).",'gotmls').'</p>':($scan_group=='wp_login'?'<p> &nbsp; * '.__("NOTE: Your WordPress Login page is susceptible to a brute-force attack (just like any other login page). These types of attacks are becoming more prevalent these days and can sometimes cause your server to become slow or unresponsive, even if the attacks do not succeed in gaining access to your site. Applying this patch will block access to the WordPress Login page whenever this type of attack is detected. For more information on this subject",'gotmls').' <a target="_blank" href="http://gotmls.net/tag/wp-login-php/">'.__("read my blog",'gotmls').'</a>.</p>':'<br />')).'</ul>';// (<a href=\"javascript:void(0)\" onclick=\"selectWholeGroup('found_$scan_group');\">Select All</a>) (<a href=\"javascript:void(0)\" onclick=\"selectNoneGroup('found_$scan_group');\">Select None</a>)
 			$_SESSION["GOTMLS_LAST_scan_start"] = time();
 			$GOTMLS_scan_logs_array["LAST_SCAN_start"] = $_SESSION["GOTMLS_LAST_scan_start"];
 			$GOTMLS_scan_logs_array["LAST_SCAN_type"] = $_REQUEST["scan_type"];
@@ -592,7 +592,7 @@ var startTime = 0;
 					$OB_last_handler = $OB_handler;
 			@ob_start();
 			if ($_REQUEST["scan_type"] == "Quick Scan")
-				$li_js = "\nfunction testComplete() {\n\tif (percent != 100)\n\t\talert('".__("The Quick Scan was unable to finish because of a shortage of memory or a problem accessing a file. Please try using the Complete Scan, it is slower but it will handle these errors better and continue scanning the rest of the files.")."');\n}\nwindow.onload=testComplete;\n</script>\n<script type=\"text/javascript\">";
+				$li_js = "\nfunction testComplete() {\n\tif (percent != 100)\n\t\talert('".__("The Quick Scan was unable to finish because of a shortage of memory or a problem accessing a file. Please try using the Complete Scan, it is slower but it will handle these errors better and continue scanning the rest of the files.",'gotmls')."');\n}\nwindow.onload=testComplete;\n</script>\n<script type=\"text/javascript\">";
 			echo "\n<script type=\"text/javascript\">$li_js\n/*<!--*/";
 			if (is_dir($dir)) {
 				$GOTMLS_dirs_at_depth[0] = 1;
@@ -611,11 +611,11 @@ var startTime = 0;
 			} else
 				echo GOTMLS_return_threat("errors", "blocked", $dir, GOTMLS_error_link("Not a valid directory!"));
 			if ($_REQUEST["scan_type"] == "Quick Scan") {
-				echo GOTMLS_update_status(__("Completed!"), 100);
+				echo GOTMLS_update_status(__("Completed!",'gotmls'), 100);
 				$GOTMLS_scan_logs_array["LAST_SCAN_finish"] = time();
 				update_option("GOTMLS_scan_logs_array", $GOTMLS_scan_logs_array);
 			} else {
-				echo GOTMLS_update_status(__("Starting Scan ...")).'/*-->*/';
+				echo GOTMLS_update_status(__("Starting Scan ...",'gotmls')).'/*-->*/';
 				echo "\nvar scriptSRC = '$GOTMLS_script_URI&GOTMLS_scan=';\nvar scanfilesArKeys = new Array('".implode("','", array_keys($GOTMLS_scanfiles))."');\nvar scanfilesArNames = new Array('Scanning ".implode("','Scanning ", $GOTMLS_scanfiles)."');".'
 var scanfilesI = 0;
 var stopScanning;
@@ -669,7 +669,7 @@ showhide("pause_button", true);
 		}
 		echo "\n</div></div></form>";
 	} else {
-		echo $scan_opts.'<div class="postbox shadowed-box"><div title="Click to toggle" onclick="showhide(\'GOTMLS-Scan-Progress\');" class="handlediv"><br></div><h3 title="Click to toggle" onclick="showhide(\'GOTMLS-Scan-Progress\');" style="cursor: pointer;" class="hndle"><span>'.__("Last Scan Status").'</span></h3><div id="GOTMLS-Scan-Progress" class="inside">'.GOTMLS_scan_log()."\n</div></div>";
+		echo $scan_opts.'<div class="postbox shadowed-box"><div title="Click to toggle" onclick="showhide(\'GOTMLS-Scan-Progress\');" class="handlediv"><br></div><h3 title="Click to toggle" onclick="showhide(\'GOTMLS-Scan-Progress\');" style="cursor: pointer;" class="hndle"><span>'.__("Last Scan Status",'gotmls').'</span></h3><div id="GOTMLS-Scan-Progress" class="inside">'.GOTMLS_scan_log()."\n</div></div>";
 	}
 	echo "\n</div></div></div>";
 $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_microtime"]).' GOTMLS_Settings_end'] = GOTMLS_memory_usage(true);
@@ -784,7 +784,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 			die(GOTMLS_scandir($file));
 		} else {
 			if (!file_exists($file))
-				die(sprintf(__("The file %s does not exist."), $file)."<br />\n".(file_exists(GOTMLS_quarantine($file))?sprintf(__("You could <a %s>try viewing the quarantined backup file</a>."), 'target="GOTMLS_iFrame" href="'.$GOTMLS_script_URI.'&GOTMLS_scan='.GOTMLS_encode(GOTMLS_quarantine($file)).''):__("The file must have already been delete.")));
+				die(sprintf(__("The file %s does not exist.",'gotmls'), $file)."<br />\n".(file_exists(GOTMLS_quarantine($file))?sprintf(__("You could <a %s>try viewing the quarantined backup file</a>.",'gotmls'), 'target="GOTMLS_iFrame" href="'.$GOTMLS_script_URI.'&GOTMLS_scan='.GOTMLS_encode(GOTMLS_quarantine($file)).'"'):__("The file must have already been delete.",'gotmls')));
 			else {
 				$clean_file = $file;
 				if (GOTMLS_get_ext($file) == 'gotmls' && dirname($file) == dirname(GOTMLS_quarantine($file))) {
@@ -823,7 +823,7 @@ function select_text_range(ta_id, start, end) {
 	}
 }
 window.parent.showhide("GOTMLS_iFrame", true);
-</script><form method="post"'.(is_file($clean_file)?' onsubmit="return confirm(\''.__("Are you sure this file is not infected and you want to ignore it in future scans?").'\');"><input type="submit" value="Whitelist this file" style="float: right;"><input type="hidden" name="GOTMLS_whitelist" value="'.GOTMLS_encode($clean_file).'"><input type="hidden" name="GOTMLS_chksum" value="'.md5($GOTMLS_file_contents).'O'.md5($GOTMLS_url).'">':'>').$clean_file.'<br />'.__("Potential threats in file:").' ('.$fa.' ) <br /><textarea id="ta_file" width="100%" style="width: 100%;" rows="20">'.htmlentities(str_replace("\r", "", $GOTMLS_file_contents)).'</textarea></form>');
+</script><form method="post"'.(is_file($clean_file)?' onsubmit="return confirm(\''.__("Are you sure this file is not infected and you want to ignore it in future scans?",'gotmls').'\');"><input type="submit" value="Whitelist this file" style="float: right;"><input type="hidden" name="GOTMLS_whitelist" value="'.GOTMLS_encode($clean_file).'"><input type="hidden" name="GOTMLS_chksum" value="'.md5($GOTMLS_file_contents).'O'.md5($GOTMLS_url).'">':'>').$clean_file.'<br />'.__("Potential threats in file:",'gotmls').' ('.$fa.' ) <br /><textarea id="ta_file" width="100%" style="width: 100%;" rows="20">'.htmlentities(str_replace("\r", "", $GOTMLS_file_contents)).'</textarea></form>');
 			}
 		}
 	} elseif (isset($_POST['GOTMLS_fix']) && is_array($_POST['GOTMLS_fix'])) {
@@ -837,9 +837,9 @@ window.parent.showhide("GOTMLS_iFrame", true);
 				$li_js = "<script type=\"text/javascript\">\n/*<!--*/";
 			}
 		}
-		die('<div id="check_site_warning" style="background-color: #F00;">'.sprintf(__("Because some threats were automatically fixed we need to check to make sure the removal did not break your site. If this stays Red and the frame below does not load please <a %s>revert the changes</a> made during the automated fix process."), 'target="test_frame" href="admin.php?page=GOTMLS-settings&scan_type=Quarantine"').' <span style="color: #F00;">'.__("Never mind, it worked!").'</span></div><br /><iframe id="test_frame" name="test_frame" src="'.$GOTMLS_script_URI.'&check_site=1" style="width: 100%; height: 200px"></iframe>'.$li_js."/*-->*/\nalert_repaired(0);\n</script>\n");
+		die('<div id="check_site_warning" style="background-color: #F00;">'.sprintf(__("Because some threats were automatically fixed we need to check to make sure the removal did not break your site. If this stays Red and the frame below does not load please <a %s>revert the changes</a> made during the automated fix process.",'gotmls'), 'target="test_frame" href="admin.php?page=GOTMLS-settings&scan_type=Quarantine"').' <span style="color: #F00;">'.__("Never mind, it worked!",'gotmls').'</span></div><br /><iframe id="test_frame" name="test_frame" src="'.$GOTMLS_script_URI.'&check_site=1" style="width: 100%; height: 200px"></iframe>'.$li_js."/*-->*/\nalert_repaired(0);\n</script>\n");
 	} elseif (isset($_POST["GOTMLS_fixing"]))
-		die("<script type=\"text/javascript\">\nwindow.parent.showhide('GOTMLS_iFrame', true);\nalert('".__("Nothing Selected to be Fixed!")."');\n</script>".__("Done!"));
+		die("<script type=\"text/javascript\">\nwindow.parent.showhide('GOTMLS_iFrame', true);\nalert('".__("Nothing Selected to be Fixed!",'gotmls')."');\n</script>".__("Done!",'gotmls'));
 	if (isset($_POST["scan_level"]) && is_numeric($_POST["scan_level"]))
 		$scan_level = intval($_POST["scan_level"]);
 	if (isset($scan_level) && is_numeric($scan_level))

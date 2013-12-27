@@ -5,10 +5,10 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, antimalware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability, block, brute force, wp-login, patch
-Version: 3.11.28
-Stable tag: 3.11.28
+Version: 3.12.27
+Stable tag: 3.12.27
 Requires at least: 3.0
-Tested up to: 3.7.1
+Tested up to: 3.8
 
 This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and it helps you remove them.
 
@@ -23,7 +23,7 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Customize Scan Setting.
 * Run a Quick Scan or a Complete Scan from the Settings Page.
 
-Updated November-28th
+Updated December-27th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -74,6 +74,9 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 3.12.27 =
+* Added Spanish traslation, thanks to Jelena Kovacevic and Andrew Kurtis.
 
 = 3.11.28 =
 * Updated string in the code and added a .pot file to be ready for translation into other languages.
@@ -227,6 +230,9 @@ There is no sure-fire way to protect your site from any kind of hack attempt. Th
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 3.12.27 =
+Added Spanish traslation, thanks to Jelena Kovacevic and Andrew Kurtis.
 
 = 3.11.28 =
 Updated code and added a .pot file for translation into other languages and added more Quarantine options and a file for advanced session tracking.
