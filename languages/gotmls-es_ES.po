@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Eli Scheetz <wordpress@ieonly.com>, 2013.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gotmls 3.11.28\n"
+"Project-Id-Version: gotmls 3.13.10\n"
 "Report-Msgid-Bugs-To: wordpress@ieonly.com\n"
-"POT-Creation-Date: 2013-11-28 20:30-1000\n"
-"PO-Revision-Date: 2013-12-08 18:55+0100\n"
+"POT-Creation-Date: 2014-01-10 05:03-1000\n"
+"PO-Revision-Date: 2014-01-10 05:03-1000\n"
 "Last-Translator: jelena kovacevic <jecajeca260@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -510,36 +510,50 @@ msgid "Failed to open"
 msgstr "Falló al abrir"
 
 #: images/index.php:426
-msgid "Preparing"
-msgstr "Preparando"
+#, php-format
+msgid "Preparing %s"
+msgstr "Preparando %s"
 
-#: images/index.php:466 images/index.php:600
+#: images/index.php:461
+#: images/index.php:555
+#, php-format
+msgid "Scanning %s"
+msgstr "Escaneando %s"
+
+#: images/index.php:468
+#: images/index.php:602
 msgid "Failed to list files in directory!"
 msgstr "¡Falló listar los archivos en el directorio!"
 
-#: images/index.php:536
+#: images/index.php:478
+#: images/index.php:604
+#, php-format
+msgid "Scanned %s"
+msgstr "Escaneado %s"
+
+#: images/index.php:538
 msgid "Skipped because of file extention!"
 msgstr "¡Omitido debido a la extensión del archivo!"
 
-#: images/index.php:538
+#: images/index.php:540
 msgid "Failed to determine file size!"
 msgstr "¡Falló determinar el tamaño!"
 
-#: images/index.php:540
+#: images/index.php:542
 msgid "Skipped because of file size!"
 msgstr "¡Omitido debido al tamaño del archivo!"
 
-#: images/index.php:559
+#: images/index.php:561
 msgid "Failed to read directory!"
 msgstr "¡Falló leer el directorio!"
 
-#: images/index.php:577
+#: images/index.php:579
 #, php-format
 msgid "Skipped because of file size (%1$s bytes) or file extention (%2$s)!"
 msgstr ""
 "¡Omitido debido al tamaño del archivo (%1$s bytes) o la extensión del "
 "archivo (%2$s)!"
 
-#: images/index.php:591
+#: images/index.php:593
 msgid "Failed to read file!"
 msgstr "¡Falló leer el archivo!"

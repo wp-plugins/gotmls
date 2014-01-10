@@ -8,7 +8,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 3.12.27
+Version: 3.13.10
 */
 
 /**
@@ -358,7 +358,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 	$scan_optjs = "<script type=\"text/javascript\">\nfunction showOnly(what) {\n";
 	foreach ($GOTMLS_scan_groups as $mg => $GOTMLS_scan_group) {
 		$scan_optjs .= "document.getElementById('only$mg').style.display = 'none';\n";
-		$scan_opts .= '<div style="position: relative; float: right; padding: 2px 0px 4px 30px;" id="scan_group_div_'.$mg.'"><input type="radio" name="scan_what" id="not-only'.$mg.'" value="'.$mg.'"'.($GOTMLS_settings_array['scan_what']==$mg?' checked':'').' /><a style="text-decoration: none;" href="#scan_what" onclick="showOnly(\''.$mg.'\');document.getElementById(\'not-only'.$mg.'\').checked=true;">'.$GOTMLS_scan_group.'</a><br /><div class="rounded-corners" style="position: absolute; display: none; background-color: #CCF; padding: 10px; z-index: 10;" id="only'.$mg.'"><div style="position: relative; padding: 0 40px 0 0;"><a class="rounded-corners" style="position: absolute; right: 0; margin: 0; padding: 0 4px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;" href="#scan_what" onclick="showhide(\'only'.$mg.'\');">X</a><b>'.str_replace(" ", "&nbsp;", __("Only Scan These Folders:",'gotmls')).'</b></div>';
+		$scan_opts .= '<div style="position: relative; float: right; padding: 2px 0px 4px 30px;" id="scan_group_div_'.$mg.'"><input type="radio" name="scan_what" id="not-only'.$mg.'" value="'.$mg.'"'.($GOTMLS_settings_array["scan_what"]==$mg?' checked':'').' /><a style="text-decoration: none;" href="#scan_what" onclick="showOnly(\''.$mg.'\');document.getElementById(\'not-only'.$mg.'\').checked=true;">'.$GOTMLS_scan_group.'</a><br /><div class="rounded-corners" style="position: absolute; display: none; background-color: #CCF; padding: 10px; z-index: 10;" id="only'.$mg.'"><div style="position: relative; padding: 0 40px 0 0;"><a class="rounded-corners" style="position: absolute; right: 0; margin: 0; padding: 0 4px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;" href="#scan_what" onclick="showhide(\'only'.$mg.'\');">X</a><b>'.str_replace(" ", "&nbsp;", __("Only Scan These Folders:",'gotmls')).'</b></div>';
 		$dir = implode(GOTMLS_slash(), array_slice($dirs, 0, -1 * (2 + $mg)));
 		$files = GOTMLS_getfiles($dir);
 		if (is_array($files))
@@ -431,7 +431,7 @@ function update_status(title, time) {
 		timeElapsed += " Second";
 	if (timeElapsed.substr(0, 2) != "1 ")
 		timeElapsed += "s";
-	divHTML = \'<div align="center" style="vertical-align: middle; background-color: #ccc; z-index: 3; height: 18px; width: 100%; border: solid #000 1px; position: relative; padding: 10px 0;"><div style="height: 18px; padding: 10px 0; position: absolute; top: 0px; left: 0px; background-color: #\'+scan_state+\'; width: \'+percent+\'%"></div><div style="height: 32px; position: absolute; top: 3px; left: 10px; z-index: 5;" align="left">\'+sdir+" Folder"+(sdir==1?"":"s")+" Checked<br />"+timeElapsed+\' Elapsed</div><div style="height: 38px; position: absolute; top: 0px; left: 0px; width: 100%; z-index: 5; line-height: 38px; font-size: 30px; text-align: center;">\'+percent+\'%</div><div style="height: 32px; position: absolute; top: 3px; right: 10px; z-index: 5;" align="right">\'+(dirs-sdir)+" Folder"+((dirs-sdir)==1?"":"s")+" Remaining<br />"+timeRemaining+" Remaining</div></div>";
+	divHTML = \'<div align="center" style="vertical-align: middle; background-color: #ccc; z-index: 3; height: 18px; width: 100%; border: solid #000 1px; position: relative; padding: 10px 0;"><div style="height: 18px; padding: 10px 0; position: absolute; top: 0px; left: 0px; background-color: #\'+scan_state+\'; width: \'+percent+\'%"></div><div style="height: 32px; position: absolute; top: 3px; left: 10px; z-index: 5; line-height: 16px;" align="left">\'+sdir+" Folder"+(sdir==1?"":"s")+" Checked<br />"+timeElapsed+\' Elapsed</div><div style="height: 38px; position: absolute; top: 0px; left: 0px; width: 100%; z-index: 5; line-height: 38px; font-size: 30px; text-align: center;">\'+percent+\'%</div><div style="height: 32px; position: absolute; top: 3px; right: 10px; z-index: 5; line-height: 16px;" align="right">\'+(dirs-sdir)+" Folder"+((dirs-sdir)==1?"":"s")+" Remaining<br />"+timeRemaining+" Remaining</div></div>";
 	document.getElementById("status_bar").innerHTML = divHTML;
 	document.getElementById("status_text").innerHTML = title;
 	dis="none";
@@ -513,12 +513,12 @@ var startTime = 0;
 	<div title="Click to toggle" onclick="showhide(\'GOTMLS-Settings-Form\');" class="handlediv"><br></div>
 	<h3 title="Click to toggle" onclick="showhide(\'GOTMLS-Settings-Form\');" style="cursor: pointer;" class="hndle"><span>'.__("Scan Settings",'gotmls').'</span></h3>
 	<div id="GOTMLS-Settings-Form" class="inside"';
-	if ((isset($_REQUEST['scan_type']) && ($_REQUEST['scan_type'] == 'Quarantine')) || (isset($_REQUEST['scan_what']) && is_numeric($_REQUEST['scan_what']))) {
-		if (!isset($_REQUEST['scan_type']))
-			$_REQUEST['scan_type'] = 'Quick Scan';
+	if ((isset($_REQUEST["scan_type"]) && ($_REQUEST["scan_type"] == "Quarantine")) || (isset($_REQUEST["scan_what"]) && is_numeric($_REQUEST["scan_what"]))) {
+		if (!isset($_REQUEST["scan_type"]))
+			$_REQUEST["scan_type"] = "Quick Scan";
 		echo ' style="display: none;"'.$scan_opts;
 		update_option($GOTMLS_plugin_dir.'_settings_array', $GOTMLS_settings_array);
-		echo '<form method="POST" target="GOTMLS_iFrame" name="GOTMLS_Form_clean"><input type="hidden" name="GOTMLS_fixing" value="1"><div class="postbox shadowed-box"><div title="Click to toggle" onclick="showhide(\'GOTMLS-Scan-Progress\');" class="handlediv"><br></div><h3 title="Click to toggle" onclick="showhide(\'GOTMLS-Scan-Progress\');" style="cursor: pointer;" class="hndle"><span>'.$_REQUEST['scan_type'].' Status</span></h3>';
+		echo '<form method="POST" target="GOTMLS_iFrame" name="GOTMLS_Form_clean"><input type="hidden" name="GOTMLS_fixing" value="1"><div class="postbox shadowed-box"><div title="Click to toggle" onclick="showhide(\'GOTMLS-Scan-Progress\');" class="handlediv"><br></div><h3 title="Click to toggle" onclick="showhide(\'GOTMLS-Scan-Progress\');" style="cursor: pointer;" class="hndle"><div style="float: right;">&nbsp;('.$_SESSION["GOTMLS_LAST_scan_dir"].')&nbsp;</div><span>'.$_REQUEST["scan_type"].' Status</span></h3>';
 		if ($_REQUEST['scan_type'] != 'Quarantine') {
 			echo '<div id="GOTMLS-Scan-Progress" class="inside">';
 			foreach ($_POST as $name => $value) {
@@ -579,11 +579,12 @@ var startTime = 0;
 			} else
 				echo __("No Items in Quarantine",'gotmls').'</h3>';
 			echo "</ul>";//</form>";
-		} elseif ($_REQUEST['scan_what'] > -1) {
-			$dir = implode(GOTMLS_slash(), array_slice($dirs, 0, -1 * (2 + $_REQUEST['scan_what'])));
+		} elseif ($_REQUEST["scan_what"] > -1) {
+			$dir = implode(GOTMLS_slash(), array_slice($dirs, 0, -1 * (2 + $_REQUEST["scan_what"])));
 			foreach ($scan_groups as $scan_name => $scan_group)
 				echo "\n<ul name=\"found_$scan_group\" id=\"found_$scan_group\" class=\"GOTMLS_plugin $scan_group\" style=\"background-color: #ccc; display: none; padding: 0;\"><a class=\"rounded-corners\" name=\"link_$scan_group\" style=\"float: right; padding: 0 4px; margin: 5px 5px 0 30px; line-height: 16px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;\" href=\"#found_top\" onclick=\"showhide('found_$scan_group');\">X</a><h3>$scan_name</h3>\n".($scan_group=='potential'?'<p> &nbsp; * '.__("NOTE: These are probably not malicious scripts (but it's a good place to start looking <u>IF</u> your site is infected and no Known Threats were found).",'gotmls').'</p>':($scan_group=='wp_login'?'<p> &nbsp; * '.__("NOTE: Your WordPress Login page is susceptible to a brute-force attack (just like any other login page). These types of attacks are becoming more prevalent these days and can sometimes cause your server to become slow or unresponsive, even if the attacks do not succeed in gaining access to your site. Applying this patch will block access to the WordPress Login page whenever this type of attack is detected. For more information on this subject",'gotmls').' <a target="_blank" href="http://gotmls.net/tag/wp-login-php/">'.__("read my blog",'gotmls').'</a>.</p>':'<br />')).'</ul>';// (<a href=\"javascript:void(0)\" onclick=\"selectWholeGroup('found_$scan_group');\">Select All</a>) (<a href=\"javascript:void(0)\" onclick=\"selectNoneGroup('found_$scan_group');\">Select None</a>)
 			$_SESSION["GOTMLS_LAST_scan_start"] = time();
+			$_SESSION["GOTMLS_LAST_scan_dir"] = $dir;
 			$GOTMLS_scan_logs_array["LAST_SCAN_start"] = $_SESSION["GOTMLS_LAST_scan_start"];
 			$GOTMLS_scan_logs_array["LAST_SCAN_type"] = $_REQUEST["scan_type"];
 			update_option("GOTMLS_scan_logs_array", $GOTMLS_scan_logs_array);
@@ -591,8 +592,7 @@ var startTime = 0;
 				foreach (ob_list_handlers() as $OB_handler)
 					$OB_last_handler = $OB_handler;
 			@ob_start();
-			if ($_REQUEST["scan_type"] == "Quick Scan")
-				$li_js = "\nfunction testComplete() {\n\tif (percent != 100)\n\t\talert('".__("The Quick Scan was unable to finish because of a shortage of memory or a problem accessing a file. Please try using the Complete Scan, it is slower but it will handle these errors better and continue scanning the rest of the files.",'gotmls')."');\n}\nwindow.onload=testComplete;\n</script>\n<script type=\"text/javascript\">";
+			if ($_REQUEST["scan_type"] == "Quick Scan")	$li_js = "\nfunction testComplete() {\n\tif (percent != 100)\n\t\talert('".__("The Quick Scan was unable to finish because of a shortage of memory or a problem accessing a file. Please try using the Complete Scan, it is slower but it will handle these errors better and continue scanning the rest of the files.",'gotmls')."');\n}\nwindow.onload=testComplete;\n</script>\n<script type=\"text/javascript\">";
 			echo "\n<script type=\"text/javascript\">$li_js\n/*<!--*/";
 			if (is_dir($dir)) {
 				$GOTMLS_dirs_at_depth[0] = 1;
@@ -757,7 +757,7 @@ $_SESSION["GOTMLS_debug"][(microtime(true)-$_SESSION["GOTMLS_debug"]["START_micr
 			}
 		}
 	}*/
-	if (!isset($_SESSION["GOTMLS"]["check"]))//	foreach ($GOTMLS_threat_levels as $threat_level)
+	if (!isset($_SESSION["GOTMLS"]["check"]))
 		$_SESSION["GOTMLS"]["check"] = $GOTMLS_threat_levels;
 	if (isset($_POST["GOTMLS_fix"]) && !is_array($_POST["GOTMLS_fix"]))
 		$_POST["GOTMLS_fix"] = array($_POST["GOTMLS_fix"]=>1);
