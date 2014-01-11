@@ -39,7 +39,7 @@ if (!function_exists("add_action")) {
 	GOTMLS_admin_notices();
 }
 /* GOTMLS init Global Variables */
-$GOTMLS_Version="3.13.10";
+$GOTMLS_Version="3.13.11";
 $GOTMLS_plugin_dir="GOTMLS";
 $GOTMLS_loop_execution_time = 60;
 $GOTMLS_chmod_file = octdec(0644);

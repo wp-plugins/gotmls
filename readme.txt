@@ -4,9 +4,9 @@ Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
-Tags: anti-malware, antimalware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, server, malicious, scripts, infection, timthumb, exploit, vulnerability, block, brute force, wp-login, patch
-Version: 3.13.10
-Stable tag: 3.13.10
+Tags: anti-malware, antimalware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, malicious, scripts, infection, timthumb, exploit, block, brute force, wp-login, patch
+Version: 3.13.11
+Stable tag: 3.13.11
 Requires at least: 3.0
 Tested up to: 3.8
 
@@ -23,7 +23,7 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Customize Scan Setting.
 * Run a Quick Scan or a Complete Scan from the Settings Page.
 
-Updated December-27th
+Updated January-11th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -69,9 +69,9 @@ This was most likely a random attack on your file-system by a hacker's robot/vir
 
 There is no sure-fire way to protect your site from any kind of hack attempt. That said, some of the basic steps should include: hardening your password, keeping all your sites up-to-date, and regular scans with Anti-Malware software like [GOTMLS.NET](http://gotmls.net/)
 
-= Why does sucuri.net or the Google Safe Browsing Diagnostic page still say I'm infected after I have removed the malicious code? =
+= Why does sucuri.net or the Google Safe Browsing Diagnostic page still say my site is infected after I have removed the malicious code? =
 
-sucuri.net caches the scan results and will not refresh your scan results until you click the small link near the bottom of the page that says "Force a Re-scan" to clear the cache. Google also caches your infected pages and will usually take some time before crawling your site again, but you can speed up that process by Requesting a Review in the Malware or Security section of [Google Webmaster Tools](https://www.google.com/webmasters/tools/). It's a good idea to have a Webmaster Tools account for your site anyway as it can provide lots of other helpful information about your site.
+sucuri.net caches their scan results and will not refresh the scan until you click the small link near the bottom of the page that says "Force a Re-scan" to clear the cache. Google also caches your infected pages and usually takes some time before crawling your site again, but you can speed up that process by Requesting a Review in the Malware or Security section of [Google Webmaster Tools](https://www.google.com/webmasters/tools/). It is a good idea to have a Webmaster Tools account for your site anyway as it can provide lots of other helpful information about your site.
 
 == Screenshots ==
 
@@ -82,6 +82,9 @@ sucuri.net caches the scan results and will not refresh your scan results until 
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 3.13.11 =
+* Fixed a session bug to display the last directory scanned.
 
 = 3.13.10 =
 * Fixed a few small cosmetic bugs for WP 3.8.
@@ -241,6 +244,9 @@ sucuri.net caches the scan results and will not refresh your scan results until 
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 3.13.11 =
+Fixed a session bug to display the last directory scanned.
 
 = 3.13.10 =
 Fixed a few small cosmetic bugs for WP 3.8.
