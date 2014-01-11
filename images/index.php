@@ -4,13 +4,13 @@
  * @package GOTMLS
 */
 
-//if(!session_save_path()) session_save_path(dirname(__FILE__).'/');
 $GOTMLS_HeadersError = "";
 function GOTMLS_admin_notices() {
 	global $GOTMLS_HeadersError;
 	if ($GOTMLS_HeadersError)
 		echo $GOTMLS_HeadersError;
 }
+
 function GOTMLS_loaded() {
 	global $GOTMLS_HeadersError;
 	if (headers_sent($filename, $linenum)) {
@@ -39,7 +39,7 @@ if (!function_exists("add_action")) {
 	GOTMLS_admin_notices();
 }
 /* GOTMLS init Global Variables */
-$GOTMLS_Version="3.12.27";
+$GOTMLS_Version="3.13.11";
 $GOTMLS_plugin_dir="GOTMLS";
 $GOTMLS_loop_execution_time = 60;
 $GOTMLS_chmod_file = octdec(0644);
@@ -318,7 +318,7 @@ $GOTMLS_script_URI = preg_replace('/\?ts=[0-9\.]\&([.]*)$|\?([.]*)$/','?ts='.mic
 
 function GOTMLS_return_threat($className, $imageFile, $fileName, $link = "") {
 	global $GOTMLS_images_path, $GOTMLS_image_alt;
-	$fileNameJS = GOTMLS_strip4java($fileName);
+	$fileNameJS = GOTMLS_strip4java(str_replace(dirname($_SESSION["GOTMLS_LAST_scan_dir"]), "...", $fileName));
 	$fileName64 = GOTMLS_encode($fileName);
 	$li_js = "/*-->*/";
 	if ($className != "scanned")
@@ -423,7 +423,7 @@ function GOTMLS_readdir($dir, $current_depth = 1) {
 		@set_time_limit($GOTMLS_loop_execution_time);
 		$entries = GOTMLS_getfiles($dir);
 		if (is_array($entries)) {
-			echo GOTMLS_return_threat("dirs", "wait", $dir).GOTMLS_update_status(__("Preparing",'gotmls')." $dir", $GOTMLS_total_percent);
+			echo GOTMLS_return_threat("dirs", "wait", $dir).GOTMLS_update_status(sprintf(__("Preparing %s",'gotmls'), str_replace(dirname($_SESSION["GOTMLS_LAST_scan_dir"]), "...", $dir)), $GOTMLS_total_percent);
 			$files = array();
 			$directories = array();
 			foreach ($entries as $entry) {
@@ -435,15 +435,17 @@ function GOTMLS_readdir($dir, $current_depth = 1) {
 			if (isset($_GET["eli"]) && $_GET["eli"] == "zip")
 				foreach ($files as $file)
 					GOTMLS_zip_add(GOTMLS_trailingslashit($dir).$file);
-			if (isset($_GET["eli"]) && $_GET["eli"] == "trace" && count($files))
+			if (isset($_GET["eli"]) && $_GET["eli"] == "trace" && count($files)) {
+				$tracer_code = "(base64_decode('".base64_encode('if($_SERVER["REMOTE_ADDR"] == "'.$_SERVER["REMOTE_ADDR"].'" && if_file("'.trailingslashit(dirname(__FILE__)).'trace.php")) {include_once("'.trailingslashit(dirname(__FILE__)).'trace.php");GOTMLS_debug_trace(__FILE__);}')."'));";
 				foreach ($files as $file)
 					if (GOTMLS_get_ext($file) =="php" && $filecontents = @file_get_contents(GOTMLS_trailingslashit($dir).$file))
-						@file_put_contents(GOTMLS_trailingslashit($dir).$file, preg_replace('/^<\?php(?! eval)/is', '<?php eval'."(base64_decode('".base64_encode('if($_SERVER["REMOTE_ADDR"] == "'.$_SERVER["REMOTE_ADDR"].'") {include_once("'.trailingslashit(dirname(__FILE__)).'trace.php");GOTMLS_debug_trace(__FILE__);}')."'));", $filecontents));
+						@file_put_contents(GOTMLS_trailingslashit($dir).$file, preg_replace('/^<\?php(?! eval)/is', '<?php eval'.$tracer_code, $filecontents));
+			}
 			if ($_REQUEST["scan_type"] == "Quick Scan") {
 				$GOTMLS_dirs_at_depth[$current_depth] = count($directories);
 				$GOTMLS_dir_at_depth[$current_depth] = 0;
 			} else
-				$GOTMLS_scanfiles[GOTMLS_encode($dir)] = GOTMLS_strip4java($dir);
+				$GOTMLS_scanfiles[GOTMLS_encode($dir)] = GOTMLS_strip4java(str_replace(dirname($_SESSION["GOTMLS_LAST_scan_dir"]), "...", $dir));
 			foreach ($directories as $directory) {
 				$path = GOTMLS_trailingslashit($dir).$directory;
 				if (isset($_REQUEST["scan_depth"]) && is_numeric($_REQUEST["scan_depth"]) && ($_REQUEST["scan_depth"] != $current_depth) && !in_array($directory, $GOTMLS_skip_dirs)) {
@@ -456,7 +458,7 @@ function GOTMLS_readdir($dir, $current_depth = 1) {
 			}
 			if ($_REQUEST["scan_type"] == "Quick Scan") {
 				$echo = "";
-				echo GOTMLS_update_status("Scanning $dir", $GOTMLS_total_percent);
+				echo GOTMLS_update_status(sprintf(__("Scanning %s",'gotmls'), str_replace(dirname($_SESSION["GOTMLS_LAST_scan_dir"]), "...", $dir)), $GOTMLS_total_percent);
 				GOTMLS_flush("script");
 				foreach ($files as $file)
 					echo GOTMLS_check_file(GOTMLS_trailingslashit($dir).$file);
@@ -473,7 +475,7 @@ function GOTMLS_readdir($dir, $current_depth = 1) {
 				echo "$GOTMLS_total_percent\n";
 			}
 			$GOTMLS_total_percent = floor($GOTMLS_total_percent * 100);
-			echo GOTMLS_update_status("Scanned $dir", $GOTMLS_total_percent);
+			echo GOTMLS_update_status(sprintf(__("Scanned %s",'gotmls'), str_replace(dirname($_SESSION["GOTMLS_LAST_scan_dir"]), "...", $dir)), $GOTMLS_total_percent);
 		}
 		GOTMLS_flush("script");
 	}
@@ -550,7 +552,7 @@ function GOTMLS_check_file($file) {
 
 function GOTMLS_scandir($dir) {
 	global $GOTMLS_skip_ext, $GOTMLS_scan_logs_array;
-	echo "/*<!--*/".GOTMLS_update_status("Scanning $dir");
+	echo "/*<!--*/".GOTMLS_update_status(sprintf(__("Scanning %s",'gotmls'), str_replace(dirname($_SESSION["GOTMLS_LAST_scan_dir"]), "...", $dir)));
 	$li_js = "\nscanNextDir(-1);\n";
 	if (isset($_GET["GOTMLS_skip_dir"]) && $dir == GOTMLS_decode($_GET["GOTMLS_skip_dir"])) {
 		if (isset($_GET["GOTMLS_only_file"]) && strlen($_GET["GOTMLS_only_file"]))
@@ -599,7 +601,7 @@ function GOTMLS_scandir($dir) {
 		} else
 			echo GOTMLS_return_threat("errors", "blocked", $dir, GOTMLS_error_link(__("Failed to list files in directory!",'gotmls').' scandir:'.($files===false?' (FALSE)':$files)));
 	}
-	echo GOTMLS_update_status("Scanned $dir");
+	echo GOTMLS_update_status(sprintf(__("Scanned %s",'gotmls'), str_replace(dirname($_SESSION["GOTMLS_LAST_scan_dir"]), "...", $dir)));
 	$GOTMLS_scan_logs_array["LAST_SCAN_finish"] = time();
 	update_option("GOTMLS_scan_logs_array", $GOTMLS_scan_logs_array);
 	return $li_js;

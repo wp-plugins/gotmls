@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: gotmls 3.12.27\n"
+"Project-Id-Version: gotmls 3.13.10\n"
 "Report-Msgid-Bugs-To: wordpress@ieonly.com\n"
-"POT-Creation-Date: 2013-11-28 20:30-1000\n"
+"POT-Creation-Date: 2014-01-10 05:03-1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,7 +150,7 @@ msgid "Scan Depth:"
 msgstr ""
 
 #: index.php:371
-msgid "how far do you want to drill down from your starting directory"
+msgid "how far do you want to drill down from your starting directory?"
 msgstr ""
 
 #: index.php:371
@@ -178,11 +178,11 @@ msgid "For very advanced users only. Do not use this without talking to Eli firs
 msgstr ""
 
 #: index.php:386
-msgid "<b>Skip files with the following extentions:</b>(a comma separated list of file extentions to be excluded from the scan)"
+msgid "<b>Skip files with the following extentions:</b> (a comma separated list of file extentions to be excluded from the scan)"
 msgstr ""
 
 #: index.php:386
-msgid "<b>Skip directories with the following names:</b>(a comma separated list of folders to be excluded from the scan)"
+msgid "<b>Skip directories with the following names:</b> (a comma separated list of folders to be excluded from the scan)"
 msgstr ""
 
 #: index.php:388
@@ -407,35 +407,48 @@ msgid "Failed to open"
 msgstr ""
 
 #: images/index.php:426
-msgid "Preparing"
+#, php-format
+msgid "Preparing %s"
 msgstr ""
 
-#: images/index.php:466
-#: images/index.php:600
+#: images/index.php:461
+#: images/index.php:555
+#, php-format
+msgid "Scanning %s"
+msgstr ""
+
+#: images/index.php:468
+#: images/index.php:602
 msgid "Failed to list files in directory!"
 msgstr ""
 
-#: images/index.php:536
-msgid "Skipped because of file extention!"
+#: images/index.php:478
+#: images/index.php:604
+#, php-format
+msgid "Scanned %s"
 msgstr ""
 
 #: images/index.php:538
-msgid "Failed to determine file size!"
+msgid "Skipped because of file extention!"
 msgstr ""
 
 #: images/index.php:540
+msgid "Failed to determine file size!"
+msgstr ""
+
+#: images/index.php:542
 msgid "Skipped because of file size!"
 msgstr ""
 
-#: images/index.php:559
+#: images/index.php:561
 msgid "Failed to read directory!"
 msgstr ""
 
-#: images/index.php:577
+#: images/index.php:579
 #, php-format
 msgid "Skipped because of file size (%1$s bytes) or file extention (%2$s)!"
 msgstr ""
 
-#: images/index.php:591
+#: images/index.php:593
 msgid "Failed to read file!"
 msgstr ""
