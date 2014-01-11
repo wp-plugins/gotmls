@@ -29,9 +29,9 @@ Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new d
 
 NOTICE: This plugin make use of a "phone home" feature to check for updates. This is not unlike what WordPress already does with all your plugins. It is an essential part of any worthwhile security plugin and it is here to let you know when there are new plugin and definition update available. If you're allergic to "phone home" scripts then don't use this plugin (or WordPress at all for that matter).
 
-Special thanks to:
+**Special thanks to:**
 * Graeme Morris of socialidentitydesign.com for the logo design.
-* Jelena Kovacevic and Andrew Kurtis of webhostinghub.com for providing the Spanish traslation.
+* Jelena Kovacevic and Andrew Kurtis of webhostinghub.com for providing the Spanish translation.
 
 == Installation ==
 
@@ -90,7 +90,7 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 * Fixed a few small cosmetic bugs for WP 3.8.
 
 = 3.12.27 =
-* Added Spanish traslation, thanks to Jelena Kovacevic and Andrew Kurtis at webhostinghub.com.
+* Added Spanish translation, thanks to Jelena Kovacevic and Andrew Kurtis at webhostinghub.com.
 
 = 3.11.28 =
 * Updated string in the code and added a .pot file to be ready for translation into other languages.
@@ -252,7 +252,7 @@ Fixed a session bug to display the last directory scanned.
 Fixed a few small cosmetic bugs for WP 3.8.
 
 = 3.12.27 =
-Added Spanish traslation, thanks to Jelena Kovacevic and Andrew Kurtis.
+Added Spanish translation, thanks to Jelena Kovacevic and Andrew Kurtis.
 
 = 3.11.28 =
 Updated code and added a .pot file for translation into other languages and added more Quarantine options and a file for advanced session tracking.
