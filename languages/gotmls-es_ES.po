@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gotmls 3.13.10\n"
+"Project-Id-Version: gotmls 3.14.08\n"
 "Report-Msgid-Bugs-To: wordpress@ieonly.com\n"
 "POT-Creation-Date: 2014-01-10 05:03-1000\n"
-"PO-Revision-Date: 2014-01-10 05:03-1000\n"
+"PO-Revision-Date: 2014-02-08 13:43-1000\n"
 "Last-Translator: jelena kovacevic <jecajeca260@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -92,14 +92,11 @@ msgstr "¡Bajar nuevas definiciones!"
 
 #: index.php:225
 msgid ""
-"Register your Key now and get instant access to new definition files as new "
-"threats are discovered.<p>*All fields are required and I will NOT share your "
-"registration information with anyone.</p>"
+"If you have not already registered your Key then register now and get instant access to definition updates."
+"<p>*All fields are required and I will NOT share your registration information with anyone.</p>"
 msgstr ""
-"Registre su Llave ahora y obtenga acceso instantáneo a los archivos de "
-"nuevas definiciones mientras nuevas amenazas son descubiertas.<p>* Todos los "
-"campos son requeridos y NO compartirán su información de registro con nadie."
-"</p>"
+"Si no se ha registrado la clave de entonces Regístrese ahora y obtenga acceso instantáneo a los archivos de nuevas definiciones."
+"<p>* Todos los campos son requeridos y NO compartirán su información de registro con nadie.</p>"
 
 #: index.php:227
 msgid "Your Full Name:"
@@ -117,70 +114,70 @@ msgstr "Su URL del Sitio WordPress:"
 msgid "Plugin Installation Key:"
 msgstr "Su Llave de Instalación del Plugin:"
 
-#: index.php:254
+#: index.php:261
 msgid "Plugin Links"
 msgstr "Enlaces del Plugin"
 
-#: index.php:278
+#: index.php:285
 msgid "Make a Donation with PayPal"
 msgstr "Haga una Donación con PayPal"
 
-#: index.php:308
+#: index.php:315
 msgid "Main Menu Item placed below <b>Comments</b> and above <b>Appearance</b>"
 msgstr ""
 "Elemento del Menú Principal posicionado debajo de <b>Comentarios</b> y "
 "arriba de <b>Apariencia</b>"
 
-#: index.php:308
+#: index.php:315
 msgid "Main Menu Item placed below <b>Settings</b>"
 msgstr "Elemento del Menú Principal posicionado debajo de <b>Ajustes</b>"
 
-#: index.php:308
+#: index.php:315
 msgid "Sub-Menu inside the <b>Tools</b> Menu Item"
 msgstr "Submenú dentro del Elemento del Menú <b>Herramientas</b>"
 
-#: index.php:310
+#: index.php:317
 msgid "ONLY SHOW for <b>Network Admins</b>"
 msgstr "SOLO MOSTRAR para <b>Administradores de Red</b>"
 
-#: index.php:361
+#: index.php:368
 msgid "Only Scan These Folders:"
 msgstr "Solo Escanear Estos Archivos:"
 
-#: index.php:371
+#: index.php:378
 msgid "What to scan:"
 msgstr "Qué escanear:"
 
-#: index.php:371
+#: index.php:378
 msgid "Scan Depth:"
 msgstr "Profundidad de Escaneo:"
 
-#: index.php:371
+#: index.php:378
 msgid "how far do you want to drill down from your starting directory?"
 msgstr "¿cuán lejos desea bajar desde su directorio de comienzo?"
 
-#: index.php:371
+#: index.php:378
 msgid "-1 is infinite depth"
 msgstr "-1 es profundidad infinita"
 
-#: index.php:371
+#: index.php:378
 msgid "What to look for:"
 msgstr "Qué buscar:"
 
-#: index.php:378
+#: index.php:385
 msgid "Download Definition Updates to Use this feature"
 msgstr "Bajar Actualizaciones de Definición para Usar esta característica"
 
-#: index.php:382
+#: index.php:389
 msgid "Registration of your Installation Key is required for this feature"
 msgstr ""
 "El registro de su Llave de instalación es requerido para esta característica"
 
-#: index.php:385
+#: index.php:392
 msgid "Custom RegExp:"
 msgstr "RegExp Personalizada:"
 
-#: index.php:385
+#: index.php:392
 msgid ""
 "For very advanced users only. Do not use this without talking to Eli first. "
 "If used incorrectly you could easily break your site."
@@ -189,7 +186,7 @@ msgstr ""
 "primero. Si se utiliza de forma incorrecta se podía romper fácilmente su "
 "sitio."
 
-#: index.php:386
+#: index.php:393
 msgid ""
 "<b>Skip files with the following extentions:</b> (a comma separated list of "
 "file extentions to be excluded from the scan)"
@@ -197,7 +194,7 @@ msgstr ""
 "<b>Omitir archivos con las siguientes extensiones:</b> (una lista separada "
 "por coma de extensiones de archivos a ser excluidos del escaneo)"
 
-#: index.php:386
+#: index.php:393
 msgid ""
 "<b>Skip directories with the following names:</b> (a comma separated list of "
 "folders to be excluded from the scan)"
@@ -205,11 +202,11 @@ msgstr ""
 "<b>Saltar directorios con los nombres siguientes:</b> (una lista separada "
 "por coma de carpetas a ser excluidas del escaneo)"
 
-#: index.php:388
+#: index.php:395
 msgid "Menu Item Placement Options"
 msgstr "Opciones de Posicionamiento del Elemento del Menú"
 
-#: index.php:396
+#: index.php:403
 #, php-format
 msgid ""
 "Another Plugin or Theme is using '%s' to handle output buffers. <br />This "
@@ -223,63 +220,63 @@ msgstr ""
 " <br />Considere deshabilitar el almacenamiento en caché y los plugins "
 "de compresión (al menos durante el proceso de digitalización)."
 
-#: index.php:398
+#: index.php:405
 msgid "Scanned Files"
 msgstr "Archivos Escaneados"
 
-#: index.php:398
+#: index.php:405
 msgid "Selected Folders"
 msgstr "Carpetas Seleccionadas"
 
-#: index.php:398
+#: index.php:405
 msgid "Scanned Folders"
 msgstr "Carpetas Escaneadas"
 
-#: index.php:398
+#: index.php:405
 msgid "Skipped Folders"
 msgstr "Carpetas Omitidas"
 
-#: index.php:398
+#: index.php:405
 msgid "Skipped Files"
 msgstr "Archivos Omitidos"
 
-#: index.php:398
+#: index.php:405
 msgid "Read/Write Errors"
 msgstr "Errores de Lectura/Escritura"
 
-#: index.php:398
+#: index.php:405
 msgid "Quarantined Files"
 msgstr "Archivos en Cuarentena"
 
-#: index.php:411
+#: index.php:418
 msgid "Scan Complete!"
 msgstr "¡Scan Completo!"
 
-#: index.php:453
+#: index.php:460
 msgid "You are not currently scanning for this type of threat!"
 msgstr "¡Usted no está actualmente escaneando para este tipo de amenaza!"
 
-#: index.php:533
+#: index.php:540
 msgid "Loading Scan, Please Wait ..."
 msgstr "Cargando Scan, Por Favor Espere ..."
 
-#: index.php:533
+#: index.php:540
 msgid "Automatically Fix SELECTED Files Now"
 msgstr "Arreglar Archivos SELECCIONADOS Automáticamente Ahora"
 
-#: index.php:534
+#: index.php:541
 msgid "Scan Details:"
 msgstr "Detalles del Escaneo:"
 
-#: index.php:536
+#: index.php:543
 msgid "Loading Results, Please Wait ..."
 msgstr "Cargando Resultados, Por Favor Espere ..."
 
-#: index.php:561
+#: index.php:568
 msgid "Restore SELECTED files from Quarantine"
 msgstr "Restaurar archivos SELECCIONADOS de la Cuarentena"
 
-#: index.php:561
+#: index.php:568
 msgid ""
 "Are you sure you want to overwrite the previously cleaned files with the "
 "selected files in the Quarantine?"
@@ -287,11 +284,11 @@ msgstr ""
 "¿Está seguro que desea sobrescribir los archivos limpiados anteriormente con "
 "los archivos seleccionados en la Cuarentena?"
 
-#: index.php:561
+#: index.php:568
 msgid "Delete SELECTED files from Quarantine"
 msgstr "Borrados archivos SELECCIONADOS de la Cuarentena"
 
-#: index.php:561
+#: index.php:568
 msgid ""
 "Are you sure you want to permanently delete the selected files in the "
 "Quarantine?"
@@ -299,7 +296,7 @@ msgstr ""
 "¿Está seguro que desea borrar permanentemente los archivos seleccionados en "
 "la Cuarentena?"
 
-#: index.php:561
+#: index.php:568
 msgid ""
 "<p><b>The following items have been found to contain malicious code, they "
 "have been cleaned, and the original infected file contents have been saved "
@@ -312,11 +309,11 @@ msgstr ""
 "es seguro aquí y usted no necesita hacer nada más con estos archivos </b>"
 "</p> PARA-SU-INFORMACIÓN - estos archivos se encuentran en:"
 
-#: index.php:580
+#: index.php:587
 msgid "No Items in Quarantine"
 msgstr "No hay Elementos en Cuarentena"
 
-#: index.php:585
+#: index.php:592
 msgid ""
 "NOTE: These are probably not malicious scripts (but it's a good place to "
 "start looking <u>IF</u> your site is infected and no Known Threats were "
@@ -326,7 +323,7 @@ msgstr ""
 "para empezar a buscar <u>SI</u> su sitio está infectado y no se encontraron "
 "amenazas conocidas)."
 
-#: index.php:585
+#: index.php:592
 msgid ""
 "NOTE: Your WordPress Login page is susceptible to a brute-force attack (just "
 "like any other login page). These types of attacks are becoming more "
@@ -344,11 +341,11 @@ msgstr ""
 "bloqueará el acceso a la página de WordPress sesión cada vez que se detecta "
 "este tipo de ataque. Para obtener más información sobre este tema"
 
-#: index.php:585
+#: index.php:592
 msgid "read my blog"
 msgstr "lea mi blog"
 
-#: index.php:595
+#: index.php:602
 msgid ""
 "The Quick Scan was unable to finish because of a shortage of memory or a "
 "problem accessing a file. Please try using the Complete Scan, it is slower "
@@ -360,33 +357,33 @@ msgstr ""
 "lento pero va a manejar estos errores mejor y continuará escaneando el resto "
 "de los archivos."
 
-#: index.php:614
+#: index.php:621
 msgid "Completed!"
 msgstr "¡Completado!"
 
-#: index.php:618
+#: index.php:625
 msgid "Starting Scan ..."
 msgstr "Comenzando Scan ..."
 
-#: index.php:672
+#: index.php:679
 msgid "Last Scan Status"
 msgstr "Estatus del Último Scan"
 
-#: index.php:787
+#: index.php:794
 #, php-format
 msgid "The file %s does not exist."
 msgstr "El archivo %s no existe."
 
-#: index.php:787
+#: index.php:794
 #, php-format
 msgid "You could <a %s>try viewing the quarantined backup file</a>."
 msgstr "Usted puede <a %s> probar ver el archivo de backup en cuarentena</a>."
 
-#: index.php:787
+#: index.php:794
 msgid "The file must have already been delete."
 msgstr "El archivo debe ya haber sido borrado."
 
-#: index.php:826
+#: index.php:833
 msgid ""
 "Are you sure this file is not infected and you want to ignore it in future "
 "scans?"
@@ -394,11 +391,11 @@ msgstr ""
 "¿Está seguro de que este archivo no está infectado y desea ignorarlo en "
 "análisis futuros?"
 
-#: index.php:826
+#: index.php:833
 msgid "Potential threats in file:"
 msgstr "Amenazas potenciales en el archivo:"
 
-#: index.php:840
+#: index.php:847
 #, php-format
 msgid ""
 "Because some threats were automatically fixed we need to check to make sure "
@@ -411,15 +408,15 @@ msgstr ""
 "en Rojo y los frames de abajo no se cargan por favor <a %s> revierta los "
 "cambios </a> hechos durante el proceso de corrección automática."
 
-#: index.php:840
+#: index.php:847
 msgid "Never mind, it worked!"
 msgstr "¡No importa, funcionó!"
 
-#: index.php:842
+#: index.php:849
 msgid "Nothing Selected to be Fixed!"
 msgstr "¡Nada seleccionado para ser Arreglado!"
 
-#: index.php:842
+#: index.php:849
 msgid "Done!"
 msgstr "¡Hecho!"
 

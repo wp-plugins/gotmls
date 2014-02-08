@@ -9,7 +9,14 @@ function GOTMLS_debug_trace($file) {
 		$_SESSION["GOTMLS_trace_includes"] = array();
 	if (isset($_SESSION["GOTMLS_trace_includes"][$_SESSION["GOTMLS_traces"]][$file]))
 		$_SESSION["GOTMLS_traces"] =  microtime(true);
-	$_SESSION["GOTMLS_trace_includes"][$_SESSION["GOTMLS_traces"]][$file] = microtime(true);
+	if (!$GOTMLS_headers_sent && $GOTMLS_headers_sent = headers_sent($filename, $linenum)) {
+		if (!$filename)
+			$filename = __("an unknown file",'gotmls');
+		if (!is_numeric($linenum))
+			$linenum = __("unknown",'gotmls');
+		$_SESSION["GOTMLS_trace_includes"][$_SESSION["GOTMLS_traces"]][$file] = microtime(true).sprintf(__(': Headers sent by %1$s on line %2$s.','gotmls'), $filename, $linenum);
+	} else
+		$_SESSION["GOTMLS_trace_includes"][$_SESSION["GOTMLS_traces"]][$file] = microtime(true);
 	if (isset($_GET["GOTMLS_traces"]) && count($_SESSION["GOTMLS_trace_includes"][$_SESSION["GOTMLS_traces"]]) > $_GET["GOTMLS_includes"]) {
 		$_SESSION["GOTMLS_traces"] = microtime(true);
 		foreach ($_SESSION["GOTMLS_trace_includes"] as $trace => $array)

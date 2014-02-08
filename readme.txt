@@ -5,10 +5,10 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, antimalware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, malicious, scripts, infection, timthumb, exploit, block, brute force, wp-login, patch
-Version: 3.13.11
-Stable tag: 3.13.11
+Version: 3.14.08
+Stable tag: 3.14.08
 Requires at least: 3.0
-Tested up to: 3.8
+Tested up to: 3.8.1
 
 This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and it helps you remove them.
 
@@ -20,10 +20,11 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Download definitions of new threat as they are discovered.
 * Automatically upgrade vulnerable versions of timthumb scripts.
 * Automatically patch wp-login.php to block brute-force attacks.
+* Run a Quick Scan from the admin menu.
 * Customize Scan Setting.
-* Run a Quick Scan or a Complete Scan from the Settings Page.
+* Run a Complete Scan from the Settings Page.
 
-Updated January-11th
+Updated February-8th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -82,6 +83,11 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 3.14.08 =
+* Re-purposed Quick Scan to just scan the most affected areas.
+* Set the registration form to display by defaulted in the definition update section.
+* Fixed a few small bugs in advanced features and directory depth determination.
 
 = 3.13.11 =
 * Fixed a session bug to display the last directory scanned.
@@ -244,6 +250,9 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 3.14.08 =
+Re-purposed Quick Scan to just scan the most affected areas and fixed a few small bugs.
 
 = 3.13.11 =
 Fixed a session bug to display the last directory scanned.
