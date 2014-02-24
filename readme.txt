@@ -5,10 +5,10 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, antimalware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, malicious, scripts, infection, timthumb, exploit, block, brute force, wp-login, patch
-Version: 3.13.11
-Stable tag: 3.13.11
+Version: 3.14.24
+Stable tag: 3.14.24
 Requires at least: 3.0
-Tested up to: 3.8
+Tested up to: 3.8.1
 
 This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and it helps you remove them.
 
@@ -20,10 +20,11 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Download definitions of new threat as they are discovered.
 * Automatically upgrade vulnerable versions of timthumb scripts.
 * Automatically patch wp-login.php to block brute-force attacks.
+* Run a Quick Scan from the admin menu.
 * Customize Scan Setting.
-* Run a Quick Scan or a Complete Scan from the Settings Page.
+* Run a Complete Scan from the Settings Page.
 
-Updated January-11th
+Updated February 24th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -43,7 +44,7 @@ NOTICE: This plugin make use of a "phone home" feature to check for updates. Thi
 
 = Why should I register? =
 
-If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to new definitions of New Threats and added features like automatic removal and patches for specific security threats and vulnerabilities like old versions of timthumb and brute-force attacks on wp-login.php. Otherwise, this plugin only scans for "Potential Threats" on your site, it would then be up to you to identify the good from the bad and remove them accordingly. 
+If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to download definitions of New Threats and added features like automatic removal of "Known Threats" and patches for specific security issues like old versions of timthumb and brute-force attacks on wp-login.php. Otherwise, this plugin only scans for "Potential Threats" on your site, it would then be up to you to identify the good from the bad and remove them accordingly. 
 
 = Why can't I automatically remove the "Potential Threats" in yellow? =
 
@@ -51,7 +52,7 @@ Many of these files may use eval and other powerful PHP function for perfectly l
 
 = How do I know if any of the "Potential Threats" are dangerous? =
 
-Click on the linked filename, then click each numbered link above the file content box to highlight the suspect code. If you cannot tell whether or not the code is malicious just leave it alone or ask someone else to look at it for you. If you find that it is malicious please send me a copy of the file so that I can add it to the definitions file as a "Know Threats", then it can be automatically removed. If you want me to examine your files please consider making a donation.
+Click on the linked filename to examine it, then click each numbered link above the file content box to highlight the suspicious code. If you cannot tell whether or not the code is malicious just leave it alone or ask someone else to look at it for you. If you find that it is malicious please send me a copy of the file so that I can add it to my definition update as a "Know Threat", then it can be automatically removed.
 
 = Why does the wp-login.php file show up as a vulnerability (even on a fresh install of WordPress)? =
 
@@ -59,15 +60,15 @@ The WordPress Login page is susceptible to a brute-force attack (just like any o
 
 = What if the scan gets stuck part way through? =
 
-First just leave it for a while. If there are a lot of files on your server it could take quite a while and could sometimes appear to not be moving along at all even if it really is working. If, after a while, it still seems really stuck then try the Complete Scan or try running the scan again. If it stops in the exact same place then you may want to try to figure out what file in that folder is causing it to hang or avoid scanning that folder all together. If you figure it out let me know what it was and I will try and make the program find it's own way around that problem.
+First just leave it for a while. If there are a lot of files on your server it could take quite a while and could sometimes appear to not be moving along at all even if it really is working. If it still seems stuck after a while then try running the scan again, be sure you try both the Complete Scan and the Quick scan.
 
 = How did I get hacked in the first place? =
 
-This was most likely a random attack on your file-system by a hacker's robot/virus (automated script). This is usually because you are running an older version of WordPress or have installed a Plugin or Theme with vulnerabilities, or because your site is on a shared server with other exploitable sites that got infected. In some cases it's possible that your hosting provider got hacked at a root level and all their clients on that machine got infected.
+First, don't take the attack personally. Lots of hackers routinely run automated script that crawl the internet looking for easy targets. Your site probably got hacked because you are unknowingly an easy target. This might be because you are running an older version of WordPress or have installed a Plugin or Theme with a backdoor or known security vulnerability. However, the most common type of infection I see is cross-conamination. This can happen when your site is on a shared server with other exploitable sites that got infected. In most shared hosting environments it's possible for hackers to use an one infected site to infect other sites on the same server, sometimes even if the sites are on different accounts.
 
 = What can I do to prevent it from happening again? =
 
-There is no sure-fire way to protect your site from any kind of hack attempt. That said, some of the basic steps should include: hardening your password, keeping all your sites up-to-date, and regular scans with Anti-Malware software like [GOTMLS.NET](http://gotmls.net/)
+There is no sure way to protect your site from every kind of hack attempt. That said, don't be an easy target. Some basic steps should include: hardening your password, keeping all your sites up-to-date, and run regular scans with Anti-Malware software like [GOTMLS.NET](http://gotmls.net/)
 
 = Why does sucuri.net or the Google Safe Browsing Diagnostic page still say my site is infected after I have removed the malicious code? =
 
@@ -82,6 +83,16 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 3.14.24 =
+* Made the Examine File window sizable.
+* Fixed a few small bugs and removed some old code.
+* Added a link to my new twitter account.
+
+= 3.14.08 =
+* Re-purposed Quick Scan to just scan the most affected areas.
+* Set the registration form to display by defaulted in the definition update section.
+* Fixed a few small bugs in advanced features and directory depth determination.
 
 = 3.13.11 =
 * Fixed a session bug to display the last directory scanned.
@@ -244,6 +255,12 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 3.14.24 =
+Made the Examine File window sizable, fixed a few small bugs, removed some old code, and added a link to twitter.
+
+= 3.14.08 =
+Re-purposed Quick Scan to just scan the most affected areas and fixed a few small bugs.
 
 = 3.13.11 =
 Fixed a session bug to display the last directory scanned.

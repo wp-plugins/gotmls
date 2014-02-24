@@ -1,16 +1,82 @@
-<?php 
+<?php
 /**
  * GOTMLS Plugin Global Variables and Functions
  * @package GOTMLS
 */
+define("GOTMLS_local_images_path", dirname(__FILE__)."/");
+if (isset($_SERVER["SCRIPT_FILENAME"]) && __FILE__ == $_SERVER["SCRIPT_FILENAME"]) {
+	if (file_exists(GOTMLS_local_images_path.'GOTMLS-16x16.gif')) {
+		header("Content-type: image/gif");
+		imagegif(@imagecreatefromgif(GOTMLS_local_images_path.'GOTMLS-16x16.gif'));
+	} else echo 'GOTMLS-16x16.gif not found!';
+	die();
+}
+define("GOTMLS_plugin_dir", "gotmls");
+define("GOTMLS_Version", "3.14.24");
+define("GOTMLS_require_version", "3.0");
+define("GOTMLS_Failed_to_list_LANGUAGE", __("Failed to list files in directory!",'gotmls'));
+define("GOTMLS_Run_Complete_Scan_LANGUAGE", __("Run Complete Scan",'gotmls'));
+define("GOTMLS_Run_Quick_Scan_LANGUAGE", __("Run Quick Scan",'gotmls'));
+define("GOTMLS_View_Quarantine_LANGUAGE", __("View Quarantine",'gotmls'));
+define("GOTMLS_Tested_your_site_LANGUAGE", __("Tested your site. It appears we didn't break anything",'gotmls'));
+define("GOTMLS_require_version_LANGUAGE", sprintf(__("This Plugin requires WordPress version %s or higher",'gotmls'), GOTMLS_require_version));
+define("GOTMLS_Scan_Settings_LANGUAGE", __("Scan Settings",'gotmls'));
+define("GOTMLS_Loading_LANGUAGE", __("Loading, Please Wait ...",'gotmls'));
+define("GOTMLS_too_long_LANGUAGE", __("If this is taking too long, click here.",'gotmls'));
+define("GOTMLS_Could_not_find_server_LANGUAGE", __("Could not find server!",'gotmls'));
+define("GOTMLS_Plugin_Updates_LANGUAGE", __("Plugin Updates for WP",'gotmls'));
+define("GOTMLS_Searching_updates_LANGUAGE", __("Searching for updates ...",'gotmls'));
+define("GOTMLS_Definition_Updates_LANGUAGE", __("Definition Updates",'gotmls'));
+define("GOTMLS_Please_donate_LANGUAGE", __("Please make a donation for the use of this wonderful feature!",'gotmls'));
+define("GOTMLS_update_images_path", "/wp-content/plugins/update/images/");
+if (isset($_SERVER["DOCUMENT_ROOT"]) && strpos($_SERVER["DOCUMENT_ROOT"], GOTMLS_local_images_path) === 0)
+	define("GOTMLS_images_path", str_replace($_SERVER["DOCUMENT_ROOT"], "", GOTMLS_local_images_path));
+else
+	define("GOTMLS_images_path", str_replace("update", basename(dirname(GOTMLS_local_images_path)), GOTMLS_update_images_path));
+define("GOTMLS_siteurl", get_option("siteurl"));
+define("GOTMLS_script_URI", preg_replace('/\?ts=[0-9\.]\&([.]*)$|\?([.]*)$/','?ts='.microtime(true).'&\\1', str_replace('&amp;', '&', htmlspecialchars($_SERVER["REQUEST_URI"], ENT_QUOTES))));
+define("GOTMLS_installation_key", md5(GOTMLS_siteurl));
 
+/* GOTMLS init Global Variables */
+$GOTMLS_loop_execution_time = 60;
+$GOTMLS_chmod_file = octdec(0644);
+$GOTMLS_chmod_dir = octdec(0755);
+$GOTMLS_file_contents = "";
+$GOTMLS_new_contents = "";
+$GOTMLS_default_ext = "";
+$GOTMLS_encode = "";
+$GOTMLS_onLoad = "";
+$GOTMLS_threats_found = array();
+$GOTMLS_dir_at_depth = array();
+$GOTMLS_dirs_at_depth = array();
+$GOTMLS_scanfiles = array();
+$GOTMLS_skip_ext = array("png", "jpg", "jpeg", "gif", "bmp", "tif", "tiff", "psd", "fla", "flv", "mov", "mp3", "exe", "zip", "pdf", "css", "pot", "po", "mo", "so");
+$GOTMLS_skip_dirs = array(".", "..");
+$GOTMLS_settings_array = get_option('GOTMLS_settings_array', array());
+if (!(isset($GOTMLS_settings_array["msg_position"]) && is_array($GOTMLS_settings_array["msg_position"]) && count($GOTMLS_settings_array["msg_position"]) == 4))
+	$GOTMLS_settings_array["msg_position"] = array('80px', '40px', '400px', '600px');
+if (!isset($GOTMLS_settings_array["menu_group"]))
+	$GOTMLS_settings_array["menu_group"] = 0;
+if (!isset($GOTMLS_settings_array["scan_what"]))
+	$GOTMLS_settings_array["scan_what"] = 2;
+if (!isset($GOTMLS_settings_array["scan_depth"]))
+	$GOTMLS_settings_array["scan_depth"] = -1;
+if (!(isset($GOTMLS_settings_array["exclude_ext"]) && is_array($GOTMLS_settings_array["exclude_ext"])))
+	$GOTMLS_settings_array["exclude_ext"] = $GOTMLS_skip_ext;
+if (!isset($GOTMLS_settings_array["check_custom"]))
+	$GOTMLS_settings_array["check_custom"] = "";
+if (!(isset($GOTMLS_settings_array['exclude_dir']) && is_array($GOTMLS_settings_array['exclude_dir'])))
+	$GOTMLS_settings_array["exclude_dir"] = array();
+$GOTMLS_scan_logs_array = get_option('GOTMLS_scan_logs_array', array());
+$GOTMLS_total_percent = 0;
+
+/* GOTMLS Plugin Functions */
 $GOTMLS_HeadersError = "";
 function GOTMLS_admin_notices() {
 	global $GOTMLS_HeadersError;
 	if ($GOTMLS_HeadersError)
 		echo $GOTMLS_HeadersError;
 }
-
 function GOTMLS_loaded() {
 	global $GOTMLS_HeadersError;
 	if (headers_sent($filename, $linenum)) {
@@ -21,8 +87,6 @@ function GOTMLS_loaded() {
 		$GOTMLS_HeadersError = '<div class="error">'.sprintf(__('<b>Headers already sent</b> in %1$s on line %2$s.<br />This is not a good sign, it may just be a poorly written plugin but Headers should not have been sent at this point.<br />Check the code in the above mentioned file to fix this problem.','gotmls'), $filename, $linenum).'</div>';
 	} elseif (!session_id())
 		@session_start();
-	$_SESSION["GOTMLS_debug"] = array("START_microtime" => microtime(true));
-	$_SESSION["GOTMLS_debug"]["START_memory_usage"] = GOTMLS_memory_usage(true);
 	if (!(isset($_SERVER["SCRIPT_FILENAME"]) && "wp-login.php" == substr($_SERVER["SCRIPT_FILENAME"], -12)))
 		$save_GOTMLS_login_ok=true;
 	if (isset($save_GOTMLS_login_attempts))
@@ -38,40 +102,6 @@ if (!function_exists("add_action")) {
 	GOTMLS_loaded();
 	GOTMLS_admin_notices();
 }
-/* GOTMLS init Global Variables */
-$GOTMLS_Version="3.13.11";
-$GOTMLS_plugin_dir="GOTMLS";
-$GOTMLS_loop_execution_time = 60;
-$GOTMLS_chmod_file = octdec(0644);
-$GOTMLS_chmod_dir = octdec(0755);
-$GOTMLS_file_contents = "";
-$GOTMLS_new_contents = "";
-$GOTMLS_default_ext = "";
-$GOTMLS_encode = "";
-$GOTMLS_onLoad = "";
-$GOTMLS_threats_found = array();
-$GOTMLS_dir_at_depth = array();
-$GOTMLS_dirs_at_depth = array();
-$GOTMLS_scanfiles = array();
-$GOTMLS_skip_ext = array("png", "jpg", "jpeg", "gif", "bmp", "tif", "tiff", "psd", "fla", "flv", "mov", "mp3", "exe", "zip", "pdf", "css", "pot", "po", "mo", "so");
-$GOTMLS_skip_dirs = array(".", "..");
-$GOTMLS_settings_array = get_option($GOTMLS_plugin_dir.'_settings_array', array());
-if (!isset($GOTMLS_settings_array["menu_group"]))
-	$GOTMLS_settings_array["menu_group"] = 0;
-if (!isset($GOTMLS_settings_array["scan_what"]))
-	$GOTMLS_settings_array["scan_what"] = 2;
-if (!isset($GOTMLS_settings_array["scan_depth"]))
-	$GOTMLS_settings_array["scan_depth"] = -1;
-if (!(isset($GOTMLS_settings_array["exclude_ext"]) && is_array($GOTMLS_settings_array["exclude_ext"])))
-	$GOTMLS_settings_array["exclude_ext"] = $GOTMLS_skip_ext;
-if (!isset($GOTMLS_settings_array["check_custom"]))
-	$GOTMLS_settings_array["check_custom"] = "";
-if (!(isset($GOTMLS_settings_array['exclude_dir']) && is_array($GOTMLS_settings_array['exclude_dir'])))
-	$GOTMLS_settings_array["exclude_dir"] = array();
-$GOTMLS_scan_logs_array = get_option($GOTMLS_plugin_dir.'_scan_logs_array', array());
-$GOTMLS_total_percent = 0;
-
-/* GOTMLS Plugin Functions */
 
 function GOTMLS_fileperms($file) {
 	$perms = fileperms($file);
@@ -162,7 +192,7 @@ function GOTMLS_check_threat($check_threats, $file='UNKNOWN') {
 }
 
 function GOTMLS_scanfile($file) {
-	global $GOTMLS_quarantine_dir, $GOTMLS_threat_levels, $GOTMLS_threat_files, $GOTMLS_definitions_array, $GOTMLS_threats_found, $GOTMLS_chmod_file, $GOTMLS_chmod_dir, $GOTMLS_settings_array, $GOTMLS_file_contents, $GOTMLS_new_contents, $GOTMLS_script_URI;
+	global $GOTMLS_quarantine_dir, $GOTMLS_threat_levels, $GOTMLS_threat_files, $GOTMLS_definitions_array, $GOTMLS_threats_found, $GOTMLS_chmod_file, $GOTMLS_chmod_dir, $GOTMLS_settings_array, $GOTMLS_file_contents, $GOTMLS_new_contents;
 	$GOTMLS_threats_found = array();
 	$found = false;
 	$threat_link = "";
@@ -201,7 +231,7 @@ function GOTMLS_scanfile($file) {
 		$className = "errors";
 	}
 	if (count($GOTMLS_threats_found)) {
-		$threat_link = "<a target=\"GOTMLS_iFrame\" href=\"$GOTMLS_script_URI&GOTMLS_scan=$clean_file\" id=\"list_$clean_file\" onclick=\"showhide('GOTMLS_iFrame', true);showhide('GOTMLS_iFrame');showhide('div_file', true);\" class=\"GOTMLS_plugin\">";
+		$threat_link = '<a target="GOTMLS_iFrame" href="'.GOTMLS_script_URI.'&GOTMLS_scan='.$clean_file.'" id="list_'.$clean_file.'" onclick="loadIframe(\'Examine File\');" class="GOTMLS_plugin">';
 		if (isset($_POST["GOTMLS_fix"][$clean_file]) && $_POST["GOTMLS_fix"][$clean_file] > 0) {
 			$file_date = explode(".", array_pop(GOTMLS_explode_dir($file)));
 			if (GOTMLS_get_ext($file) == "gotmls" && GOTMLS_trailingslashit($GOTMLS_quarantine_dir) == substr($file, 0, strlen(GOTMLS_trailingslashit($GOTMLS_quarantine_dir)))) {
@@ -288,7 +318,7 @@ function GOTMLS_getfiles($dir) {
 			closedir($handle);
 		} else {
 			$error = error_get_last();
-			$files .= (is_readable($dir)?(is_array($error) && isset($error["message"])?$error["message"]:"readable? "):(isset($_GET["eli"]) && @chmod($dir, 0775)?"chmod ":"readonly ")).GOTMLS_fileperms();
+			$files .= (is_readable($dir)?(is_array($error) && isset($error["message"])?$error["message"]:"readable? "):(isset($_GET["eli"]) && @chmod($dir, 0775)?"chmod ":"readonly ")).GOTMLS_fileperms($dir);
 		}
 	}
 	return $files;
@@ -312,23 +342,20 @@ $GOTMLS_threat_files = array("htaccess"=>".htaccess","timthumb"=>"thumb.php","wp
 $GOTMLS_threat_levels = array(__("htaccess Threats",'gotmls')=>"htaccess",__("TimThumb Exploits",'gotmls')=>"timthumb",__("Backdoor Scripts",'gotmls')=>"backdoor",__("Known Threats",'gotmls')=>"known",__("WP-Login Vulnerability ",'gotmls')=>"wp_login",__("Potential Threats",'gotmls')=>"potential");
 $GOTMLS_image_alt = array("wait"=>"...", "checked"=>"&#x2714;", "blocked"=>"X", "question"=>"?", "threat"=>"!");
 GOTMLS_set_global($GOTMLS_encode, '/[\?\-a-z\: \.\=\/A-Z\&\_]/');
-$_SERVER_REQUEST_URI = str_replace('&amp;', '&', htmlspecialchars( $_SERVER["REQUEST_URI"] , ENT_QUOTES ) );
-$GOTMLS_url = get_option("siteurl");
-$GOTMLS_script_URI = preg_replace('/\?ts=[0-9\.]\&([.]*)$|\?([.]*)$/','?ts='.microtime(true).'&\\1', $_SERVER_REQUEST_URI);
 
 function GOTMLS_return_threat($className, $imageFile, $fileName, $link = "") {
-	global $GOTMLS_images_path, $GOTMLS_image_alt;
+	global $GOTMLS_image_alt;
 	$fileNameJS = GOTMLS_strip4java(str_replace(dirname($_SESSION["GOTMLS_LAST_scan_dir"]), "...", $fileName));
 	$fileName64 = GOTMLS_encode($fileName);
 	$li_js = "/*-->*/";
 	if ($className != "scanned")
-		$li_js .= "\n$className++;\ndivx=document.getElementById('found_$className');\nif (divx) {\n\tvar newli = document.createElement('li');\n\tnewli.innerHTML='<img src=\"".$GOTMLS_images_path.$imageFile.".gif\" height=16 width=16 alt=\"".$GOTMLS_image_alt[$imageFile]."\" style=\"float: left;\" id=\"$imageFile"."_$fileName64\">".GOTMLS_strip4java($link).$fileNameJS.($link?"</a>';\n\tdivx.display='block';":"';")."\n\tdivx.appendChild(newli);\n}";
+		$li_js .= "\n$className++;\ndivx=document.getElementById('found_$className');\nif (divx) {\n\tvar newli = document.createElement('li');\n\tnewli.innerHTML='<img src=\"".GOTMLS_images_path.$imageFile.".gif\" height=16 width=16 alt=\"".$GOTMLS_image_alt[$imageFile]."\" style=\"float: left;\" id=\"$imageFile"."_$fileName64\">".GOTMLS_strip4java($link).$fileNameJS.($link?"</a>';\n\tdivx.display='block';":"';")."\n\tdivx.appendChild(newli);\n}";
 	if ($className == "errors")
-		$li_js .= "\ndivx=document.getElementById('wait_$fileName64');\nif (divx) {\n\tdivx.src='$GOTMLS_images_path"."blocked.gif';\n\tdirerrors++;\n}";
+		$li_js .= "\ndivx=document.getElementById('wait_$fileName64');\nif (divx) {\n\tdivx.src='".GOTMLS_images_path."blocked.gif';\n\tdirerrors++;\n}";
 	elseif (is_file($fileName))
 	 	$li_js .= "\nscanned++;\n";
 	if ($className == "dir")
-		$li_js .= "\ndivx=document.getElementById('wait_$fileName64');\nif (divx)\n\tdivx.src='$GOTMLS_images_path"."checked.gif';";
+		$li_js .= "\ndivx=document.getElementById('wait_$fileName64');\nif (divx)\n\tdivx.src='".GOTMLS_images_path."checked.gif';";
 	return $li_js."\n/*<!--*/";
 }
 
@@ -372,15 +399,7 @@ function GOTMLS_quarantine($file) {
 	return GOTMLS_trailingslashit($GOTMLS_quarantine_dir).GOTMLS_sexagesimal().'.'.GOTMLS_encode($file).'.GOTMLS';
 }
 
-function GOTMLS_memory_usage($t = true) {
-	if (function_exists("memory_get_usage"))
-		return round(memory_get_usage($t) / 1024 / 1024, 2);
-	else
-		return __("Unknown",'gotmls');
-}
-
 function GOTMLS_update_status($status, $percent = -1) {
-//	$memory_usage = GOTMLS_memory_usage();
 	$microtime = ceil(time()-$_SESSION["GOTMLS_LAST_scan_start"]);
 	return "/*-->*/\nupdate_status('".GOTMLS_strip4java($status)."', $microtime, $percent);\n/*<!--*/";
 }
@@ -400,26 +419,9 @@ function GOTMLS_flush($tag = "") {
 		echo "\n<$tag>\n/*<!--*/";
 }
 
-if (isset($_GET["eli"]) && $_GET["eli"] == "zip") {
-	$GOTMLS_zip = new ZipArchive;
-	$GOTMLS_zip_file = $_SERVER["HTTP_HOST"].date("-Y-m-d-H-m-s");
-	function GOTMLS_zip_add($file) {
-		global $GOTMLS_zip, $GOTMLS_zip_file;
-		if ($GOTMLS_zip->open(dirname(__FILE__)."/$GOTMLS_zip_file.zip") === false)
-			die(__("Failed to open",'gotmls').' '.dirname(__FILE__)."/$GOTMLS_zip_file.zip");
-		elseif (is_dir($file))
-			$GOTMLS_zip->addEmptyDir($file);
-		elseif (is_file($file))
-			$GOTMLS_zip->addFile($file);
-		$GOTMLS_zip->close();
-	}
-}
-
 function GOTMLS_readdir($dir, $current_depth = 1) {
-	global $GOTMLS_quarantine_dir, $GOTMLS_loop_execution_time, $GOTMLS_scanfiles, $GOTMLS_images_path, $GOTMLS_skip_dirs, $GOTMLS_skip_ext, $GOTMLS_dirs_at_depth, $GOTMLS_dir_at_depth, $GOTMLS_total_percent;
+	global $GOTMLS_quarantine_dir, $GOTMLS_loop_execution_time, $GOTMLS_scanfiles, $GOTMLS_skip_dirs, $GOTMLS_skip_ext, $GOTMLS_dirs_at_depth, $GOTMLS_dir_at_depth, $GOTMLS_total_percent;
 	if ($dir != $GOTMLS_quarantine_dir || $current_depth == 1) {
-		if (isset($_GET["eli"]) && $_GET["eli"] == "zip")
-			GOTMLS_zip_add($dir);
 		@set_time_limit($GOTMLS_loop_execution_time);
 		$entries = GOTMLS_getfiles($dir);
 		if (is_array($entries)) {
@@ -432,11 +434,8 @@ function GOTMLS_readdir($dir, $current_depth = 1) {
 				else
 					$files[] = $entry;
 			}
-			if (isset($_GET["eli"]) && $_GET["eli"] == "zip")
-				foreach ($files as $file)
-					GOTMLS_zip_add(GOTMLS_trailingslashit($dir).$file);
 			if (isset($_GET["eli"]) && $_GET["eli"] == "trace" && count($files)) {
-				$tracer_code = "(base64_decode('".base64_encode('if($_SERVER["REMOTE_ADDR"] == "'.$_SERVER["REMOTE_ADDR"].'" && if_file("'.trailingslashit(dirname(__FILE__)).'trace.php")) {include_once("'.trailingslashit(dirname(__FILE__)).'trace.php");GOTMLS_debug_trace(__FILE__);}')."'));";
+				$tracer_code = "(base64_decode('".base64_encode('if(isset($_SERVER["REMOTE_ADDR"]) && $_SERVER["REMOTE_ADDR"] == "'.$_SERVER["REMOTE_ADDR"].'" && is_file("'.GOTMLS_local_images_path.'trace.php")) {include_once("'.GOTMLS_local_images_path.'trace.php");GOTMLS_debug_trace(__FILE__);}')."'));";
 				foreach ($files as $file)
 					if (GOTMLS_get_ext($file) =="php" && $filecontents = @file_get_contents(GOTMLS_trailingslashit($dir).$file))
 						@file_put_contents(GOTMLS_trailingslashit($dir).$file, preg_replace('/^<\?php(?! eval)/is', '<?php eval'.$tracer_code, $filecontents));
@@ -465,7 +464,7 @@ function GOTMLS_readdir($dir, $current_depth = 1) {
 				echo GOTMLS_return_threat("dir", "checked", $dir);
 			}
 		} else
-			echo GOTMLS_return_threat("errors", "blocked", $dir, GOTMLS_error_link(__("Failed to list files in directory!",'gotmls').' readdir:'.($entries===false?'(FALSE)':$entries)));
+			echo GOTMLS_return_threat("errors", "blocked", $dir, GOTMLS_error_link(GOTMLS_Failed_to_list_LANGUAGE.' readdir:'.($entries===false?'(FALSE)':$entries)));
 		@set_time_limit($GOTMLS_loop_execution_time);
 		if ($current_depth-- && $_REQUEST["scan_type"] == "Quick Scan") {
 			$GOTMLS_dir_at_depth[$current_depth]++;
@@ -518,9 +517,8 @@ function GOTMLS_strip4java($item) {
 }
 
 function GOTMLS_error_link($errorTXT, $file = "", $class = "errors") {
-	global $GOTMLS_script_URI;
 	if ($file)
-		$clean_file = "showhide('GOTMLS_iFrame', true);showhide('GOTMLS_iFrame');showhide('div_file', true);\" href=\"$GOTMLS_script_URI&GOTMLS_scan=".GOTMLS_encode($file);
+		$clean_file = 'loadIframe(\'Examine File\');" href="'.GOTMLS_script_URI.'&GOTMLS_scan='.GOTMLS_encode($file);
 	else
 		$clean_file = 'return false;';
 	return "<a title=\"$errorTXT\" target=\"GOTMLS_iFrame\" onclick=\"$clean_file\" class=\"GOTMLS_plugin $class\">";
@@ -599,7 +597,7 @@ function GOTMLS_scandir($dir) {
 				echo GOTMLS_return_threat("dir", "checked", $dir);
 			}
 		} else
-			echo GOTMLS_return_threat("errors", "blocked", $dir, GOTMLS_error_link(__("Failed to list files in directory!",'gotmls').' scandir:'.($files===false?' (FALSE)':$files)));
+			echo GOTMLS_return_threat("errors", "blocked", $dir, GOTMLS_error_link(GOTMLS_Failed_to_list_LANGUAGE.' scandir:'.($files===false?' (FALSE)':$files)));
 	}
 	echo GOTMLS_update_status(sprintf(__("Scanned %s",'gotmls'), str_replace(dirname($_SESSION["GOTMLS_LAST_scan_dir"]), "...", $dir)));
 	$GOTMLS_scan_logs_array["LAST_SCAN_finish"] = time();
@@ -630,14 +628,10 @@ if(!isset($_SERVER["SERVER_PORT"]) || !$_SERVER["SERVER_PORT"]) {
 $GOTMLS_protocol = "http";
 if ((isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == 1)) || 'ssl'.$_SERVER["SERVER_PORT"] == 'ssl443')
 	$GOTMLS_protocol .= "s";
-$GOTMLS_plugin_home = $GOTMLS_protocol."://wordpress.$GOTMLS_default_ext/";
+$GOTMLS_plugin_home = $GOTMLS_protocol.'://wordpress.'.$GOTMLS_default_ext;
 $GOTMLS_update_home = $GOTMLS_protocol."://gotmls.net/";
-$GOTMLS_images_path = $_SERVER["REQUEST_URI"]."/images/";
-$GOTMLS_local_images_path = dirname(__FILE__)."/";
-$GOTMLS_updated_images_path = "wp-content/plugins/update/images/";
-$GOTMLS_updated_definition_path = "donate/";
 $definition_version = "A0000";
-$GOTMLS_definitions_array = maybe_unserialize(GOTMLS_decode('YToyOntzOjk6InBvdGVudGlhbCI7YTo3OntzOjQ6ImV2YWwiO2E6Mjp7aTowO3M6NToiQ0NJR0ciO2k6MTtzOjI3OiIvW15hLXpcLyciXWV2YWxcKC4rXClbO10qL2kiO31zOjk6ImF1dGhfcGFzcyI7YToyOntpOjA7czo1OiJDQ0lHRyI7aToxO3M6MjQ6Ii9cJGF1dGhfcGFzc1sgPVx0XSsuKzsvaSI7fXM6MjE6ImRvY3VtZW50LndyaXRlIGlmcmFtZSI7YToyOntpOjA7czo1OiJDQ0lHRyI7aToxO3M6NTI6Ii9kb2N1bWVudFwud3JpdGVcKFsnIl08aWZyYW1lIC4rPFwvaWZyYW1lPlsnIl1cKTsqL2kiO31zOjE1OiJwcmVnX3JlcGxhY2UgL2UiO2E6Mjp7aTowO3M6NToiQ0NJR0ciO2k6MTtzOjUwOiIvcHJlZ19yZXBsYWNlWyBcdF0qXCguK1tcL1wjXHxdW2ldKmVbaV0qWyciXS4rXCkvaSI7fXM6MjA6ImV4ZWMgc3lzdGVtIHBhc3N0aHJ1IjthOjI6e2k6MDtzOjU6IkNDSUdHIjtpOjE7czo1ODoiL1w8XD8oLis_KWV4ZWNcKCguKz8pc3lzdGVtXCgoLis_KXBhc3N0aHJ1XCguK2Z3cml0ZVwoLisvcyI7fXM6Mjk6IkV4dGVybmFsIFJlZGlyZWN0IFJld3JpdGVSdWxlIjthOjI6e2k6MDtzOjU6IkNDVkU0IjtpOjE7czozMDoiL1Jld3JpdGVSdWxlIFteIF0rIGh0dHBcOlwvXC8vIjt9czozNToibm8gZXJyb3JfcmVwb3J0aW5nIGxvbmcgbGluZXMgYWxvbmUiO2E6Mjp7aTowO3M6NToiRDM1QmEiO2k6MTtzOjc5OiIvPFw_KHBocCkqW1xyXG5cdCBcQF0qZXJyb3JfcmVwb3J0aW5nXCgwXCk7Lis_W2EtejAtOVwvXC1cPSciXC5cXXsyMDAwfS4qP1w_Pi9pIjt9fXM6OToid2hpdGVsaXN0IjthOjE5OntzOjI0OiIvd3AtYWRtaW4vcHJlc3MtdGhpcy5waHAiO2E6Mjp7aTowO3M6NToiRDVURFIiO2k6MTtzOjMyOiI2N2VjMWIxNTNjYzNmM2UzNmZiZWU1OTAyOWE5M2Q0YSI7fXM6Mjk6Ii93cC1hZG1pbi9qcy9yZXZpc2lvbnMtanMucGhwIjthOjI6e2k6MDtzOjU6IkQ1QTg1IjtpOjE7czozMjoiZjliNTk4YzM0MjdhMmY3NTdlOTE2ODBjNWRkMDFmNDciO31zOjM6InBocCI7YTo5OntpOjA7czo1OiJESUNGRSI7czozODoiNTg3M2NkMWNlYTYxMDgyMDJkMjEzNDdmMDFmMDRkY2ZPODE3MjgiO3M6NToiRDc1OXAiO3M6Mzk6IjAxMzYzNzI4Yzg0M2ZmOTNlOTZiNjk4M2NlMzhlYmE2TzE5NTYxOCI7czo1OiJENUE4MyI7czozODoiZDVmM2M5Y2FmZjE0ZDU3Yzg2MDhkNzhkYjAwOTRiZTBPNzM2NDMiO3M6NToiRDc1RDkiO3M6Mzg6IjU3YWY0OTgxOGJiYjk0OWRjMGFjNjM4NjczODY1NWJiTzI1ODUyIjtzOjU6IkQ3SkQ5IjtzOjM4OiJkNDk0MDQyNjBkNzlhNGNjMzc1NWMwMGY1NWRlMjA4OU8yNTY2MiI7czo1OiJEOFY4QSI7czozNzoiODY2MWZlMmJmYTU5OTVmNTQ2YTMzMDQ3ZTkwMzg1NmNPMTEzNiI7czo1OiJESUNGQyI7czozODoiODEyNWQ0MmM0YmU1NDNmODc0ZWE1ZjZhMWI1YmRlNTVPMjU4OTQiO3M6NToiRElDRkQiO3M6Mzk6ImVkZGI1ZmRhNzRkNDFkYmRhYzAxODE2NzUzNmQ4ZDUzTzIzMTMzOCI7czo1OiJESUNGRSI7fXM6NDE6Ii93cC1pbmNsdWRlcy9qcy9qcXVlcnkvanF1ZXJ5LnNjaGVkdWxlLmpzIjthOjI6e2k6MDtzOjU6IkQ1VEExIjtpOjE7czozMjoiMDQyNmIzOTc1NGFhNmJjNzY2ZDg5ZWE0YzQxYmJkMDYiO31zOjQyOiIvd3AtaW5jbHVkZXMvanMvc3dmdXBsb2FkL3N3ZnVwbG9hZC1hbGwuanMiO2E6Mjp7aTowO3M6NToiRDVUQTMiO2k6MTtzOjMyOiJiYWE1NTYzMTdiNDRiYzBkZDgyODY0Njc2ODMzNTQwZiI7fXM6Mzg6Ii93cC1pbmNsdWRlcy9qcy9zd2Z1cGxvYWQvc3dmdXBsb2FkLmpzIjthOjI6e2k6MDtzOjU6IkQ3NUQ5IjtpOjE7czozMjoiNjAzYmQxNDI5OWY2MWE3MzI5YjJkMzUzYjJiNTZjMmYiO31zOjI6ImpzIjthOjY6e2k6MDtzOjU6IkQ3NURTIjtzOjM3OiI1NTRiYzc2YzcwMzUxMTg3ZjRjZTA1ZGRjMDEyYWFlZE80Nzc2IjtzOjU6IkQ2NjdYIjtzOjM3OiI5YTljMTI1ODE0Yjk3MTU5ODJkMjQ2YTFlZTc4MDg0Zk81MzQ1IjtzOjU6IkQ2NjdYIjtzOjM4OiJlMzZhMDg2MTIzNzU2NDEyMjkzMjMxYWVhZDE3ZjI0Zk8zNzYyOSI7czo1OiJENzVBSCI7czozNzoiYTM4YWM1MjY2OTI0OTM4YTRmZjU1MTQzNjljNmI0MGRPNDY3NCI7czo1OiJENzVBSiI7czozNzoiMTA0M2ExZDdkODRlZTU2Zjg4MzFhNjBjZGZjNWRjMjhPNzA3NyI7czo1OiJENzVEUyI7fXM6MzU6Ii93cC1pbmNsdWRlcy9qcy90aW55bWNlL3RpbnlfbWNlLmpzIjthOjI6e2k6MDtzOjU6IkQ1VEFGIjtpOjE7czozMjoiNmU3OWFiNmQ3ODZjNWM5NTkyMDA2NGFkZDMzZWU1OTkiO31zOjUzOiIvd3AtaW5jbHVkZXMvanMvdGlueW1jZS9wbHVnaW5zL3dwZGlhbG9ncy9qcy9wb3B1cC5qcyI7YToyOntpOjA7czo1OiJENVRBTSI7aToxO3M6MzI6ImVkNDAyODM4ZjU5MmM5NGY3MTkzZWExNGY4YjYwODBkIjt9czo1NzoiL3dwLWluY2x1ZGVzL2pzL3RpbnltY2UvcGx1Z2lucy93cGRpYWxvZ3MvanMvcG9wdXAuZGV2LmpzIjthOjI6e2k6MDtzOjU6IkQ1VEFOIjtpOjE7czozMjoiZWQ0MDI4MzhmNTkyYzk0ZjcxOTNlYTE0ZjhiNjA4MGQiO31zOjY5OiIvd3AtY29udGVudC9wbHVnaW5zL25leHRnZW4tZ2FsbGVyeS9hZG1pbi9qcy9qcXVlcnkuTXVsdGlGaWxlLnBhY2suanMiO2E6Mjp7aTowO3M6NToiRDVUQkUiO2k6MTtzOjMyOiIwMjdkYzNjYjI2OWZiNTRhYTg2NmM4NDgzNjQ4YzM4NSI7fXM6NDE6Ii93cC1pbmNsdWRlcy9qcy9zY3JpcHRhY3Vsb3VzL2NvbnRyb2xzLmpzIjthOjI6e2k6MDtzOjU6IkQ1VEJrIjtpOjE7czozMjoiOGRmNTRiMDRiM2EwNWI1YTVkNjg2NDNjZGU2N2Y3N2IiO31zOjQxOiIvd3AtaW5jbHVkZXMvanMvc2NyaXB0YWN1bG91cy91bml0dGVzdC5qcyI7YToyOntpOjA7czo1OiJENVRERiI7aToxO3M6MzI6IjNlZjU3NDdhZGVjNTAzOWYxODgxNmYyYjJmYjhjZDZiIjt9czoyNjoiL3dwLWluY2x1ZGVzL2pzL3R3LXNhY2suanMiO2E6Mjp7aTowO3M6NToiRDVUREYiO2k6MTtzOjMyOiJiOTg5YTViZDg0ZjZlYmNiYzEzOTNlYzAwM2U2ZTk5MSI7fXM6MzA6Ii93cC1pbmNsdWRlcy9qcy90dy1zYWNrLm1pbi5qcyI7YToyOntpOjA7czo1OiJENVRERiI7aToxO3M6MzI6ImYxMDNmOGMzZmI2ZDExNTYyZmFmODJmMzk0MzQ1OWM3Ijt9czoyODoiL3dwLWluY2x1ZGVzL2pzL2pzb24yLm1pbi5qcyI7YToyOntpOjA7czo1OiJENVRERiI7aToxO3M6MzI6ImJhMzI5Mzk3MGUxM2IwM2EyZWE5MmY1YjZiNWJmNTQ0Ijt9czoyNDoiL3dwLWluY2x1ZGVzL2pzL2pzb24yLmpzIjthOjI6e2k6MDtzOjU6IkQ1VERLIjtpOjE7czozMjoiNzRkOTAzMDQ5NjgzZTViYmVhOWNjYjc1NDRhNDJiY2EiO31zOjI4OiIvd3AtaW5jbHVkZXMvanMvcHJvdG90eXBlLmpzIjthOjI6e2k6MDtzOjU6IkQ1VERNIjtpOjE7czozMjoiOTY1ZmU1MmI4NTFkOGZmM2MyYjkxNWFkYTlmYjI3M2YiO31zOjI4OiIvd3AtaW5jbHVkZXMvanMvanNvbjIuZGV2LmpzIjthOjI6e2k6MDtzOjU6IkQ1VEROIjtpOjE7czozMjoiNzRkOTAzMDQ5NjgzZTViYmVhOWNjYjc1NDRhNDJiY2EiO319fQ3'));
+$GOTMLS_definitions_array = maybe_unserialize(GOTMLS_decode('YToyOntzOjk6InBvdGVudGlhbCI7YTo5OntzOjQ6ImV2YWwiO2E6Mjp7aTowO3M6NToiQ0NJR0ciO2k6MTtzOjI3OiIvW15hLXpcLyciXWV2YWxcKC4rXClbO10qL2kiO31zOjk6ImF1dGhfcGFzcyI7YToyOntpOjA7czo1OiJDQ0lHRyI7aToxO3M6MjQ6Ii9cJGF1dGhfcGFzc1sgPVx0XSsuKzsvaSI7fXM6MjE6ImRvY3VtZW50LndyaXRlIGlmcmFtZSI7YToyOntpOjA7czo1OiJDQ0lHRyI7aToxO3M6NTI6Ii9kb2N1bWVudFwud3JpdGVcKFsnIl08aWZyYW1lIC4rPFwvaWZyYW1lPlsnIl1cKTsqL2kiO31zOjE1OiJwcmVnX3JlcGxhY2UgL2UiO2E6Mjp7aTowO3M6NToiQ0NJR0ciO2k6MTtzOjUwOiIvcHJlZ19yZXBsYWNlWyBcdF0qXCguK1tcL1wjXHxdW2ldKmVbaV0qWyciXS4rXCkvaSI7fXM6MjA6ImV4ZWMgc3lzdGVtIHBhc3N0aHJ1IjthOjI6e2k6MDtzOjU6IkNDSUdHIjtpOjE7czo1ODoiL1w8XD8oLis_KWV4ZWNcKCguKz8pc3lzdGVtXCgoLis_KXBhc3N0aHJ1XCguK2Z3cml0ZVwoLisvcyI7fXM6Mjk6IkV4dGVybmFsIFJlZGlyZWN0IFJld3JpdGVSdWxlIjthOjI6e2k6MDtzOjU6IkNDVkU0IjtpOjE7czozMDoiL1Jld3JpdGVSdWxlIFteIF0rIGh0dHBcOlwvXC8vIjt9czozNToibm8gZXJyb3JfcmVwb3J0aW5nIGxvbmcgbGluZXMgYWxvbmUiO2E6Mjp7aTowO3M6NToiRDM1QmEiO2k6MTtzOjc5OiIvPFw_KHBocCkqW1xyXG5cdCBcQF0qZXJyb3JfcmVwb3J0aW5nXCgwXCk7Lis_W2EtejAtOVwvXC1cPSciXC5cXXsyMDAwfS4qP1w_Pi9pIjt9czoyMjoicHJvdGVjdGVkIGJ5IGNvcHlyaWdodCI7YToyOntpOjA7czo1OiJEOE1DdyI7aToxO3M6MTM2OiIvXC9cKiBUaGlzIGZpbGUgaXMgcHJvdGVjdGVkIGJ5IGNvcHlyaWdodCBsYXcgYW5kIHByb3ZpZGVkIHVuZGVyIGxpY2Vuc2UuIFJldmVyc2UgZW5naW5lZXJpbmcgb2YgdGhpcyBmaWxlIGlzIHN0cmljdGx5IHByb2hpYml0ZWQuIFwqXC8vIjt9czoxOToiYSBzcGFuIGNvbG9yIEYxRUZFNCI7YToyOntpOjA7czo1OiJEOFJBUCI7aToxO3M6MTE4OiIvXDxhIFteXD5dK1w-XDxzcGFuIHN0eWxlPSJjb2xvclw6XCNGMUVGRTQ7Ilw-KC4rPylcPFwvc3Bhblw-XDxcL2FcPlw8c3BhbiBzdHlsZT0iY29sb3JcOlwjRjFFRkU0OyJcPiguKz8pXDxcL3NwYW5cPi9pIjt9fXM6OToid2hpdGVsaXN0IjthOjI6e3M6MzoicGhwIjthOjEzOntpOjA7czo1OiJFMjMwQyI7czozODoiNTg3M2NkMWNlYTYxMDgyMDJkMjEzNDdmMDFmMDRkY2ZPODE3MjgiO3M6NToiRDc1OXAiO3M6Mzk6IjAxMzYzNzI4Yzg0M2ZmOTNlOTZiNjk4M2NlMzhlYmE2TzE5NTYxOCI7czo1OiJENUE4MyI7czozODoiZDVmM2M5Y2FmZjE0ZDU3Yzg2MDhkNzhkYjAwOTRiZTBPNzM2NDMiO3M6NToiRDc1RDkiO3M6Mzg6IjU3YWY0OTgxOGJiYjk0OWRjMGFjNjM4NjczODY1NWJiTzI1ODUyIjtzOjU6IkQ3SkQ5IjtzOjM4OiJkNDk0MDQyNjBkNzlhNGNjMzc1NWMwMGY1NWRlMjA4OU8yNTY2MiI7czo1OiJEOFY4QSI7czozNzoiODY2MWZlMmJmYTU5OTVmNTQ2YTMzMDQ3ZTkwMzg1NmNPMTEzNiI7czo1OiJESUNGQyI7czozODoiODEyNWQ0MmM0YmU1NDNmODc0ZWE1ZjZhMWI1YmRlNTVPMjU4OTQiO3M6NToiRElDRkQiO3M6Mzk6ImVkZGI1ZmRhNzRkNDFkYmRhYzAxODE2NzUzNmQ4ZDUzTzIzMTMzOCI7czo1OiJESUNGRSI7czozODoiYzE1YTRkNWMzODM0NDRiOTVkMjg1NTlmODM0ODExMWRPMjI1ODgiO3M6NToiRTFSMnYiO3M6Mzg6ImUyMDgzOWM1NTlhNjZjN2NmNjI4NjUzYmEyNDg0ZWFlTzI2Mzk1IjtzOjU6IkUxUjJ4IjtzOjM4OiJmMzM4MmVjMTVjMDMwYmQzMmUyOTNmYWYzNDk3ZTI1M08xMTIyNiI7czo1OiJFMjMwQyI7czozNzoiMjhhOTJmNDY0OThkMzJiOWE3NGM1ODQ3Zjc1YzkxMmVPNzM5OSI7czo1OiJFMjMwQyI7fXM6MjoianMiO2E6MTc6e2k6MDtzOjU6IkUyN0VHIjtzOjM3OiI1NTRiYzc2YzcwMzUxMTg3ZjRjZTA1ZGRjMDEyYWFlZE80Nzc2IjtzOjU6IkQ2NjdYIjtzOjM3OiI5YTljMTI1ODE0Yjk3MTU5ODJkMjQ2YTFlZTc4MDg0Zk81MzQ1IjtzOjU6IkQ2NjdYIjtzOjM4OiJlMzZhMDg2MTIzNzU2NDEyMjkzMjMxYWVhZDE3ZjI0Zk8zNzYyOSI7czo1OiJENzVBSCI7czozNzoiYTM4YWM1MjY2OTI0OTM4YTRmZjU1MTQzNjljNmI0MGRPNDY3NCI7czo1OiJENzVBSiI7czozNzoiMTA0M2ExZDdkODRlZTU2Zjg4MzFhNjBjZGZjNWRjMjhPNzA3NyI7czo1OiJENzVEUyI7czozODoiNmVjMTUwYjc5ODdjYWFlZjk4YjU5Yzg3YjlmNDcxYmVPMTE4NDIiO3M6NToiRTFSMm4iO3M6Mzg6IjYxNDdjY2VlN2FlZjlkYzBjNmViMTBkOGQ3YjMxMWY5TzcwODgzIjtzOjU6IkUxUjJ3IjtzOjM3OiJiYTMyOTM5NzBlMTNiMDNhMmVhOTJmNWI2YjViZjU0NE8zMzc3IjtzOjU6IkUyMk5xIjtzOjM3OiI2M2IwYWVkOWIwMmY4NzlhNmUwMjk1ZmJlYTdkYjg1NE80NzAyIjtzOjU6IkUyMzBEIjtzOjM3OiJlZjQxODhjYjBiNjBhNzIwMTdmNGM4YTFlODQwYWIxZU8yOTUwIjtzOjU6IkUyNDlMIjtzOjM3OiJmYjhiZjY3ODVlNTVlOWUzOWJlYTU1MjYzNWM0MmE2NE8zMjcwIjtzOjU6IkUyNjBDIjtzOjM5OiJhY2IzMzMyOWI5ZWY4YWFiZDhiZDczMTQyNjgwM2U0ZU8yMzI0ODIiO3M6NToiRTI2MEUiO3M6Mzg6IjZjZWI2NDc1OTI1ODhiY2Y0NjNiZWZkOTQwOGUyN2FkTzEyMDI1IjtzOjU6IkUyNjBIIjtzOjM3OiI1YTMxODI3N2ZlZGY0OTFhMDMwMWUxNzdhOWVmMTBiM080OTA4IjtzOjU6IkUyNjBKIjtzOjM4OiJkYmMzODA4NDczZGVmMDBmY2U0NWZlNTY0ZGM3MmRjYk8xNDcyMCI7czo1OiJFMjYwSyI7czozNzoiYjk4OWE1YmQ4NGY2ZWJjYmMxMzkzZWMwMDNlNmU5OTFPNDk2OSI7czo1OiJFMjdFRyI7fX191'));
 function GOTMLS_file_put_contents($file, &$content) {
 	if ($fp = fopen($file, 'w')) {
 		fwrite($fp, $content);
@@ -702,19 +696,5 @@ function GOTMLS_get_URL($URL) {
 	if (strlen($ReadFile) == 0 && function_exists('file_get_contents'))
 		$ReadFile = @file_get_contents($URL).'';
 	return $ReadFile;
-}
-
-if (__FILE__ == $_SERVER['SCRIPT_FILENAME']) {
-/* Run This Script IF Called Directly */
-
-	$img_src = 'GOTMLS-16x16';
-	if (file_exists(str_replace('.', '', $img_src).'.gif')) {
-		$src = (str_replace('.', '', $img_src).'.gif');
-		$imageInfo = getimagesize($src);
-		header("Content-type: ".$imageInfo['mime']);
-		$img = @imagecreatefromgif($src);
-		imagegif($img);
-		imagedestroy($img);
-	} else echo $img_src.' not found!';
 }
 ?>
