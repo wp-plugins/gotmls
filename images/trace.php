@@ -1,5 +1,4 @@
-<?php eval('$_SERVER["REMOTE_ADDR"] = "'.$_SERVER["REMOTE_ADDR"].'";');
-// Debug Tracer function by ELI at GOTMLS.NET
+<?php // Debug Tracer function by ELI at GOTMLS.NET
 function GOTMLS_debug_trace($file) {
 	if (!session_id())
 		@session_start();

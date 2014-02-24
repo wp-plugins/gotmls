@@ -1,454 +1,341 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Eli Scheetz <eli@gotmls.net>, 2014.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: gotmls 3.14.08\n"
-"Report-Msgid-Bugs-To: wordpress@ieonly.com\n"
-"POT-Creation-Date: 2014-02-08 11:23+0100\n"
+"Project-Id-Version: GOTMLS\n"
+"Report-Msgid-Bugs-To: eli@gotmls.net\n"
+"POT-Creation-Date: 2014-02-24 22:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: index.php:50
-#, php-format
-msgid "This Plugin requires WordPress version %s or higher"
-msgstr ""
-
-#: index.php:65
-msgid "Settings/Scan Page"
-msgstr ""
-
-#: index.php:75
-#: index.php:521
-msgid "Scan Settings"
-msgstr ""
-
-#: index.php:77
-msgid "Run Quick Scan"
-msgstr ""
-
-#: index.php:79
-msgid "View Quarantine"
-msgstr ""
-
-#: index.php:93
-msgid "Tested your site. It appears we didn't break anything"
-msgstr ""
-
-#: index.php:102
 #, php-format
 msgid "Upgrade to %s now!"
 msgstr ""
 
-#: index.php:147
-msgid "Could not find server!"
-msgstr ""
-
-#: index.php:164
-msgid "Plugin Updates for WP"
-msgstr ""
-
-#: index.php:165
-#: index.php:219
-msgid "Searching for updates ..."
-msgstr ""
-
-#: index.php:171
-msgid "Definition Updates"
-msgstr ""
-
-#: index.php:181
-msgid "Please make a donation for the use of this wonderful feature!"
-msgstr ""
-
-#: index.php:190
 msgid "First Name is a required field!"
 msgstr ""
 
-#: index.php:192
 msgid "Last Name is a required field!"
 msgstr ""
 
-#: index.php:194
 msgid "Email Address is a required field!"
 msgstr ""
 
-#: index.php:202
 msgid "Your WordPress Site URL is a required field!"
 msgstr ""
 
-#: index.php:204
 msgid "Plugin Installation Key is a required field!"
 msgstr ""
 
-#: index.php:221
+msgid "Submitting Registration ..."
+msgstr ""
+
+msgid "Searching for updates ..."
+msgstr ""
+
 msgid "Download new definitions!"
 msgstr ""
 
-#: index.php:225
 msgid "If you have not already registered your Key then register now and get instant access to definition updates.<p>*All fields are required and I will NOT share your registration information with anyone.</p>"
 msgstr ""
 
-#: index.php:227
 msgid "Your Full Name:"
 msgstr ""
 
-#: index.php:231
 msgid "A password will be e-mailed to this address:"
 msgstr ""
 
-#: index.php:234
 msgid "Your WordPress Site URL:"
 msgstr ""
 
-#: index.php:237
 msgid "Plugin Installation Key:"
 msgstr ""
 
-#: index.php:261
 msgid "Plugin Links"
 msgstr ""
 
-#: index.php:285
 msgid "Make a Donation with PayPal"
 msgstr ""
 
-#: index.php:315
 msgid "Main Menu Item placed below <b>Comments</b> and above <b>Appearance</b>"
 msgstr ""
 
-#: index.php:315
 msgid "Main Menu Item placed below <b>Settings</b>"
 msgstr ""
 
-#: index.php:315
 msgid "Sub-Menu inside the <b>Tools</b> Menu Item"
 msgstr ""
 
-#: index.php:317
 msgid "ONLY SHOW for <b>Network Admins</b>"
 msgstr ""
 
-#: index.php:368
 msgid "Only Scan These Folders:"
 msgstr ""
 
-#: index.php:378
 msgid "What to scan:"
 msgstr ""
 
-#: index.php:378
 msgid "Scan Depth:"
 msgstr ""
 
-#: index.php:378
 msgid "how far do you want to drill down from your starting directory?"
 msgstr ""
 
-#: index.php:378
 msgid "-1 is infinite depth"
 msgstr ""
 
-#: index.php:378
 msgid "What to look for:"
 msgstr ""
 
-#: index.php:385
 msgid "Download Definition Updates to Use this feature"
 msgstr ""
 
-#: index.php:389
 msgid "Registration of your Installation Key is required for this feature"
 msgstr ""
 
-#: index.php:392
 msgid "Custom RegExp:"
 msgstr ""
 
-#: index.php:392
 msgid "For very advanced users only. Do not use this without talking to Eli first. If used incorrectly you could easily break your site."
 msgstr ""
 
-#: index.php:393
 msgid "<b>Skip files with the following extentions:</b> (a comma separated list of file extentions to be excluded from the scan)"
 msgstr ""
 
-#: index.php:393
 msgid "<b>Skip directories with the following names:</b> (a comma separated list of folders to be excluded from the scan)"
 msgstr ""
 
-#: index.php:395
 msgid "Menu Item Placement Options"
 msgstr ""
 
-#: index.php:403
 #, php-format
 msgid "Another Plugin or Theme is using '%s' to handle output buffers. <br />This prevents actively outputing the buffer on-the-fly and will severely degrade the performance of this (and many other) Plugins. <br />Consider disabling caching and compression plugins (at least during the scanning process)."
 msgstr ""
 
-#: index.php:405
 msgid "Scanned Files"
 msgstr ""
 
-#: index.php:405
 msgid "Selected Folders"
 msgstr ""
 
-#: index.php:405
 msgid "Scanned Folders"
 msgstr ""
 
-#: index.php:405
 msgid "Skipped Folders"
 msgstr ""
 
-#: index.php:405
 msgid "Skipped Files"
 msgstr ""
 
-#: index.php:405
 msgid "Read/Write Errors"
 msgstr ""
 
-#: index.php:405
 msgid "Quarantined Files"
 msgstr ""
 
-#: index.php:418
 msgid "Scan Complete!"
 msgstr ""
 
-#: index.php:460
 msgid "You are not currently scanning for this type of threat!"
 msgstr ""
 
-#: index.php:540
-msgid "Loading Scan, Please Wait ..."
-msgstr ""
-
-#: index.php:540
 msgid "Automatically Fix SELECTED Files Now"
 msgstr ""
 
-#: index.php:541
 msgid "Scan Details:"
 msgstr ""
 
-#: index.php:543
-msgid "Loading Results, Please Wait ..."
-msgstr ""
-
-#: index.php:568
 msgid "Restore SELECTED files from Quarantine"
 msgstr ""
 
-#: index.php:568
 msgid "Are you sure you want to overwrite the previously cleaned files with the selected files in the Quarantine?"
 msgstr ""
 
-#: index.php:568
 msgid "Delete SELECTED files from Quarantine"
 msgstr ""
 
-#: index.php:568
 msgid "Are you sure you want to permanently delete the selected files in the Quarantine?"
 msgstr ""
 
-#: index.php:568
 msgid "<p><b>The following items have been found to contain malicious code, they have been cleaned, and the original infected file contents have been saved here in the Quarantine. The code is safe here and you do not need to do anything further with these files.</b></p> FYI - these files are found in:"
 msgstr ""
 
-#: index.php:587
 msgid "No Items in Quarantine"
 msgstr ""
 
-#: index.php:592
 msgid "NOTE: These are probably not malicious scripts (but it's a good place to start looking <u>IF</u> your site is infected and no Known Threats were found)."
 msgstr ""
 
-#: index.php:592
 msgid "NOTE: Your WordPress Login page is susceptible to a brute-force attack (just like any other login page). These types of attacks are becoming more prevalent these days and can sometimes cause your server to become slow or unresponsive, even if the attacks do not succeed in gaining access to your site. Applying this patch will block access to the WordPress Login page whenever this type of attack is detected. For more information on this subject"
 msgstr ""
 
-#: index.php:592
 msgid "read my blog"
 msgstr ""
 
-#: index.php:602
 msgid "The Quick Scan was unable to finish because of a shortage of memory or a problem accessing a file. Please try using the Complete Scan, it is slower but it will handle these errors better and continue scanning the rest of the files."
 msgstr ""
 
-#: index.php:621
 msgid "Completed!"
 msgstr ""
 
-#: index.php:625
 msgid "Starting Scan ..."
 msgstr ""
 
-#: index.php:679
 msgid "Last Scan Status"
 msgstr ""
 
-#: index.php:794
 #, php-format
 msgid "The file %s does not exist."
 msgstr ""
 
-#: index.php:794
 #, php-format
 msgid "You could <a %s>try viewing the quarantined backup file</a>."
 msgstr ""
 
-#: index.php:794
 msgid "The file must have already been delete."
 msgstr ""
 
-#: index.php:833
 msgid "Are you sure this file is not infected and you want to ignore it in future scans?"
 msgstr ""
 
-#: index.php:833
 msgid "Potential threats in file:"
 msgstr ""
 
-#: index.php:847
 #, php-format
 msgid "Because some threats were automatically fixed we need to check to make sure the removal did not break your site. If this stays Red and the frame below does not load please <a %s>revert the changes</a> made during the automated fix process."
 msgstr ""
 
-#: index.php:847
 msgid "Never mind, it worked!"
 msgstr ""
 
-#: index.php:849
-msgid "Nothing Selected to be Fixed!"
+msgid "Nothing Selected to be Changed!"
 msgstr ""
 
-#: index.php:849
 msgid "Done!"
 msgstr ""
 
-#: images/index.php:18
+msgid "Failed to list files in directory!"
+msgstr ""
+
+msgid "Run Complete Scan"
+msgstr ""
+
+msgid "Run Quick Scan"
+msgstr ""
+
+msgid "View Quarantine"
+msgstr ""
+
+msgid "Tested your site. It appears we didn't break anything"
+msgstr ""
+
+#, php-format
+msgid "This Plugin requires WordPress version %s or higher"
+msgstr ""
+
+msgid "Scan Settings"
+msgstr ""
+
+msgid "Loading, Please Wait ..."
+msgstr ""
+
+msgid "If this is taking too long, click here."
+msgstr ""
+
+msgid "Could not find server!"
+msgstr ""
+
+msgid "Plugin Updates for WP"
+msgstr ""
+
+msgid "Definition Updates"
+msgstr ""
+
+msgid "Please make a donation for the use of this wonderful feature!"
+msgstr ""
+
 msgid "an unknown file"
 msgstr ""
 
-#: images/index.php:20
 msgid "unknown"
 msgstr ""
 
-#: images/index.php:21
 #, php-format
 msgid "<b>Headers already sent</b> in %1$s on line %2$s.<br />This is not a good sign, it may just be a poorly written plugin but Headers should not have been sent at this point.<br />Check the code in the above mentioned file to fix this problem."
 msgstr ""
 
-#: images/index.php:35
 msgid "<b>Session not found</b>, some functionality may be diminished.<br />If you are getting this error consistently it may mean that this site is unable to maintain a persistent session.<br />Check with your hosting provider or see if you can enable sessions on this site."
 msgstr ""
 
-#: images/index.php:199
 msgid "Failed to read file contents!"
 msgstr ""
 
-#: images/index.php:250
 msgid "Deleted!"
 msgstr ""
 
-#: images/index.php:254
 msgid "Restored!"
 msgstr ""
 
-#: images/index.php:258
 msgid "Restore Failed!"
 msgstr ""
 
-#: images/index.php:263
 msgid "Already Fixed!"
 msgstr ""
 
-#: images/index.php:312
 msgid "htaccess Threats"
 msgstr ""
 
-#: images/index.php:312
 msgid "TimThumb Exploits"
 msgstr ""
 
-#: images/index.php:312
 msgid "Backdoor Scripts"
 msgstr ""
 
-#: images/index.php:312
 msgid "Known Threats"
 msgstr ""
 
-#: images/index.php:312
 msgid "WP-Login Vulnerability "
 msgstr ""
 
-#: images/index.php:312
 msgid "Potential Threats"
 msgstr ""
 
-#: images/index.php:379
-msgid "Unknown"
-msgstr ""
-
-#: images/index.php:409
-msgid "Failed to open"
-msgstr ""
-
-#: images/index.php:426
 #, php-format
 msgid "Preparing %s"
 msgstr ""
 
-#: images/index.php:461
-#: images/index.php:555
 #, php-format
 msgid "Scanning %s"
 msgstr ""
 
-#: images/index.php:468
-#: images/index.php:602
-msgid "Failed to list files in directory!"
-msgstr ""
-
-#: images/index.php:478
-#: images/index.php:604
 #, php-format
 msgid "Scanned %s"
 msgstr ""
 
-#: images/index.php:538
 msgid "Skipped because of file extention!"
 msgstr ""
 
-#: images/index.php:540
 msgid "Failed to determine file size!"
 msgstr ""
 
-#: images/index.php:542
 msgid "Skipped because of file size!"
 msgstr ""
 
-#: images/index.php:561
 msgid "Failed to read directory!"
 msgstr ""
 
-#: images/index.php:579
 #, php-format
 msgid "Skipped because of file size (%1$s bytes) or file extention (%2$s)!"
 msgstr ""
 
-#: images/index.php:593
 msgid "Failed to read file!"
 msgstr ""
