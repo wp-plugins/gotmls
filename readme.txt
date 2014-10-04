@@ -2,13 +2,13 @@
 Plugin URI: http://gotmls.net/
 Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
-Contributors: scheeeli
+Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
-Tags: anti-malware, antimalware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, recover, hacked, malicious, scripts, infection, timthumb, exploit, block, brute force, wp-login, patch
-Version: 3.14.24
-Stable tag: 3.14.24
+Tags: anti-malware, antimalware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, hacked, malicious, scripts, infection, timthumb, exploit, block, brute-force, wp-login, patch
+Version: 3.15.15
+Stable tag: 3.15.15
 Requires at least: 3.0
-Tested up to: 3.8.1
+Tested up to: 4.0
 
 This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and it helps you remove them.
 
@@ -24,21 +24,23 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Customize Scan Setting.
 * Run a Complete Scan from the Settings Page.
 
-Updated February 24th
+Updated October 3rd
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
-NOTICE: This plugin make use of a "phone home" feature to check for updates. This is not unlike what WordPress already does with all your plugins. It is an essential part of any worthwhile security plugin and it is here to let you know when there are new plugin and definition update available. If you're allergic to "phone home" scripts then don't use this plugin (or WordPress at all for that matter).
+NOTICE: This plugin make use of a "phone home" feature to check for updates. This is not unlike what WordPress already does with all your plugins. Staying up-to-date is an essential part of any worthwhile security plugin and it will let you know when there are new plugin and definition update available. If you're allergic to "phone home" scripts then don't use this plugin (or WordPress at all for that matter).
 
 **Special thanks to:**
+
 * Graeme Morris of socialidentitydesign.com for the logo design.
+
 * Jelena Kovacevic and Andrew Kurtis of webhostinghub.com for providing the Spanish translation.
 
 == Installation ==
 
 1. Download and unzip the plugin into your WordPress plugins directory (usually `/wp-content/plugins/`).
 1. Activate the plugin through the 'Plugins' menu in your WordPress Admin.
-1. Register on gotmls.net to have access to new definitions of "known threats" and added features like automatic removal and automatic security patches from your admin page.
+1. Register on gotmls.net and download the newest definition update to scan for Known Threats.
 
 == Frequently Asked Questions ==
 
@@ -83,6 +85,11 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 3.15.15 =
+* Enhanced the Examine File window with better styles and more info.
+* Changed form submission of encrypted file lists to array values instead of keys.
+* Fixes other minor bugs.
 
 = 3.14.24 =
 * Made the Examine File window sizable.
@@ -255,6 +262,9 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 3.15.15 =
+Enhanced the Examine File window with better styles and more info, changed form submission of encrypted file lists, and fixes other minor bugs.
 
 = 3.14.24 =
 Made the Examine File window sizable, fixed a few small bugs, removed some old code, and added a link to twitter.
