@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GOTMLS\n"
 "Report-Msgid-Bugs-To: eli@gotmls.net\n"
-"POT-Creation-Date: 2014-02-24 22:42+0100\n"
+"POT-Creation-Date: 2014-10-04 07:56-1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,6 +140,12 @@ msgid "Read/Write Errors"
 msgstr ""
 
 msgid "Quarantined Files"
+msgstr ""
+
+msgid "Potential Threats"
+msgstr ""
+
+msgid "WP-Login Vulnerability "
 msgstr ""
 
 msgid "Scan Complete!"
@@ -279,6 +285,9 @@ msgstr ""
 msgid "Failed to read file contents!"
 msgstr ""
 
+msgid "Empty file!"
+msgstr ""
+
 msgid "Deleted!"
 msgstr ""
 
@@ -301,12 +310,6 @@ msgid "Backdoor Scripts"
 msgstr ""
 
 msgid "Known Threats"
-msgstr ""
-
-msgid "WP-Login Vulnerability "
-msgstr ""
-
-msgid "Potential Threats"
 msgstr ""
 
 #, php-format
