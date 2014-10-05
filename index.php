@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Anti-Malware by ELI (Get Off Malicious Scripts)
+Plugin Name: Anti-Malware and Brute-Force Security by ELI
 Plugin URI: http://gotmls.net/
 Author: Eli Scheetz
 Text Domain: gotmls
@@ -8,7 +8,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 3.15.15
+Version: 3.15.16
 */
 /*            ___
  *           /  /\     GOTMLS Main Plugin File
@@ -778,7 +778,7 @@ function GOTMLS_init() {
 					$GOTMLS_definitions_versions[$threat_level] = $definition_version[0];
 	if (isset($_POST["UPDATE_definitions_array"])) {
 		$GOTnew_definitions = maybe_unserialize(GOTMLS_decode($_POST["UPDATE_definitions_array"]));
-		GOTMLS_set_global($GOTMLS_onLoad, "check_for_updates('Downloaded Definitions');");
+		$GOTMLS_onLoad .= "check_for_updates('Downloaded Definitions');";
 	} //elseif (file_exists(GOTMLS_plugin_path.'definitions_update.txt'))	$GOTnew_definitions = maybe_unserialize(GOTMLS_decode(file_get_contents(GOTMLS_plugin_path.'definitions_update.txt')));
 	if (isset($GOTnew_definitions) && is_array($GOTnew_definitions)) {
 		$GOTMLS_definitions_array = GOTMLS_array_replace_recursive($GOTMLS_definitions_array, $GOTnew_definitions);	

@@ -1,12 +1,12 @@
-=== Anti-Malware (Get Off Malicious Scripts) ===
+=== Anti-Malware and Brute-Force Security ===
 Plugin URI: http://gotmls.net/
 Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
-Tags: anti-malware, antimalware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, hacked, malicious, scripts, infection, timthumb, exploit, block, brute-force, wp-login, patch
-Version: 3.15.15
-Stable tag: 3.15.15
+Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, hacked, malicious, scripts, infection, timthumb, exploit, block, brute-force, wp-login, patch, antimalware
+Version: 3.15.16
+Stable tag: 3.15.16
 Requires at least: 3.0
 Tested up to: 4.0
 
@@ -24,7 +24,7 @@ This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like th
 * Customize Scan Setting.
 * Run a Complete Scan from the Settings Page.
 
-Updated October 3rd
+Updated October 4th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -85,6 +85,9 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 3.15.16 =
+* Fixes a minor bug with pass-by-reference which raises a fatal error in PHP v5.4.
 
 = 3.15.15 =
 * Enhanced the Examine File window with better styles and more info.
@@ -262,6 +265,9 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 3.15.16 =
+Fixes a minor bug with pass-by-reference which raises a fatal error in PHP v5.4.
 
 = 3.15.15 =
 Enhanced the Examine File window with better styles and more info, changed form submission of encrypted file lists, and fixes other minor bugs.
