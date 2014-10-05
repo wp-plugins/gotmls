@@ -1,4 +1,4 @@
-=== Anti-Malware and Brute-Force Security ===
+=== Anti-Malware and Brute-Force Security by ELI ===
 Plugin URI: http://gotmls.net/
 Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
@@ -10,7 +10,7 @@ Stable tag: 3.15.16
 Requires at least: 3.0
 Tested up to: 4.0
 
-This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and it helps you remove them.
+This Anti-Malware plugin searches for Malware and other Virus like threats and security vulnerabilities on your server and it helps you remove them.
 
 == Description ==
 
