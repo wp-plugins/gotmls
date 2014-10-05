@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GOTMLS\n"
 "Report-Msgid-Bugs-To: eli@gotmls.net\n"
-"POT-Creation-Date: 2014-02-24 22:42+0100\n"
+"POT-Creation-Date: 2014-10-04 17:23-1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -142,6 +142,12 @@ msgstr ""
 msgid "Quarantined Files"
 msgstr ""
 
+msgid "Potential Threats"
+msgstr ""
+
+msgid "WP-Login Vulnerability "
+msgstr ""
+
 msgid "Scan Complete!"
 msgstr ""
 
@@ -263,6 +269,18 @@ msgstr ""
 msgid "Please make a donation for the use of this wonderful feature!"
 msgstr ""
 
+msgid "htaccess Threats"
+msgstr ""
+
+msgid "TimThumb Exploits"
+msgstr ""
+
+msgid "Backdoor Scripts"
+msgstr ""
+
+msgid "Known Threats"
+msgstr ""
+
 msgid "an unknown file"
 msgstr ""
 
@@ -279,6 +297,9 @@ msgstr ""
 msgid "Failed to read file contents!"
 msgstr ""
 
+msgid "Empty file!"
+msgstr ""
+
 msgid "Deleted!"
 msgstr ""
 
@@ -289,24 +310,6 @@ msgid "Restore Failed!"
 msgstr ""
 
 msgid "Already Fixed!"
-msgstr ""
-
-msgid "htaccess Threats"
-msgstr ""
-
-msgid "TimThumb Exploits"
-msgstr ""
-
-msgid "Backdoor Scripts"
-msgstr ""
-
-msgid "Known Threats"
-msgstr ""
-
-msgid "WP-Login Vulnerability "
-msgstr ""
-
-msgid "Potential Threats"
 msgstr ""
 
 #, php-format
