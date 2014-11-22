@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GOTMLS\n"
 "Report-Msgid-Bugs-To: eli@gotmls.net\n"
-"POT-Creation-Date: 2014-10-04 17:23-1000\n"
+"POT-Creation-Date: 2014-11-22 21:08+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,7 +145,7 @@ msgstr ""
 msgid "Potential Threats"
 msgstr ""
 
-msgid "WP-Login Vulnerability "
+msgid "WP-Login Updates"
 msgstr ""
 
 msgid "Scan Complete!"
@@ -181,7 +181,7 @@ msgstr ""
 msgid "NOTE: These are probably not malicious scripts (but it's a good place to start looking <u>IF</u> your site is infected and no Known Threats were found)."
 msgstr ""
 
-msgid "NOTE: Your WordPress Login page is susceptible to a brute-force attack (just like any other login page). These types of attacks are becoming more prevalent these days and can sometimes cause your server to become slow or unresponsive, even if the attacks do not succeed in gaining access to your site. Applying this patch will block access to the WordPress Login page whenever this type of attack is detected. For more information on this subject"
+msgid "NOTE: Your WordPress Login page has the old version of my brute-force protection installed. Upgrade this patch to improve the protection on the WordPress Login page and preserve the integrity of your WordPress core files. For more information on brute force attack prevention and the WordPress wp-login-php file "
 msgstr ""
 
 msgid "read my blog"
@@ -289,9 +289,6 @@ msgstr ""
 
 #, php-format
 msgid "<b>Headers already sent</b> in %1$s on line %2$s.<br />This is not a good sign, it may just be a poorly written plugin but Headers should not have been sent at this point.<br />Check the code in the above mentioned file to fix this problem."
-msgstr ""
-
-msgid "<b>Session not found</b>, some functionality may be diminished.<br />If you are getting this error consistently it may mean that this site is unable to maintain a persistent session.<br />Check with your hosting provider or see if you can enable sessions on this site."
 msgstr ""
 
 msgid "Failed to read file contents!"
