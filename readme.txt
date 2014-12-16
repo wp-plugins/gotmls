@@ -4,9 +4,9 @@ Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
-Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, hacked, malicious, scripts, infection, timthumb, exploit, block, brute-force, wp-login, patch, antimalware
-Version: 4.14.50
-Stable tag: 4.14.50
+Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, hacked, malicious, scripts, infection, timthumb, exploit, block, brute-force, wp-login, patch, antimalware, revslider, Revolution Slider
+Version: 4.14.51
+Stable tag: 4.14.51
 Requires at least: 3.3
 Tested up to: 4.0.1
 
@@ -16,15 +16,15 @@ This Anti-Malware plugin searches for Malware and other Virus like threats and s
 
 **Features:**
 
-* Automatic removal of "Known Threats".
-* Download definitions of new threat as they are discovered.
-* Automatically upgrade vulnerable versions of timthumb scripts.
-* Automatically patch wp-login.php to block brute-force attacks.
+* Automatically remove Known Threats and Back-doors.
+* Automatically block SoakSoak and other malware from exploiting the Revolution Slider Vulnerability.
+* Patch wp-login to block Brute-Force attacks.
+* Upgrade vulnerable versions of timthumb scripts.
 * Run a Quick Scan from the admin menu.
-* Customize Scan Setting.
 * Run a Complete Scan from the Settings Page.
+* Download Definition Updates to protect against new threats.
 
-Updated December 12th
+Updated December 17th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -47,6 +47,14 @@ NOTICE: This plugin make use of a "phone home" feature to check for updates. Thi
 
 If you register on [GOTMLS.NET](http://gotmls.net/) you will have access to download definitions of New Threats and added features like automatic removal of "Known Threats" and patches for specific security issues like old versions of timthumb and brute-force attacks on wp-login.php. Otherwise, this plugin only scans for "Potential Threats" on your site, it would then be up to you to identify the good from the bad and remove them accordingly. 
 
+= How do I patch the Revolution Slider vulnerability? =
+
+Easy, if you have installed and activated my this Anti-Malware plugin on your site then it will automatically block attempts to exploit the Revolution Slider vulnerability.
+
+= How do I patch the wp-login vulnerability? =
+
+The WordPress Login page is susceptible to a brute-force attack (just like any other login page). These types of attacks are becoming more prevalent these days and can sometimes cause your server to become slow or unresponsive, even if the attacks do not succeed in gaining access to your site. This plugin can apply a patch that will block access to the WordPress Login page whenever this type of attack is detected. Just click the Install Patch button under Brute-force Protection on the Anti-Malware Setting page. For more information on this subject [read my blog](http://gotmls.net/tag/wp-login-php/).
+
 = Why can't I automatically remove the "Potential Threats" in yellow? =
 
 Many of these files may use eval and other powerful PHP function for perfectly legitimate reasons and removing that code from the files would likely cripple or even break your site so I have only enabled the Auto remove feature for "Know Threats".
@@ -54,10 +62,6 @@ Many of these files may use eval and other powerful PHP function for perfectly l
 = How do I know if any of the "Potential Threats" are dangerous? =
 
 Click on the linked filename to examine it, then click each numbered link above the file content box to highlight the suspicious code. If you cannot tell whether or not the code is malicious just leave it alone or ask someone else to look at it for you. If you find that it is malicious please send me a copy of the file so that I can add it to my definition update as a "Know Threat", then it can be automatically removed.
-
-= Why does the wp-login.php file show up as a vulnerability (even on a fresh install of WordPress)? =
-
-The WordPress Login page is susceptible to a brute-force attack (just like any other login page). These types of attacks are becoming more prevalent these days and can sometimes cause your server to become slow or unresponsive, even if the attacks do not succeed in gaining access to your site. This plugin can apply a patch that will block access to the WordPress Login page whenever this type of attack is detected. For more information on this subject [read my blog](http://gotmls.net/tag/wp-login-php/).
 
 = What if the scan gets stuck part way through? =
 
@@ -84,6 +88,9 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 4.14.51 =
+* Block SoakSoak and other malware from exploiting the Slider Revolution Vulnerability (THIS IS A WIDESPREAD THREAT RIGHT NOW).
 
 = 4.14.50 =
 * Enabled the Brute-Force protection option directly from the Settings page.
@@ -265,6 +272,9 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 4.14.51 =
+Block SoakSoak and other malware from exploiting the Slider Revolution Vulnerability (THIS IS A WIDESPREAD THREAT RIGHT NOW).
 
 = 4.14.50 =
 Enabled the Brute-Force protection from the Settings page and fixed window position on small screens.

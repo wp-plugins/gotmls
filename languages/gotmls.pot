@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GOTMLS\n"
 "Report-Msgid-Bugs-To: eli@gotmls.net\n"
-"POT-Creation-Date: 2014-12-13 20:31+0900\n"
+"POT-Creation-Date: 2014-12-17 01:13+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,10 +109,30 @@ msgstr ""
 msgid "Are you sure you want to permanently delete the selected files in the Quarantine?"
 msgstr ""
 
-msgid "<p><b>The following items have been found to contain malicious code, they have been cleaned, and the original infected file contents have been saved here in the Quarantine. The code is safe here and you do not need to do anything further with these files.</b></p> FYI - these files are found in:"
+msgid "The following items have been found to contain malicious code, they have been cleaned, and the original infected file contents have been saved here in the Quarantine. The code is safe here and you do not need to do anything further with these files."
+msgstr ""
+
+#, php-format
+msgid "FYI - these files are found in: %s"
+msgstr ""
+
+#, php-format
+msgid "Check all %d"
+msgstr ""
+
+msgid " Items in Quarantine"
+msgstr ""
+
+msgid "View Quarantined File"
+msgstr ""
+
+msgid "Foreign File in Quarantine"
 msgstr ""
 
 msgid "No Items in Quarantine"
+msgstr ""
+
+msgid "Quarantine"
 msgstr ""
 
 msgid "Only Scan These Folders:"
