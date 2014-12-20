@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GOTMLS\n"
 "Report-Msgid-Bugs-To: eli@gotmls.net\n"
-"POT-Creation-Date: 2014-12-17 01:13+0900\n"
+"POT-Creation-Date: 2014-12-20 15:57+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,10 +39,10 @@ msgstr ""
 msgid "If Known Threats are found and displayed in red then there will be a button to '%s'. If only Potentional Threats are found then there is no automatic fix because those are probably not malicious."
 msgstr ""
 
-msgid "The Quarantine"
+msgid "A backup of the original infected files are placed in the Quarantine in case you need to restore them or just want to look at them later. You can delete these files if you don't want to save more."
 msgstr ""
 
-msgid "A backup of the original infected files are placed in the Quarantine in case you need to restore them or just want to look at them later. You can delete these files if you don't want to save more."
+msgid "FAQs"
 msgstr ""
 
 msgid "Menu Placement"
@@ -242,6 +242,9 @@ msgid "Installed Brute-Force Protection"
 msgstr ""
 
 msgid "Removed Old Brute-Force Login Patch"
+msgstr ""
+
+msgid "NOTE: This Protection in automatically activated with this plugin because of the widespread attack on WordPress that are affecting so many site right now. It is still recommended that you make sure to upgrade and older versions of the Revolution Slider plugin, especially those included in some themes that will not update automatically. Even if you do not have Revolution Slider on your site it still can't hurt to have this protection installed."
 msgstr ""
 
 msgid " For more information on Brute-Force attack prevention and the WordPress wp-login-php file "

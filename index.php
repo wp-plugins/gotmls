@@ -8,7 +8,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 4.14.51
+Version: 4.14.52
 */
 /*            ___
  *           /  /\     GOTMLS Main Plugin File
@@ -89,13 +89,16 @@ function GOTMLS_admin_add_help_tab() {
 	$screen->add_help_tab(array(
 		'id'	=> "GOTMLS_Getting_Started",
 		'title'	=> __("Getting Started", 'gotmls'),
-		'content'	=> '<p>'.__("Make sure the Definition Updates are current and Run a Complete Scan.").'</p><p>'.sprintf(__("If Known Threats are found and displayed in red then there will be a button to '%s'. If only Potentional Threats are found then there is no automatic fix because those are probably not malicious."), GOTMLS_Automatically_Fix_LANGUAGE).'</p>'
+		'content'	=> '<p>'.__("Make sure the Definition Updates are current and Run a Complete Scan.").'</p><p>'.sprintf(__("If Known Threats are found and displayed in red then there will be a button to '%s'. If only Potentional Threats are found then there is no automatic fix because those are probably not malicious."), GOTMLS_Automatically_Fix_LANGUAGE).'</p><p>'.__("A backup of the original infected files are placed in the Quarantine in case you need to restore them or just want to look at them later. You can delete these files if you don't want to save more.").'</p>'
 	));
-	$screen->add_help_tab(array(
-		'id'	=> "GOTMLS_The_Quarantine",
-		'title'	=> __("The Quarantine", 'gotmls'),
-		'content'	=> '<p>'.__("A backup of the original infected files are placed in the Quarantine in case you need to restore them or just want to look at them later. You can delete these files if you don't want to save more.").'</p>'
-	));
+	$FAQMarker = '== Frequently Asked Questions ==';
+ 	if (is_file(dirname(__FILE__).'/readme.txt') && ($readme = explode($FAQMarker, @file_get_contents(dirname(__FILE__).'/readme.txt').$FAQMarker)) && strlen($readme[1]) && ($readme = explode("==", $readme[1]."==")) && strlen($readme[0])) {
+		$screen->add_help_tab(array(
+			'id'	=> "GOTMLS_FAQs",
+			'title'	=> __("FAQs", 'gotmls'),
+			'content'	=> '<p>'.preg_replace('/\[(.+?)\]\((.+?)\)/', "<a target=\"_blank\" href=\"\\2\">\\1</a>", preg_replace('/[\r\n]+= /', "</p><b>", preg_replace('/ =[\r\n]+/', "</b><p>", $readme[0]))).'</p>'
+		));
+	}
 	$screen->add_help_tab(array(
 		'id'	=> 'GOTMLS_Menu_Placement',
 		'title'	=> __("Menu Placement", 'gotmls'),
@@ -526,7 +529,7 @@ function GOTMLS_View_Quarantine() {
 		foreach ($entries as $entry) {
 			$file = GOTMLS_trailingslashit($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]).$entry;
 			$date = explode("-", date("y-m-d-H-i",filemtime($file)));
-			$Q_Page .= "\n<li style='margin-left: 12px;'><span style='float: right; width: 130px;'>(20$date[0]-$date[1]-$date[2] at $date[3]:$date[4])</span>".'<input type="checkbox" name="GOTMLS_fix[]" value="'.GOTMLS_encode($file).'" id="check_'.GOTMLS_encode($file).'" onchange="document.getElementById(\'fix_button\').style.display = \'block\';" />';
+			$Q_Page .= "\n<li style='margin: 4px 12px;'><span style='float: right; white-space: nowrap;'>(20$date[0]-$date[1]-$date[2] at $date[3]:$date[4])</span>".'<input type="checkbox" name="GOTMLS_fix[]" value="'.GOTMLS_encode($file).'" id="check_'.GOTMLS_encode($file).'" onchange="document.getElementById(\'fix_button\').style.display = \'block\';" />';
 			if (is_file($file) && GOTMLS_get_ext($entry) == "gotmls") {
 				$file_date = explode(".", $entry);
 				if (count($file_date) > 2 && strlen($file_date[0]) == 5)
@@ -544,7 +547,7 @@ function GOTMLS_View_Quarantine() {
 }
 
 function GOTMLS_settings() {
-	global $current_user, $wp_version, $GOTMLS_definitions_array, $GOTMLS_threat_levels, $GOTMLS_scanfiles, $GOTMLS_loop_execution_time, $GOTMLS_skip_ext, $GOTMLS_skip_dirs, $GOTMLS_settings_array, $GOTMLS_dirs_at_depth, $GOTMLS_dir_at_depth;
+	global $current_user, $wp_version, $GOTMLS_definitions_array, $GOTMLS_threat_levels, $GOTMLS_scanfiles, $GOTMLS_loop_execution_time, $GOTMLS_skip_dirs, $GOTMLS_settings_array, $GOTMLS_dirs_at_depth, $GOTMLS_dir_at_depth;
 	$GOTMLS_scan_groups = array();
 	$dirs = GOTMLS_explode_dir(__file__);
 	for ($SL=0;$SL<intval($GOTMLS_settings_array["scan_level"]);$SL++)
@@ -558,9 +561,9 @@ function GOTMLS_settings() {
 			$GOTMLS_settings_array["exclude_ext"] = array();
 	}
 	if (isset($_GET['eli']) && $_GET['eli']=='quarantine')
-		$GOTMLS_skip_ext = $GOTMLS_settings_array["exclude_ext"];
+		$GLOBALS["GOTMLS"]["tmp"]["skip_ext"] = $GOTMLS_settings_array["exclude_ext"];
 	else
-		$GOTMLS_skip_ext = array_merge($GOTMLS_settings_array["exclude_ext"], array("gotmls"));
+		$GLOBALS["GOTMLS"]["tmp"]["skip_ext"] = array_merge($GOTMLS_settings_array["exclude_ext"], array("gotmls"));
 	if (isset($_POST["exclude_dir"])) {
 		if (strlen(trim(str_replace(",","",$_POST["exclude_dir"]).' ')) > 0)
 			$GOTMLS_settings_array["exclude_dir"] = preg_split('/[\s]*([,]+[\s]*)+/', trim($_POST["exclude_dir"]), -1, PREG_SPLIT_NO_EMPTY);
@@ -900,11 +903,13 @@ showhide("pause_button", true);'."\n/*<!--*"."/";
 			else
 				$patch_status = 2;
 		}
-		$sec_opts = $patch_action.'
+		$sec_opts = '
+		<p><img src="'.GOTMLS_images_path.'checked.gif"><b>Revolution Slider Exploit Protection (Automatically Enabled)</b></p><div style="padding: 0 30px;"> &nbsp; * '.__("NOTE: This Protection in automatically activated with this plugin because of the widespread attack on WordPress that are affecting so many site right now. It is still recommended that you make sure to upgrade and older versions of the Revolution Slider plugin, especially those included in some themes that will not update automatically. Even if you do not have Revolution Slider on your site it still can't hurt to have this protection installed.",'gotmls').'</div><hr />
+		'.$patch_action.'
 		<form method="POST" name="GOTMLS_Form_patch"><p><img src="'.GOTMLS_images_path.$patch_attr[$patch_status]["icon"].'.gif"><b>Brute-force Protection '.$patch_attr[$patch_status]["status"].'</b></p><p style="float: right;"><input type="submit" value="'.$patch_attr[$patch_status]["action"].'"><input type="hidden" name="GOTMLS_patching" value="1"></p><div style="padding: 0 30px;"> &nbsp; * '.$patch_attr[$patch_status]["language"].__(" For more information on Brute-Force attack prevention and the WordPress wp-login-php file ",'gotmls').' <a target="_blank" href="http://gotmls.net/tag/wp-login-php/">'.__("read my blog",'gotmls').'</a>.</div>';
 		$admin_notice = "";
 		if ($current_user->user_login == "admin") {
-			$admin_notice .= '</form>
+			$admin_notice .= '</form><hr />
 			<form method="POST" name="GOTMLS_Form_admin"><p><img src="'.GOTMLS_images_path.'threat.gif"><b>Admin Notice</b></p><div style="padding: 0 30px;">Your username is "admin", this is the most commonly guessed username by hackers and brute-force scripts. It is highly recommended that you change your username immediately.</div>';
 		}
 		echo GOTMLS_box("Aditional Security Options", $sec_opts.$admin_notice);
@@ -925,7 +930,7 @@ function GOTMLS_set_plugin_row_meta($links_array, $plugin_file) {
 }
 
 function GOTMLS_init() {
-	global $GOTMLS_update_home, $GOTMLS_settings_array, $GOTMLS_onLoad, $GOTMLS_threat_levels, $wpdb, $GOTMLS_threats_found, $GOTMLS_settings_array, $GOTMLS_definitions_versions, $GOTMLS_definitions_array, $GOTMLS_file_contents, $GOTMLS_skip_ext;
+	global $GOTMLS_update_home, $GOTMLS_settings_array, $GOTMLS_onLoad, $GOTMLS_threat_levels, $wpdb, $GOTMLS_threats_found, $GOTMLS_settings_array, $GOTMLS_definitions_versions, $GOTMLS_definitions_array, $GOTMLS_file_contents;
 	if (!isset($GOTMLS_settings_array["scan_what"]))
 		$GOTMLS_settings_array["scan_what"] = 2;
 	if (!isset($GOTMLS_settings_array["scan_depth"]))
@@ -1018,7 +1023,7 @@ function GOTMLS_init() {
 			@error_reporting(0);
 			@header("Content-type: text/javascript");
 			if (isset($GOTMLS_settings_array["exclude_ext"]) && is_array($GOTMLS_settings_array["exclude_ext"]))
-				$GOTMLS_skip_ext = $GOTMLS_settings_array["exclude_ext"];
+				$GLOBALS["GOTMLS"]["tmp"]["skip_ext"] = $GOTMLS_settings_array["exclude_ext"];
 			@ob_start();
 			echo GOTMLS_scandir($file);
 			if (@ob_get_level()) {
@@ -1119,6 +1124,7 @@ window.parent.showhide("GOTMLS_iFrame", true);
 		die('<body style="margin: 0; padding: 0;">'.$_GET["GOTMLS_msg"].'</body>');
     add_contextual_help('GOTMLS-settings', __("<p>This is a help text for 'GOTMLS-settings' page.</p>", 'gotmls')); 
 }
+
 if (function_exists("is_admin") && is_admin() && ((isset($_POST['GOTMLS_whitelist']) && isset($_POST['GOTMLS_chksum'])) || (isset($_GET["GOTMLS_scan"]) && is_dir(GOTMLS_decode($_GET["GOTMLS_scan"]))))) {
 	@set_time_limit($GOTMLS_loop_execution_time-5);
 	GOTMLS_loaded();
@@ -1133,4 +1139,3 @@ if (function_exists("is_admin") && is_admin() && ((isset($_POST['GOTMLS_whitelis
 	add_action("network_admin_menu", "GOTMLS_menu");
 	$init = add_action("admin_init", "GOTMLS_init");
 }
-?>
