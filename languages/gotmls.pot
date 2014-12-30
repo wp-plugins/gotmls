@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GOTMLS\n"
 "Report-Msgid-Bugs-To: eli@gotmls.net\n"
-"POT-Creation-Date: 2014-12-20 15:57+0900\n"
+"POT-Creation-Date: 2014-12-30 18:56+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,11 +48,26 @@ msgstr ""
 msgid "Menu Placement"
 msgstr ""
 
+msgid "Tested your site. It appears we didn't break anything"
+msgstr ""
+
 #, php-format
 msgid "Upgrade to %s now!"
 msgstr ""
 
+msgid "If this is taking too long, click here."
+msgstr ""
+
+msgid "No response from server!"
+msgstr ""
+
+msgid "Plugin Updates for WP"
+msgstr ""
+
 msgid "Searching for updates ..."
+msgstr ""
+
+msgid "Definition Updates"
 msgstr ""
 
 msgid "Download new definitions!"
@@ -71,6 +86,9 @@ msgid "Your WordPress Site URL:"
 msgstr ""
 
 msgid "Plugin Installation Key:"
+msgstr ""
+
+msgid "Please make a donation for the use of this wonderful feature!"
 msgstr ""
 
 msgid "First Name is a required field!"
@@ -95,6 +113,9 @@ msgid "Links & External Resources"
 msgstr ""
 
 msgid "Make a Donation with PayPal"
+msgstr ""
+
+msgid "Scan Status"
 msgstr ""
 
 msgid "Restore SELECTED files from Quarantine"
@@ -171,6 +192,9 @@ msgstr ""
 msgid "<b>Skip directories with the following names:</b> (a comma separated list of folders to be excluded from the scan)"
 msgstr ""
 
+msgid "Run Complete Scan"
+msgstr ""
+
 #, php-format
 msgid "Another Plugin or Theme is using '%s' to handle output buffers. <br />This prevents actively outputing the buffer on-the-fly and will severely degrade the performance of this (and many other) Plugins. <br />Consider disabling caching and compression plugins (at least during the scanning process)."
 msgstr ""
@@ -217,6 +241,13 @@ msgstr ""
 msgid "read my blog"
 msgstr ""
 
+msgid "Scan Details:"
+msgstr ""
+
+#, php-format
+msgid "Not flushing OB Handlers: %s"
+msgstr ""
+
 msgid "The Quick Scan was unable to finish because of a shortage of memory or a problem accessing a file. Please try using the Complete Scan, it is slower but it will handle these errors better and continue scanning the rest of the files."
 msgstr ""
 
@@ -238,6 +269,9 @@ msgstr ""
 msgid "Removed Brute-Force Protection"
 msgstr ""
 
+msgid "Upgraded Brute-Force Protection"
+msgstr ""
+
 msgid "Installed Brute-Force Protection"
 msgstr ""
 
@@ -245,6 +279,9 @@ msgid "Removed Old Brute-Force Login Patch"
 msgstr ""
 
 msgid "NOTE: This Protection in automatically activated with this plugin because of the widespread attack on WordPress that are affecting so many site right now. It is still recommended that you make sure to upgrade and older versions of the Revolution Slider plugin, especially those included in some themes that will not update automatically. Even if you do not have Revolution Slider on your site it still can't hurt to have this protection installed."
+msgstr ""
+
+msgid "Checking for session compatability ..."
 msgstr ""
 
 msgid " For more information on Brute-Force attack prevention and the WordPress wp-login-php file "
@@ -280,22 +317,16 @@ msgstr ""
 msgid "Done!"
 msgstr ""
 
-msgid "<p>This is a help text for 'GOTMLS-settings' page.</p>"
+msgid "Skip scanning the Quarantine:"
 msgstr ""
 
 msgid "Failed to list files in directory!"
-msgstr ""
-
-msgid "Run Complete Scan"
 msgstr ""
 
 msgid "Run Quick Scan"
 msgstr ""
 
 msgid "View Quarantine"
-msgstr ""
-
-msgid "Tested your site. It appears we didn't break anything"
 msgstr ""
 
 #, php-format
@@ -308,28 +339,7 @@ msgstr ""
 msgid "Loading, Please Wait ..."
 msgstr ""
 
-msgid "If this is taking too long, click here."
-msgstr ""
-
-msgid "Could not find server!"
-msgstr ""
-
-msgid "Plugin Updates for WP"
-msgstr ""
-
-msgid "Definition Updates"
-msgstr ""
-
-msgid "Please make a donation for the use of this wonderful feature!"
-msgstr ""
-
 msgid "Automatically Fix SELECTED Files Now"
-msgstr ""
-
-msgid "Scan Details:"
-msgstr ""
-
-msgid "Scan Status"
 msgstr ""
 
 msgid "htaccess Threats"
@@ -382,6 +392,9 @@ msgstr ""
 
 #, php-format
 msgid "Scanned %s"
+msgstr ""
+
+msgid "Examine File"
 msgstr ""
 
 msgid "Skipped because of file extention!"
