@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GOTMLS\n"
 "Report-Msgid-Bugs-To: eli@gotmls.net\n"
-"POT-Creation-Date: 2014-12-30 18:56+0900\n"
+"POT-Creation-Date: 2014-12-31 11:35+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,25 +55,28 @@ msgstr ""
 msgid "Upgrade to %s now!"
 msgstr ""
 
+msgid "Searching for updates ..."
+msgstr ""
+
 msgid "If this is taking too long, click here."
 msgstr ""
 
 msgid "No response from server!"
 msgstr ""
 
-msgid "Plugin Updates for WP"
-msgstr ""
-
-msgid "Searching for updates ..."
-msgstr ""
-
-msgid "Definition Updates"
+msgid "Updates & Registration"
 msgstr ""
 
 msgid "Download new definitions!"
 msgstr ""
 
-msgid "If you have not already registered your Key then register now and get instant access to definition updates.<p>*All fields are required and I will NOT share your registration information with anyone.</p>"
+msgid "<p>If you already registered your Key then you can get instant access to definition updates.</p>"
+msgstr ""
+
+msgid "Check for Definition Updates Now!"
+msgstr ""
+
+msgid "<p>If you have not already registered your Key then register now and get instant access to definition updates.</p><p>* All fields are required and I will NOT share your registration information with anyone.</p>"
 msgstr ""
 
 msgid "Your Full Name:"
@@ -109,13 +112,13 @@ msgstr ""
 msgid "Submitting Registration ..."
 msgstr ""
 
-msgid "Links & External Resources"
+msgid "Resources & Links"
 msgstr ""
 
 msgid "Make a Donation with PayPal"
 msgstr ""
 
-msgid "Scan Status"
+msgid "Last Scan Status"
 msgstr ""
 
 msgid "Restore SELECTED files from Quarantine"
@@ -257,13 +260,13 @@ msgstr ""
 msgid "Starting Scan ..."
 msgstr ""
 
-msgid "NOTE: Your WordPress Login page is susceptible to a brute-force attack (just like any other login page). These types of attacks are becoming more prevalent these days and can sometimes cause your server to become slow or unresponsive, even if the attacks do not succeed in gaining access to your site. Applying this patch will block access to the WordPress Login page whenever this type of attack is detected."
+msgid "Your WordPress Login page is susceptible to a brute-force attack (just like any other login page). These types of attacks are becoming more prevalent these days and can sometimes cause your server to become slow or unresponsive, even if the attacks do not succeed in gaining access to your site. Applying this patch will block access to the WordPress Login page whenever this type of attack is detected."
 msgstr ""
 
-msgid "NOTE: Your WordPress site has the current version of my brute-force Login protection installed."
+msgid "Your WordPress site has the current version of my brute-force Login protection installed."
 msgstr ""
 
-msgid "NOTE: Your WordPress Login page has the old version of my brute-force protection installed. Upgrade this patch to improve the protection on the WordPress Login page and preserve the integrity of your WordPress core files."
+msgid "Your WordPress Login page has the old version of my brute-force protection installed. Upgrade this patch to improve the protection on the WordPress Login page and preserve the integrity of your WordPress core files."
 msgstr ""
 
 msgid "Removed Brute-Force Protection"
@@ -278,7 +281,7 @@ msgstr ""
 msgid "Removed Old Brute-Force Login Patch"
 msgstr ""
 
-msgid "NOTE: This Protection in automatically activated with this plugin because of the widespread attack on WordPress that are affecting so many site right now. It is still recommended that you make sure to upgrade and older versions of the Revolution Slider plugin, especially those included in some themes that will not update automatically. Even if you do not have Revolution Slider on your site it still can't hurt to have this protection installed."
+msgid "This protection is automatically activated with this plugin because of the widespread attack on WordPress that are affecting so many site right now. It is still recommended that you make sure to upgrade and older versions of the Revolution Slider plugin, especially those included in some themes that will not update automatically. Even if you do not have Revolution Slider on your site it still can't hurt to have this protection installed."
 msgstr ""
 
 msgid "Checking for session compatability ..."

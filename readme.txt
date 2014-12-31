@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, hacked, malicious, scripts, infection, timthumb, exploit, block, brute-force, wp-login, patch, antimalware, revslider, Revolution Slider
-Version: 4.14.53
-Stable tag: 4.14.53
+Version: 4.14.54
+Stable tag: 4.14.54
 Requires at least: 3.3
 Tested up to: 4.1
 
@@ -89,10 +89,11 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 
 == Changelog ==
 
-= 4.14.53 =
-* Added option to skip scanning the Quaratined files.
+= 4.14.54 =
+* Added option to skip scanning the Quarantined files.
 * Updated Brute-Force patch to fix the problem of being included more that once.
 * Fixed a few minor bugs (better window positioning and css, cleaner results page, updated new help tab, etc.).
+Made sure that the plugin does not check my servers for updates unless you have registered (this opt-in requirement is part of the WordPress Repository Guidelines).
 
 = 4.14.52 =
 * Added exception for the social.png files to the skip files by extension list.
@@ -282,8 +283,8 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 
 == Upgrade Notice ==
 
-= 4.14.53 =
-Added option to skip scanning the Quaratine, updated Brute-Force patch, and fixed a few minor bugs.
+= 4.14.54 =
+Added option to skip scanning the Quarantine, updated Brute-Force patch, and fixed a few minor bugs.
 
 = 4.14.52 =
 Added exception for the social.png files to the skip files by extension list, and fixed removal of Known Threats from files in the Quarantine directory.
