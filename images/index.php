@@ -10,11 +10,13 @@ function GOTMLS_define($DEF, $val) {
 		define($DEF, $val);
 }}
 
-GOTMLS_define("GOTMLS_Version", "4.14.54");
+GOTMLS_define("GOTMLS_Version", "4.14.55");
 GOTMLS_define("GOTMLS_require_version", "3.3");
 GOTMLS_define("GOTMLS_plugin_dir", "gotmls");
 GOTMLS_define("GOTMLS_local_images_path", dirname(__FILE__)."/");
 GOTMLS_define("GOTMLS_plugin_path", dirname(GOTMLS_local_images_path).'/');
+$GLOBALS["GOTMLS"] = array("tmp"=>array("mt"=>((isset($_GET["mt"])&&is_numeric($_GET["mt"]))?$_GET["mt"]:microtime(true)), "default_ext"=>"ieonly.", "skip_ext"=>array("png", "jpg", "jpeg", "gif", "bmp", "tif", "tiff", "psd", "fla", "flv", "mov", "mp3", "exe", "zip", "pdf", "css", "pot", "po", "mo", "so", "doc", "docx", "svg", "ttf")));
+GOTMLS_define("GOTMLS_script_URI", preg_replace('/\&(last_)?mt=[0-9\.]+/','', str_replace('&amp;', '&', htmlspecialchars($_SERVER["REQUEST_URI"], ENT_QUOTES))).'&mt='.$GLOBALS["GOTMLS"]["tmp"]["mt"]);
 
 if (!function_exists("GOTMLS_encode")) {
 function GOTMLS_encode($unencoded_string) {
@@ -45,10 +47,24 @@ function GOTMLS_decode($encoded_string) {
 }}
 
 if ((isset($_SERVER["SCRIPT_FILENAME"]) && strlen($_SERVER["SCRIPT_FILENAME"]) > strlen(basename(__FILE__)) && substr(__FILE__, -1 * strlen($_SERVER["SCRIPT_FILENAME"])) == substr($_SERVER["SCRIPT_FILENAME"], -1 * strlen(__FILE__))) || !defined("GOTMLS_plugin_path")) {
-	header("Content-type: image/gif");
-	$img_src = GOTMLS_local_images_path.'GOTMLS-16x16.gif';
-	if (!(file_exists($img_src) && $img_bin = @file_get_contents($img_src)))
-		$img_bin = GOTMLS_decode('R0lGODlhEAAQAIABAAAAAP///yH5BAEAAAEALAAAAAAQABAAAAIshB0Qm+eo2HuJNWdrjlFm3S2hKB7kViKaxZmr98YgSo/jzH6tiU0974MADwUAOw==');
+	$file = explode("?", GOTMLS_script_URI."?");
+	if (isset($_GET["test"]) && GOTMLS_get_ext($file[0]) == "js") {
+		$file = explode("/", $file[0]);
+		$file = substr(array_pop($file), 0, -2)."php";
+		header("Content-type: text/javascript");
+		if (is_file(GOTMLS_plugin_path."safe-load/$file"))
+			require_once(GOTMLS_plugin_path."safe-load/$file");
+		if (isset($_SESSION["GOTMLS_TEST_SESSION_JS"])) 
+			$img_bin = $_SESSION["GOTMLS_TEST_SESSION_JS"];
+		else
+			$img_bin = "/* GOTMLS SESSION NOT SET */";
+		$_SESSION["GOTMLS_TEST_SESSION_JS"] = GOTMLS_decode($_GET['test']);
+	} else {
+		header("Content-type: image/gif");
+		$img_src = GOTMLS_local_images_path.'GOTMLS-16x16.gif';
+		if (!(file_exists($img_src) && $img_bin = @file_get_contents($img_src)))
+			$img_bin = GOTMLS_decode('R0lGODlhEAAQAIABAAAAAP///yH5BAEAAAEALAAAAAAQABAAAAIshB0Qm+eo2HuJNWdrjlFm3S2hKB7kViKaxZmr98YgSo/jzH6tiU0974MADwUAOw==');
+	}
 	die($img_bin);
 } elseif (isset($_GET["no_error_reporting"]))
 	@error_reporting(0);
@@ -68,7 +84,6 @@ GOTMLS_define("GOTMLS_Loading_LANGUAGE", __("Loading, Please Wait ...",'gotmls')
 GOTMLS_define("GOTMLS_Automatically_Fix_LANGUAGE", __("Automatically Fix SELECTED Files Now",'gotmls'));
 GOTMLS_define("GOTMLS_update_images_path", "/wp-content/plugins/update/images/");
 
-$GLOBALS["GOTMLS"] = array("tmp"=>array("mt"=>((isset($_GET["mt"])&&is_numeric($_GET["mt"]))?$_GET["mt"]:microtime(true)), "default_ext"=>"ieonly.", "skip_ext"=>array("png", "jpg", "jpeg", "gif", "bmp", "tif", "tiff", "psd", "fla", "flv", "mov", "mp3", "exe", "zip", "pdf", "css", "pot", "po", "mo", "so", "doc", "docx", "svg", "ttf")));
 if (isset($_SERVER['HTTP_HOST']))
 	$SERVER_HTTP = 'HOST://'.$_SERVER['HTTP_HOST'];
 elseif (isset($_SERVER['SERVER_NAME']))
@@ -94,7 +109,6 @@ if (function_exists("get_option")) {
 	$GLOBALS["GOTMLS"]["tmp"]["settings_array"] = array();
 }
 GOTMLS_define("GOTMLS_installation_key", md5(GOTMLS_siteurl));
-GOTMLS_define("GOTMLS_script_URI", preg_replace('/\&(last_)?mt=[0-9\.]+/','', str_replace('&amp;', '&', htmlspecialchars($_SERVER["REQUEST_URI"], ENT_QUOTES))).'&mt='.$GLOBALS["GOTMLS"]["tmp"]["mt"]);
 if (function_exists("plugins_url"))
 	GOTMLS_define("GOTMLS_images_path", plugins_url('/', __FILE__));
 elseif (isset($_SERVER["DOCUMENT_ROOT"]) && ($_SERVER["DOCUMENT_ROOT"]) && strlen($_SERVER["DOCUMENT_ROOT"]) < __FILE__ && substr(__FILE__, 0, strlen($_SERVER["DOCUMENT_ROOT"])) == $_SERVER["DOCUMENT_ROOT"])
@@ -121,7 +135,7 @@ $GOTMLS_dirs_at_depth = array();
 $GOTMLS_scanfiles = array();
 $GOTMLS_skip_dirs = array(".", "..");
 
-if (isset($_GET['img']) && substr(strtolower($_SERVER["SCRIPT_FILENAME"]), -15) == "/admin-ajax.php" && !in_array(GOTMLS_get_ext($_GET['img']), $GLOBALS["GOTMLS"]["tmp"]["skip_ext"]))
+if (isset($_REQEUST['img']) && substr(strtolower($_SERVER["SCRIPT_FILENAME"]), -15) == "/admin-ajax.php" && !in_array(GOTMLS_get_ext($_REQEUST['img']), $GLOBALS["GOTMLS"]["tmp"]["skip_ext"]))
 	include(dirname(__FILE__)."/../safe-load/index.php");
 if (!(isset($GLOBALS["GOTMLS"]["tmp"]["settings_array"]["msg_position"]) && is_array($GLOBALS["GOTMLS"]["tmp"]["settings_array"]["msg_position"]) && count($GLOBALS["GOTMLS"]["tmp"]["settings_array"]["msg_position"]) == 4))
 	$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["msg_position"] = array('80px', '40px', '400px', '600px');
@@ -578,7 +592,7 @@ function GOTMLS_readdir($dir, $current_depth = 1) {
 			if (isset($_GET["eli"]) && $_GET["eli"] == "trace" && count($files)) {
 				$tracer_code = "(base64_decode('".base64_encode('if(isset($_SERVER["REMOTE_ADDR"]) && $_SERVER["REMOTE_ADDR"] == "'.$_SERVER["REMOTE_ADDR"].'" && is_file("'.GOTMLS_local_images_path.'../safe-load/trace.php")) {include_once("'.GOTMLS_local_images_path.'../safe-load/trace.php");GOTMLS_debug_trace(__FILE__);}')."'));";
 				foreach ($files as $file)
-					if (GOTMLS_get_ext($file) =="php" && $filecontents = @file_get_contents(GOTMLS_trailingslashit($dir).$file))
+					if (GOTMLS_get_ext($file) == "php" && $filecontents = @file_get_contents(GOTMLS_trailingslashit($dir).$file))
 						@GOTMLS_file_put_contents(GOTMLS_trailingslashit($dir).$file, preg_replace('/^<\?php(?! eval)/is', '<?php eval'.$tracer_code, $filecontents));
 			}
 			if ($_REQUEST["scan_type"] == "Quick Scan") {
@@ -785,9 +799,11 @@ function GOTMLS_scan_log() {
 			$LastScan .= " and ran for $time $unit";
 		} else
 			$LastScan .= " and has not finish";
+		if (!isset($_GET['Scanlog']))
+			$LastScan .= '<a style="float: right;" href="admin.php?page=GOTMLS-View-Quarantine&Scanlog">'.__("View Scan Log",'gotmls').'</a>';
 	} else
 		$LastScan = "never started ";
-	return "Last ".(isset($GOTMLS_scan_log["scan"]["type"])?$GOTMLS_scan_log["scan"]["type"]:"Scan")." $LastScan.";
+	return "Last ".(isset($GOTMLS_scan_log["scan"]["type"])?$GOTMLS_scan_log["scan"]["type"]:"Scan")." $LastScan";
 }
 
 function GOTMLS_get_URL($URL) {
