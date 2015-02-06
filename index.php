@@ -8,9 +8,9 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 4.14.55
+Version: 4.14.56
 */
-if (isset($_SERVER["SCRIPT_FILENAME"]) && strlen($_SERVER["SCRIPT_FILENAME"]) > strlen(basename(__FILE__)) && substr(__FILE__, -1 * strlen($_SERVER["SCRIPT_FILENAME"])) == substr($_SERVER["SCRIPT_FILENAME"], -1 * strlen(__FILE__)))
+if (isset($_SERVER["DOCUMENT_ROOT"]) && ($SCRIPT_FILE = str_replace($_SERVER["DOCUMENT_ROOT"], "", isset($_SERVER["SCRIPT_FILENAME"])?$_SERVER["SCRIPT_FILENAME"]:isset($_SERVER["SCRIPT_NAME"])?$_SERVER["SCRIPT_NAME"]:"")) && strlen($SCRIPT_FILE) > strlen(basename(__FILE__)) && substr(__FILE__, -1 * strlen($SCRIPT_FILE)) == substr($SCRIPT_FILE, -1 * strlen(__FILE__)))
 	include(dirname(__FILE__)."/safe-load/index.php");
 else
 	require_once(dirname(__FILE__)."/images/index.php");
@@ -46,19 +46,18 @@ function GOTMLS_install() {
 register_activation_hook(__FILE__, "GOTMLS_install");
 
 function GOTMLS_menu() {
-	if ($GLOBALS["GOTMLS"]["tmp"]["settings_array"]["menu_group"] > 2 && is_multisite()) {
-		$_POST["GOTMLS_menu_group"] = 1;
+	if (is_multisite())
 		$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["user_can"] = "manage_network";
-	} elseif (!isset($GLOBALS["GOTMLS"]["tmp"]["settings_array"]["user_can"]))
+	elseif (!isset($GLOBALS["GOTMLS"]["tmp"]["settings_array"]["user_can"]) || $GLOBALS["GOTMLS"]["tmp"]["settings_array"]["user_can"] == "manage_network")
 		$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["user_can"] = "activate_plugins";
 	if (isset($_POST["GOTMLS_menu_group"]) && is_numeric($_POST["GOTMLS_menu_group"])) {
 		$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["menu_group"] = $_POST["GOTMLS_menu_group"];
-		$capabilities = array();
+/*		$capabilities = array();
 		if (current_user_can($GLOBALS["GOTMLS"]["tmp"]["settings_array"]["user_can"]))
 			foreach (get_editable_roles() as $role)
 				$capabilities = array_merge($capabilities, $role["capabilities"]);
 		if (isset($_POST["GOTMLS_user_can"]) && in_array($_POST["GOTMLS_user_can"], $capabilities))
-			$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["user_can"] = $_POST["GOTMLS_user_can"];
+			$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["user_can"] = $_POST["GOTMLS_user_can"];*/
 		update_option('GOTMLS_settings_array', $GLOBALS["GOTMLS"]["tmp"]["settings_array"]);
 	}
 	$GOTMLS_Full_plugin_logo_URL = GOTMLS_images_path.'GOTMLS-16x16.gif';
@@ -77,12 +76,6 @@ function GOTMLS_menu() {
 }
 
 function GOTMLS_admin_add_help_tab() {
-	$GOTMLS_menu_groups = array(__("Main Menu Item placed below <b>Comments</b> and above <b>Appearance</b>",'gotmls'),__("Main Menu Item placed below <b>Settings</b>",'gotmls'));
-	if (is_multisite() && current_user_can("manage_network"))
-		$GOTMLS_menu_groups[] = __("ONLY SHOW for <b>Network Admins</b>",'gotmls');
-	$menu_opts = '<h5>'.__("Menu Item Placement Options",'gotmls').'</h5>';
-	foreach ($GOTMLS_menu_groups as $mg => $GOTMLS_menu_group)
-		$menu_opts .= '<div style="padding: 4px;" id="menu_group_div_'.$mg.'"><input type="radio" name="GOTMLS_menu_group" value="'.$mg.'"'.($GLOBALS["GOTMLS"]["tmp"]["settings_array"]["menu_group"]==$mg?' checked':'').' onchange="document.GOTMLS_menu_Form.submit();" />'.$GOTMLS_menu_group.'</div>';
 	$screen = get_current_screen();
 	$screen->add_help_tab(array(
 		'id'	=> "GOTMLS_Getting_Started",
@@ -97,6 +90,13 @@ function GOTMLS_admin_add_help_tab() {
 			'content'	=> '<p>'.preg_replace('/\[(.+?)\]\((.+?)\)/', "<a target=\"_blank\" href=\"\\2\">\\1</a>", preg_replace('/[\r\n]+= /', "</p><b>", preg_replace('/ =[\r\n]+/', "</b><p>", $readme[0]))).'</p>'
 		));
 	}
+	if (is_multisite() && current_user_can("manage_network"))
+		$GOTMLS_menu_groups = array(__("Main Menu Item placed at the <b>Top</b>",'gotmls'),__("Main Menu Item placed at the <b>Bottom</b>",'gotmls'));
+	else
+		$GOTMLS_menu_groups = array(__("Main Menu Item placed below <b>Comments</b> and above <b>Appearance</b>",'gotmls'),__("Main Menu Item placed below <b>Settings</b>",'gotmls'));
+	$menu_opts = '<h5>'.__("Menu Item Placement Options",'gotmls').'</h5>';
+	foreach ($GOTMLS_menu_groups as $mg => $GOTMLS_menu_group)
+		$menu_opts .= '<div style="padding: 4px;" id="menu_group_div_'.$mg.'"><input type="radio" name="GOTMLS_menu_group" value="'.$mg.'"'.($GLOBALS["GOTMLS"]["tmp"]["settings_array"]["menu_group"]==$mg?' checked':'').' onchange="document.GOTMLS_menu_Form.submit();" />'.$GOTMLS_menu_group.'</div>';
 	$screen->add_help_tab(array(
 		'id'	=> 'GOTMLS_Menu_Placement',
 		'title'	=> __("Menu Placement", 'gotmls'),
@@ -364,7 +364,7 @@ setDiv("div_file");
 <div>
 <div>'.__("Plugin Installation Key:",'gotmls').'</div>
 <input style="width: 100%;" id="installation_key" type="text" name="installation_key" value="'.GOTMLS_installation_key.'" readonly /><input id="old_key" type="hidden" name="old_key" value="'.md5($GOTMLS_url_parts[2]).'" /></div>
-<input style="width: 100%;" id="wp-submit" type="submit" name="wp-submit" value="Register Now!" /></form></div>', "stuffbox").'
+<input style="width: 100%;" id="wp-submit" type="submit" name="wp-submit" value="Register Now!" /></form></div>'.$Update_Link, "stuffbox").'
 	<script type="text/javascript">
 		function check_for_updates(update_type) {
 			showhide(update_type, true);
@@ -1022,10 +1022,10 @@ showhide("pause_button", true);'."\n/*<!--*"."/";
 		$patch_status = 0;
 		$patch_found = -1;
 		$patch_action = "";
-		$find = "#if\s*\(\s*file_exists\((.+?)(safe-load|wp-login)\.php'\)\)\s*require(_once)?\((.+?)(safe-load|wp-login)\.php'\);#";
-		$head = str_replace(array('#', '\\(', '\\)', '(_once)?', ')\\.', '\\s*', '(.+?)(', '|'), array(' ', '(', ')', '_once', '.', ' ', '\''.dirname(__FILE__).'/', '/'), $find);
+		$find = "#if\s*\(([^\&]+\&\&)?\s*file_exists\((.+?)(safe-load|wp-login)\.php'\)\)\s*require(_once)?\((.+?)(safe-load|wp-login)\.php'\);#";
+		$head = str_replace(array('#', '\\(', '\\)', '(_once)?', ')\\.', '\\s*', '(.+?)(', '|', '([^\\&]+\\&\\&)?'), array(' ', '(', ')', '_once', '.', ' ', '\''.dirname(__FILE__).'/', '/', '!in_array($_SERVER["REMOTE_ADDR"], array("'.$_SERVER["REMOTE_ADDR"].'")) &&'), $find);
 		if (file_exists(dirname(__FILE__).'/../../../wp-config.php') && ($config = @file_get_contents(dirname(__FILE__).'/../../../wp-config.php')) && strlen($config) && ($patch_found = preg_match($find, $config))) {
-			if (strpos($config, $head)) {
+			if (strpos($config, substr($head, strpos($head, "file_exists")))) {
 				if (isset($_POST["GOTMLS_patching"]) && GOTMLS_file_put_contents(dirname(__FILE__).'/../../../wp-config.php', preg_replace('#<\?[ph\s]+(//.*\s*)*\?>#i', "", preg_replace($find, "", $config))))
 					$patch_action .= '<div class="error">'.__("Removed Brute-Force Protection",'gotmls').'</div>';
 				else
@@ -1051,10 +1051,10 @@ showhide("pause_button", true);'."\n/*<!--*"."/";
 		$sec_opts = '
 		<p><img src="'.GOTMLS_images_path.'checked.gif"><b>Revolution Slider Exploit Protection (Automatically Enabled)</b></p><div style="padding: 0 30px;">'.__("This protection is automatically activated with this plugin because of the widespread attack on WordPress that are affecting so many site right now. It is still recommended that you make sure to upgrade and older versions of the Revolution Slider plugin, especially those included in some themes that will not update automatically. Even if you do not have Revolution Slider on your site it still can't hurt to have this protection installed.",'gotmls').'</div><hr />
 		'.$patch_action.'
-		<form method="POST" name="GOTMLS_Form_patch"><p style="float: right;"><input type="submit" value="'.$patch_attr[$patch_status]["action"].'" style="'.($patch_status?'">':' display: none;" id="GOTMLS_patch_button"><div id="GOTMLS_patch_searching" style="float: right;">'.__("Checking for session compatability ...",'gotmls').' <img src="'.GOTMLS_images_path.'wait.gif" height=16 width=16 alt="Wait..." /></div>').'<input type="hidden" name="GOTMLS_patching" value="1"></p><p><img src="'.GOTMLS_images_path.$patch_attr[$patch_status]["icon"].'.gif"><b>Brute-force Protection '.$patch_attr[$patch_status]["status"].'</b></p><div style="padding: 0 30px;"> &nbsp; * '.$patch_attr[$patch_status]["language"].__(" For more information on Brute-Force attack prevention and the WordPress wp-login-php file ",'gotmls').' <a target="_blank" href="http://gotmls.net/tag/wp-login-php/">'.__("read my blog",'gotmls').'</a>.</div></form>
+		<form method="POST" name="GOTMLS_Form_patch"><p style="float: right;"><input type="submit" value="'.$patch_attr[$patch_status]["action"].'" style="'.($patch_status?'">':' display: none;" id="GOTMLS_patch_button"><div id="GOTMLS_patch_searching" style="float: right;">'.__("Checking for session compatibility ...",'gotmls').' <img src="'.GOTMLS_images_path.'wait.gif" height=16 width=16 alt="Wait..." /></div>').'<input type="hidden" name="GOTMLS_patching" value="1"></p><p><img src="'.GOTMLS_images_path.$patch_attr[$patch_status]["icon"].'.gif"><b>Brute-force Protection '.$patch_attr[$patch_status]["status"].'</b></p><div style="padding: 0 30px;"> &nbsp; * '.$patch_attr[$patch_status]["language"].__(" For more information on Brute-Force attack prevention and the WordPress wp-login-php file ",'gotmls').' <a target="_blank" href="http://gotmls.net/tag/wp-login-php/">'.__("read my blog",'gotmls').'</a>.</div></form>
 		<script type="text/javascript">
-		stopSettingSession = checkupdateserver("'.GOTMLS_images_path.'session.js?test='.$js.'", "GOTMLS_patch_button");
-		stopCheckingSession = checkupdateserver("'.GOTMLS_images_path.'session.js?test='.$js.'", "GOTMLS_patch_button");
+		stopSettingSession = checkupdateserver("'.GOTMLS_images_path.'session.js?test='.$js.'", "GOTMLS_patch_searching");
+		stopCheckingSession = checkupdateserver("'.GOTMLS_images_path.'session.js?test='.$js.'", "GOTMLS_patch_searching");
 		</script>';
 		$admin_notice = "";
 		if ($current_user->user_login == "admin") {

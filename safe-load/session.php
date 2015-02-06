@@ -4,7 +4,7 @@
  * @package GOTMLS
 */
 
-if (!defined(GOTMLS_SESSION_TIME))
+if (!defined("GOTMLS_SESSION_TIME"))
 	define("GOTMLS_SESSION_TIME", microtime(true));
 if (!@session_id())
 	@session_start();
