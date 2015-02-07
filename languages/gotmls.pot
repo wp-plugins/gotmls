@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GOTMLS\n"
 "Report-Msgid-Bugs-To: eli@gotmls.net\n"
-"POT-Creation-Date: 2014-02-24 22:42+0100\n"
+"POT-Creation-Date: 2014-12-31 11:35+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,81 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Main Menu Item placed below <b>Comments</b> and above <b>Appearance</b>"
+msgstr ""
+
+msgid "Main Menu Item placed below <b>Settings</b>"
+msgstr ""
+
+msgid "ONLY SHOW for <b>Network Admins</b>"
+msgstr ""
+
+msgid "Menu Item Placement Options"
+msgstr ""
+
+msgid "Getting Started"
+msgstr ""
+
+msgid "Make sure the Definition Updates are current and Run a Complete Scan."
+msgstr ""
+
+#, php-format
+msgid "If Known Threats are found and displayed in red then there will be a button to '%s'. If only Potentional Threats are found then there is no automatic fix because those are probably not malicious."
+msgstr ""
+
+msgid "A backup of the original infected files are placed in the Quarantine in case you need to restore them or just want to look at them later. You can delete these files if you don't want to save more."
+msgstr ""
+
+msgid "FAQs"
+msgstr ""
+
+msgid "Menu Placement"
+msgstr ""
+
+msgid "Tested your site. It appears we didn't break anything"
+msgstr ""
+
 #, php-format
 msgid "Upgrade to %s now!"
+msgstr ""
+
+msgid "Searching for updates ..."
+msgstr ""
+
+msgid "If this is taking too long, click here."
+msgstr ""
+
+msgid "No response from server!"
+msgstr ""
+
+msgid "Updates & Registration"
+msgstr ""
+
+msgid "Download new definitions!"
+msgstr ""
+
+msgid "<p>If you already registered your Key then you can get instant access to definition updates.</p>"
+msgstr ""
+
+msgid "Check for Definition Updates Now!"
+msgstr ""
+
+msgid "<p>If you have not already registered your Key then register now and get instant access to definition updates.</p><p>* All fields are required and I will NOT share your registration information with anyone.</p>"
+msgstr ""
+
+msgid "Your Full Name:"
+msgstr ""
+
+msgid "A password will be e-mailed to this address:"
+msgstr ""
+
+msgid "Your WordPress Site URL:"
+msgstr ""
+
+msgid "Plugin Installation Key:"
+msgstr ""
+
+msgid "Please make a donation for the use of this wonderful feature!"
 msgstr ""
 
 msgid "First Name is a required field!"
@@ -39,43 +112,51 @@ msgstr ""
 msgid "Submitting Registration ..."
 msgstr ""
 
-msgid "Searching for updates ..."
-msgstr ""
-
-msgid "Download new definitions!"
-msgstr ""
-
-msgid "If you have not already registered your Key then register now and get instant access to definition updates.<p>*All fields are required and I will NOT share your registration information with anyone.</p>"
-msgstr ""
-
-msgid "Your Full Name:"
-msgstr ""
-
-msgid "A password will be e-mailed to this address:"
-msgstr ""
-
-msgid "Your WordPress Site URL:"
-msgstr ""
-
-msgid "Plugin Installation Key:"
-msgstr ""
-
-msgid "Plugin Links"
+msgid "Resources & Links"
 msgstr ""
 
 msgid "Make a Donation with PayPal"
 msgstr ""
 
-msgid "Main Menu Item placed below <b>Comments</b> and above <b>Appearance</b>"
+msgid "Last Scan Status"
 msgstr ""
 
-msgid "Main Menu Item placed below <b>Settings</b>"
+msgid "Restore SELECTED files from Quarantine"
 msgstr ""
 
-msgid "Sub-Menu inside the <b>Tools</b> Menu Item"
+msgid "Are you sure you want to overwrite the previously cleaned files with the selected files in the Quarantine?"
 msgstr ""
 
-msgid "ONLY SHOW for <b>Network Admins</b>"
+msgid "Delete SELECTED files from Quarantine"
+msgstr ""
+
+msgid "Are you sure you want to permanently delete the selected files in the Quarantine?"
+msgstr ""
+
+msgid "The following items have been found to contain malicious code, they have been cleaned, and the original infected file contents have been saved here in the Quarantine. The code is safe here and you do not need to do anything further with these files."
+msgstr ""
+
+#, php-format
+msgid "FYI - these files are found in: %s"
+msgstr ""
+
+#, php-format
+msgid "Check all %d"
+msgstr ""
+
+msgid " Items in Quarantine"
+msgstr ""
+
+msgid "View Quarantined File"
+msgstr ""
+
+msgid "Foreign File in Quarantine"
+msgstr ""
+
+msgid "No Items in Quarantine"
+msgstr ""
+
+msgid "Quarantine"
 msgstr ""
 
 msgid "Only Scan These Folders:"
@@ -114,7 +195,7 @@ msgstr ""
 msgid "<b>Skip directories with the following names:</b> (a comma separated list of folders to be excluded from the scan)"
 msgstr ""
 
-msgid "Menu Item Placement Options"
+msgid "Run Complete Scan"
 msgstr ""
 
 #, php-format
@@ -142,43 +223,32 @@ msgstr ""
 msgid "Quarantined Files"
 msgstr ""
 
+msgid "Potential Threats"
+msgstr ""
+
+msgid "WP-Login Updates"
+msgstr ""
+
 msgid "Scan Complete!"
 msgstr ""
 
 msgid "You are not currently scanning for this type of threat!"
 msgstr ""
 
-msgid "Automatically Fix SELECTED Files Now"
+msgid "NOTE: These are probably not malicious scripts (but it's a good place to start looking <u>IF</u> your site is infected and no Known Threats were found)."
+msgstr ""
+
+msgid "NOTE: Your WordPress Login page has the old version of my brute-force protection installed. Upgrade this patch to improve the protection on the WordPress Login page and preserve the integrity of your WordPress core files. For more information on brute force attack prevention and the WordPress wp-login-php file "
+msgstr ""
+
+msgid "read my blog"
 msgstr ""
 
 msgid "Scan Details:"
 msgstr ""
 
-msgid "Restore SELECTED files from Quarantine"
-msgstr ""
-
-msgid "Are you sure you want to overwrite the previously cleaned files with the selected files in the Quarantine?"
-msgstr ""
-
-msgid "Delete SELECTED files from Quarantine"
-msgstr ""
-
-msgid "Are you sure you want to permanently delete the selected files in the Quarantine?"
-msgstr ""
-
-msgid "<p><b>The following items have been found to contain malicious code, they have been cleaned, and the original infected file contents have been saved here in the Quarantine. The code is safe here and you do not need to do anything further with these files.</b></p> FYI - these files are found in:"
-msgstr ""
-
-msgid "No Items in Quarantine"
-msgstr ""
-
-msgid "NOTE: These are probably not malicious scripts (but it's a good place to start looking <u>IF</u> your site is infected and no Known Threats were found)."
-msgstr ""
-
-msgid "NOTE: Your WordPress Login page is susceptible to a brute-force attack (just like any other login page). These types of attacks are becoming more prevalent these days and can sometimes cause your server to become slow or unresponsive, even if the attacks do not succeed in gaining access to your site. Applying this patch will block access to the WordPress Login page whenever this type of attack is detected. For more information on this subject"
-msgstr ""
-
-msgid "read my blog"
+#, php-format
+msgid "Not flushing OB Handlers: %s"
 msgstr ""
 
 msgid "The Quick Scan was unable to finish because of a shortage of memory or a problem accessing a file. Please try using the Complete Scan, it is slower but it will handle these errors better and continue scanning the rest of the files."
@@ -190,7 +260,34 @@ msgstr ""
 msgid "Starting Scan ..."
 msgstr ""
 
-msgid "Last Scan Status"
+msgid "Your WordPress Login page is susceptible to a brute-force attack (just like any other login page). These types of attacks are becoming more prevalent these days and can sometimes cause your server to become slow or unresponsive, even if the attacks do not succeed in gaining access to your site. Applying this patch will block access to the WordPress Login page whenever this type of attack is detected."
+msgstr ""
+
+msgid "Your WordPress site has the current version of my brute-force Login protection installed."
+msgstr ""
+
+msgid "Your WordPress Login page has the old version of my brute-force protection installed. Upgrade this patch to improve the protection on the WordPress Login page and preserve the integrity of your WordPress core files."
+msgstr ""
+
+msgid "Removed Brute-Force Protection"
+msgstr ""
+
+msgid "Upgraded Brute-Force Protection"
+msgstr ""
+
+msgid "Installed Brute-Force Protection"
+msgstr ""
+
+msgid "Removed Old Brute-Force Login Patch"
+msgstr ""
+
+msgid "This protection is automatically activated with this plugin because of the widespread attack on WordPress that are affecting so many site right now. It is still recommended that you make sure to upgrade and older versions of the Revolution Slider plugin, especially those included in some themes that will not update automatically. Even if you do not have Revolution Slider on your site it still can't hurt to have this protection installed."
+msgstr ""
+
+msgid "Checking for session compatability ..."
+msgstr ""
+
+msgid " For more information on Brute-Force attack prevention and the WordPress wp-login-php file "
 msgstr ""
 
 #, php-format
@@ -223,19 +320,16 @@ msgstr ""
 msgid "Done!"
 msgstr ""
 
-msgid "Failed to list files in directory!"
+msgid "Skip scanning the Quarantine:"
 msgstr ""
 
-msgid "Run Complete Scan"
+msgid "Failed to list files in directory!"
 msgstr ""
 
 msgid "Run Quick Scan"
 msgstr ""
 
 msgid "View Quarantine"
-msgstr ""
-
-msgid "Tested your site. It appears we didn't break anything"
 msgstr ""
 
 #, php-format
@@ -248,47 +342,7 @@ msgstr ""
 msgid "Loading, Please Wait ..."
 msgstr ""
 
-msgid "If this is taking too long, click here."
-msgstr ""
-
-msgid "Could not find server!"
-msgstr ""
-
-msgid "Plugin Updates for WP"
-msgstr ""
-
-msgid "Definition Updates"
-msgstr ""
-
-msgid "Please make a donation for the use of this wonderful feature!"
-msgstr ""
-
-msgid "an unknown file"
-msgstr ""
-
-msgid "unknown"
-msgstr ""
-
-#, php-format
-msgid "<b>Headers already sent</b> in %1$s on line %2$s.<br />This is not a good sign, it may just be a poorly written plugin but Headers should not have been sent at this point.<br />Check the code in the above mentioned file to fix this problem."
-msgstr ""
-
-msgid "<b>Session not found</b>, some functionality may be diminished.<br />If you are getting this error consistently it may mean that this site is unable to maintain a persistent session.<br />Check with your hosting provider or see if you can enable sessions on this site."
-msgstr ""
-
-msgid "Failed to read file contents!"
-msgstr ""
-
-msgid "Deleted!"
-msgstr ""
-
-msgid "Restored!"
-msgstr ""
-
-msgid "Restore Failed!"
-msgstr ""
-
-msgid "Already Fixed!"
+msgid "Automatically Fix SELECTED Files Now"
 msgstr ""
 
 msgid "htaccess Threats"
@@ -303,10 +357,32 @@ msgstr ""
 msgid "Known Threats"
 msgstr ""
 
-msgid "WP-Login Vulnerability "
+msgid "an unknown file"
 msgstr ""
 
-msgid "Potential Threats"
+msgid "unknown"
+msgstr ""
+
+#, php-format
+msgid "<b>Headers already sent</b> in %1$s on line %2$s.<br />This is not a good sign, it may just be a poorly written plugin but Headers should not have been sent at this point.<br />Check the code in the above mentioned file to fix this problem."
+msgstr ""
+
+msgid "Failed to read file contents!"
+msgstr ""
+
+msgid "Empty file!"
+msgstr ""
+
+msgid "Deleted!"
+msgstr ""
+
+msgid "Restored!"
+msgstr ""
+
+msgid "Restore Failed!"
+msgstr ""
+
+msgid "Already Fixed!"
 msgstr ""
 
 #, php-format
@@ -319,6 +395,9 @@ msgstr ""
 
 #, php-format
 msgid "Scanned %s"
+msgstr ""
+
+msgid "Examine File"
 msgstr ""
 
 msgid "Skipped because of file extention!"
