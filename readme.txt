@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, hacked, malicious, scripts, infection, timthumb, exploit, block, brute-force, wp-login, patch, antimalware, revslider, Revolution Slider
-Version: 4.14.59
-Stable tag: 4.14.59
+Version: 4.14.62
+Stable tag: 4.14.62
 Requires at least: 3.3
 Tested up to: 4.1
 
@@ -88,6 +88,9 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 4.14.62 =
+* Improved rewrite compatibility of session check for the Brute-Force Protection Installation.
 
 = 4.14.59 =
 * Improved session check for the option to Install Brute-Force Protection and added an error message on failure.
@@ -291,6 +294,9 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 4.14.62 =
+Improved rewrite compatibility of session check for the Brute-Force Protection Installation.
 
 = 4.14.59 =
 Improved session check for the Brute-Force Protection and support for Multisite menu.
