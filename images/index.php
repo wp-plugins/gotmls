@@ -10,7 +10,7 @@ function GOTMLS_define($DEF, $val) {
 		define($DEF, $val);
 }}
 
-GOTMLS_define("GOTMLS_Version", "4.14.62");
+GOTMLS_define("GOTMLS_Version", "4.14.63");
 GOTMLS_define("GOTMLS_require_version", "3.3");
 GOTMLS_define("GOTMLS_plugin_dir", "gotmls");
 GOTMLS_define("GOTMLS_local_images_path", dirname(__FILE__)."/");
@@ -57,7 +57,7 @@ if (isset($_GET["SESSION"]) && is_numeric($_GET["SESSION"]) && preg_match('|(.*?
 		if ($_GET["SESSION"] > 0)
 			die("/* GOTMLS SESSION FAIL */\nif('undefined' != typeof stopCheckingSession && stopCheckingSession)\n\tclearTimeout(stopCheckingSession);\ndocument.getElementById('GOTMLS_patch_searching').innerHTML = '<div class=\"error\">Your Server could not start a Session!</div>';");
 		else
-			die("/* GOTMLS SESSION TEST */\nif('undefined' != typeof stopCheckingSession && stopCheckingSession)\n\tclearTimeout(stopCheckingSession);alert('".$match[0].$_SESSION["GOTMLS_SESSION_TEST"]."');\nstopCheckingSession = checkupdateserver('".$match[0].$_SESSION["GOTMLS_SESSION_TEST"]."', 'GOTMLS_patch_searching');");
+			die("/* GOTMLS SESSION TEST */\nif('undefined' != typeof stopCheckingSession && stopCheckingSession)\n\tclearTimeout(stopCheckingSession);\nstopCheckingSession = checkupdateserver('".$match[0].$_SESSION["GOTMLS_SESSION_TEST"]."', 'GOTMLS_patch_searching');");
 	}
 } elseif ((isset($_SERVER["DOCUMENT_ROOT"]) && ($SCRIPT_FILE = str_replace($_SERVER["DOCUMENT_ROOT"], "", isset($_SERVER["SCRIPT_FILENAME"])?$_SERVER["SCRIPT_FILENAME"]:isset($_SERVER["SCRIPT_NAME"])?$_SERVER["SCRIPT_NAME"]:"")) && strlen($SCRIPT_FILE) > strlen("/".basename(__FILE__)) && substr(__FILE__, -1 * strlen($SCRIPT_FILE)) == substr($SCRIPT_FILE, -1 * strlen(__FILE__))) || !defined("GOTMLS_plugin_path")) {
 	header("Content-type: image/gif");
@@ -563,17 +563,17 @@ function GOTMLS_update_status($status, $percent = -1) {
 
 function GOTMLS_flush($tag = "") {
 	$output = "";
-	if (!(isset($_GET["eli"]) && $_GET["eli"] == "debug") && ($output = @ob_get_contents())) {
+	if (($output = @ob_get_contents()) && strlen(trim($output)) > 18) {
 		@ob_clean();
-		$output = preg_replace('/\/\*\<\!--\*\/(.*?)\/\*--\>\*\//s', "", "$output/*-->*"."/");
+		$output = preg_replace('/\/\*<\!--\*\/.*?\/\*-->\*\//s', "", "$output/*-->*"."/");
+		echo "$output\n//flushed(".strlen(trim($output)).")\n";
+		if ($tag)
+			echo "\n</$tag>\n";
+		if (@ob_get_length())
+			@ob_flush();
+		if ($tag)
+			echo "<$tag>\n/*<!--*"."/";
 	}
-	echo "$output\n//flushed()\n";
-	if ($tag)
-		echo "\n</$tag>\n";
-	if (@ob_get_length())
-		@ob_flush();
-	if ($tag)
-		echo "<$tag>\n/*<!--*"."/";
 }
 
 function GOTMLS_readdir($dir, $current_depth = 1) {

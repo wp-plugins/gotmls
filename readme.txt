@@ -5,10 +5,10 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, hacked, malicious, scripts, infection, timthumb, exploit, block, brute-force, wp-login, patch, antimalware, revslider, Revolution Slider
-Version: 4.14.62
-Stable tag: 4.14.62
+Version: 4.14.63
+Stable tag: 4.14.63
 Requires at least: 3.3
-Tested up to: 4.1
+Tested up to: 4.1.1
 
 This Anti-Malware plugin searches for Malware and other Virus like threats and security vulnerabilities on your server and it helps you remove them.
 
@@ -24,7 +24,7 @@ This Anti-Malware plugin searches for Malware and other Virus like threats and s
 * Run a Complete Scan from the Settings Page.
 * Download Definition Updates to protect against new threats.
 
-Updated February 6th
+Updated March 17th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -88,6 +88,9 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 4.14.63 =
+* Removed debug alert from initial session check.
 
 = 4.14.62 =
 * Improved rewrite compatibility of session check for the Brute-Force Protection Installation.
@@ -294,6 +297,9 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 4.14.63 =
+Removed debug alert from initial session check.
 
 = 4.14.62 =
 Improved rewrite compatibility of session check for the Brute-Force Protection Installation.
