@@ -10,7 +10,7 @@ function GOTMLS_define($DEF, $val) {
 		define($DEF, $val);
 }}
 
-GOTMLS_define("GOTMLS_Version", "4.14.63");
+GOTMLS_define("GOTMLS_Version", "4.14.64");
 GOTMLS_define("GOTMLS_require_version", "3.3");
 GOTMLS_define("GOTMLS_plugin_dir", "gotmls");
 GOTMLS_define("GOTMLS_local_images_path", dirname(__FILE__)."/");
@@ -37,7 +37,7 @@ function GOTMLS_decode($encoded_string) {
 		$tail = substr($encoded_string, -1) - 1;
 	else
 		$encoded_string .= "$tail";
-	$encoded_string = strtr(substr($encoded_string, 0, -1), "-_", "+/").str_repeat("=", $tail);
+	$encoded_string = strtr(substr($encoded_string, 0, -1), "-_=", "+/0").str_repeat("=", $tail);
 	if (function_exists("base64_decode"))
 		return base64_decode($encoded_string);
 	elseif (function_exists("mb_convert_encoding"))
