@@ -5,10 +5,10 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, hacked, malicious, scripts, infection, timthumb, exploit, block, brute-force, wp-login, patch, antimalware, revslider, Revolution Slider
-Version: 4.14.65
-Stable tag: 4.14.65
+Version: 4.15.16
+Stable tag: 4.15.16
 Requires at least: 3.3
-Tested up to: 4.1.1
+Tested up to: 4.2
 
 This Anti-Malware plugin searches for Malware and other Virus like threats and security vulnerabilities on your server and it helps you remove them.
 
@@ -24,7 +24,7 @@ This Anti-Malware plugin searches for Malware and other Virus like threats and s
 * Run a Complete Scan from the Settings Page.
 * Download Definition Updates to protect against new threats.
 
-Updated March 27th
+Updated April 25th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -88,6 +88,13 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 4.15.16 =
+* Created an automatic update feature that downloads any new definition updates before starting the scan.
+* Added WordPress Core files to the new definitions update process and included a scan option to check the integrity of the Core files.
+* Automatically whitelisted the unmodified WordPress Core files.
+* Made more improvements to the Brute-Force protection patch and other minor cosmetic changes to the interface.
+* Protected the HTML in my plugin from filter injections and fixed a few other minor bugs.
 
 = 4.14.65 =
 * Fixed a problem with deleting files from the Quarantine folder.
@@ -306,6 +313,9 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 4.15.16 =
+Created automatic definition updates that include WordPress Core files for integrity checking and whitelisting, made more improvements to the Brute-Force protection patch, and a few other cosmetic changes and minor bug fixes.
 
 = 4.14.65 =
 Fixed a problem with deleting files from the Quarantine folder, added more descriptive errors and a link to restore the default location of the Examine Results window.
