@@ -8,7 +8,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 4.15.16
+Version: 4.15.17
 */
 if (isset($_SERVER["DOCUMENT_ROOT"]) && ($SCRIPT_FILE = str_replace($_SERVER["DOCUMENT_ROOT"], "", isset($_SERVER["SCRIPT_FILENAME"])?$_SERVER["SCRIPT_FILENAME"]:isset($_SERVER["SCRIPT_NAME"])?$_SERVER["SCRIPT_NAME"]:"")) && strlen($SCRIPT_FILE) > strlen("/".basename(__FILE__)) && substr(__FILE__, -1 * strlen($SCRIPT_FILE)) == substr($SCRIPT_FILE, -1 * strlen(__FILE__)))
 	include(dirname(__FILE__)."/safe-load/index.php");
@@ -111,7 +111,7 @@ function GOTMLS_enqueue_scripts() {
 }
 add_action('admin_enqueue_scripts', 'GOTMLS_enqueue_scripts');
 function GOTMLS_display_header($optional_box = "") {
-	global $GOTMLS_onLoad, $GOTMLS_loop_execution_time, $wp_version, $current_user;
+	global $GOTMLS_onLoad, $wp_version, $current_user;
 	get_currentuserinfo();
 	$GOTMLS_url_parts = explode('/', GOTMLS_siteurl);
 	if (isset($_GET["check_site"]) && $_GET["check_site"] == 1)
@@ -270,7 +270,7 @@ function checkupdateserver(server, divid) {
 		if (arguments[2])
 			return setTimeout("stopCheckingDefinitions = checkupdateserver(\'"+arguments[2]+"\',\'"+divid+"\')",15000);
 		else
-			return setTimeout("cancelserver(\'"+divid+"\')",'.($GOTMLS_loop_execution_time+1).'000+3000);
+			return setTimeout("cancelserver(\'"+divid+"\')",'.($GLOBALS["GOTMLS"]["tmp"]['execution_time']+1).'000+3000);
 	}
 }
 var IE = document.all?true:false;
@@ -666,7 +666,7 @@ function GOTMLS_View_Quarantine() {
 }
 
 function GOTMLS_settings() {
-	global $current_user, $wp_version, $GOTMLS_scanfiles, $GOTMLS_loop_execution_time, $GOTMLS_skip_dirs, $GOTMLS_dirs_at_depth, $GOTMLS_dir_at_depth;
+	global $current_user, $wp_version, $GOTMLS_scanfiles, $GOTMLS_skip_dirs, $GOTMLS_dirs_at_depth, $GOTMLS_dir_at_depth;
 	$GOTMLS_scan_groups = array();
 	$dirs = GOTMLS_explode_dir(__file__);
 	for ($SL=0;$SL<intval($GLOBALS["GOTMLS"]["tmp"]["settings_array"]["scan_level"]);$SL++)
@@ -913,7 +913,7 @@ var startTime = 0;
 	</script>'.GOTMLS_box($_REQUEST["scan_type"].' Status', '<div id="status_text"><img src="'.GOTMLS_images_path.'wait.gif" height=16 width=16 alt="..."> '.GOTMLS_Loading_LANGUAGE.'</div><div id="status_bar"></div><p id="pause_button" style="display: none; position: absolute; left: 0; text-align: center; margin-left: -30px; padding-left: 50%;"><input type="button" value="Pause" class="button-primary" onclick="pauseresume(this);" id="resume_button" /></p><div id="status_counts"></div><p id="fix_button" style="display: none; text-align: center;"><input id="repair_button" type="submit" value="'.GOTMLS_Automatically_Fix_LANGUAGE.'" class="button-primary" onclick="loadIframe(\'Examine Results\');" /></p>');
 		$scan_groups_UL = "";
 		foreach ($scan_groups as $scan_name => $scan_group)
-			$scan_groups_UL .= "\n<ul name=\"found_$scan_group\" id=\"found_$scan_group\" class=\"GOTMLS_plugin $scan_group\" style=\"background-color: #ccc; display: none; padding: 0;\"><a class=\"rounded-corners\" name=\"link_$scan_group\" style=\"float: right; padding: 0 4px; margin: 5px 5px 0 30px; line-height: 16px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;\" href=\"#found_top\" onclick=\"showhide('found_$scan_group');\">X</a><h3>$scan_name</h3>\n".($scan_group=='potential'?'<p> &nbsp; * '.__("NOTE: These are probably not malicious scripts (but it's a good place to start looking <u>IF</u> your site is infected and no Known Threats were found).",'gotmls').'</p>':($scan_group=='wp_core'?'<p> &nbsp; * '.sprintf(__("NOTE: We have detected changes to the WordPress Core files on your site. This could be an intentional modification or the malicious work of a hacker. We can restore these files to their original state to preserve the integrity of your original WordPress %s installation.",'gotmls'), $wp_version).'</p>':'<br />')).'</ul>';
+			$scan_groups_UL .= "\n<ul name=\"found_$scan_group\" id=\"found_$scan_group\" class=\"GOTMLS_plugin $scan_group\" style=\"background-color: #ccc; display: none; padding: 0;\"><a class=\"rounded-corners\" name=\"link_$scan_group\" style=\"float: right; padding: 0 4px; margin: 5px 5px 0 30px; line-height: 16px; text-decoration: none; color: #C00; background-color: #FCC; border: solid #F00 1px;\" href=\"#found_top\" onclick=\"showhide('found_$scan_group');\">X</a><h3>$scan_name</h3>\n".($scan_group=='potential'?'<p> &nbsp; * '.__("NOTE: These are probably not malicious scripts (but it's a good place to start looking <u>IF</u> your site is infected and no Known Threats were found).",'gotmls').'</p>':($scan_group=='wp_core'?'<p> &nbsp; * '.sprintf(__("NOTE: We have detected changes to the WordPress Core files on your site. This could be an intentional modification or the malicious work of a hacker. We can restore these files to their original state to preserve the integrity of your original WordPress %s installation.",'gotmls'), $wp_version).' (for more info <a target="_blank" href="http://gotmls.net/tag/wp-core-files/">'.__("read my blog",'gotmls').'</a>).</p>':'<br />')).'</ul>';
 		if (!($dir = implode(GOTMLS_slash(), array_slice($dirs, 0, -1 * (2 + $_REQUEST["scan_what"]))))) $dir = "/";
 		GOTMLS_update_scan_log(array("scan" => array("dir" => $dir, "start" => time(), "type" => $_REQUEST["scan_type"])));
 		echo GOTMLS_box('<div style="float: right;">&nbsp;('.$GLOBALS["GOTMLS"]["log"]["scan"]["dir"].')&nbsp;</div>'.__("Scan Details:",'gotmls'), $scan_groups_UL);
@@ -989,7 +989,7 @@ else if (scanfilesI < scanfilesArKeys.length) {
 	divx = document.getElementById("found_scanned");
 	if (divx)
 		divx.appendChild(newscript);
-	stopScanning=setTimeout("scanNextDir("+(scanfilesI++)+")",'.$GOTMLS_loop_execution_time.'000);
+	stopScanning=setTimeout("scanNextDir("+(scanfilesI++)+")",'.$GLOBALS["GOTMLS"]["tmp"]['execution_time'].'000);
 }
 }
 startTime = ('.ceil(time()-$GLOBALS["GOTMLS"]["log"]["scan"]["start"]).'+3);
@@ -1264,6 +1264,7 @@ window.parent.showhide("GOTMLS_iFrame", true);
 	} elseif (isset($_REQUEST["GOTMLS_fix"]) && is_array($_REQUEST["GOTMLS_fix"]) && isset($_REQUEST["GOTMLS_fixing"]) && $_REQUEST["GOTMLS_fixing"]) {
 		$callAlert = "clearTimeout(callAlert);\ncallAlert=setTimeout('alert_repaired(1)', 30000);";
 		$li_js = "\n<script type=\"text/javascript\">\nvar callAlert;\nfunction alert_repaired(failed) {\nclearTimeout(callAlert);\nif (failed)\nfilesFailed='the rest, try again to change more.';\nwindow.parent.check_for_donation('Changed '+filesFixed+' files, failed to change '+filesFailed);\n}\n$callAlert\nwindow.parent.showhide('GOTMLS_iFrame', true);\nfilesFixed=0;\nfilesFailed=0;\nfunction fixedFile(file) {\n filesFixed++;\nwindow.parent.document.getElementById('list_'+file).className='GOTMLS_plugin';\nwindow.parent.document.getElementById('check_'+file).checked=false;\n }\nfunction DeletedFile(file) {\n filesFixed++;\nwindow.parent.document.getElementById('list_'+file).style.display='none';\nwindow.parent.document.getElementById('check_'+file).checked=false;\n }\nfunction failedFile(file) {\n filesFailed++;\nwindow.parent.document.getElementById('check_'+file).checked=false; \n}\n</script>\n<script type=\"text/javascript\">\n/*<!--*"."/";
+		@set_time_limit($GLOBALS["GOTMLS"]["tmp"]['execution_time'] * 2);
 		foreach ($_REQUEST["GOTMLS_fix"] as $clean_file) {
 			$path = GOTMLS_decode($clean_file);
 			if (is_file($path)) {
@@ -1327,7 +1328,7 @@ if (curDiv = window.parent.document.getElementById("div_file")) {
 }
 
 if (function_exists("is_admin") && is_admin() && ((isset($_POST['GOTMLS_whitelist']) && isset($_POST['GOTMLS_chksum'])) || (isset($_GET["GOTMLS_scan"]) && is_dir(GOTMLS_decode($_GET["GOTMLS_scan"]))))) {
-	@set_time_limit($GOTMLS_loop_execution_time - 5);
+	@set_time_limit($GLOBALS["GOTMLS"]["tmp"]['execution_time'] - 5);
 	GOTMLS_loaded();
 	GOTMLS_init();
 	die("\n//PHP to Javascript Error!\n");
