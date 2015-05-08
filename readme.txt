@@ -4,13 +4,13 @@ Author: Eli Scheetz
 Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
-Tags: anti-malware, security, plugin, scan, automatic, repair, remove, malware, virus, threat, hacked, malicious, scripts, infection, timthumb, exploit, block, brute-force, wp-login, patch, antimalware, revslider, Revolution Slider
-Version: 4.15.17
-Stable tag: 4.15.17
+Tags: anti-malware, security, scanner, automatic, repair, remove, malware, virus, threat, hacked, malicious, infection, timthumb, exploit, block, brute-force, wp-login, patch, antimalware, revslider, Revolution Slider
+Version: 4.15.18
+Stable tag: 4.15.18
 Requires at least: 3.3
-Tested up to: 4.2.1
+Tested up to: 4.2.2
 
-This Anti-Malware plugin searches for Malware and other Virus like threats and security vulnerabilities on your server and it helps you remove them.
+This Anti-Malware scanner searches for Malware, Viruses, and other security threats and vulnerabilities on your server and it helps you fix them.
 
 == Description ==
 
@@ -24,7 +24,7 @@ This Anti-Malware plugin searches for Malware and other Virus like threats and s
 * Run a Complete Scan from the Settings Page.
 * Download Definition Updates to protect against new threats.
 
-Updated May 1st
+Updated May 8th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -89,7 +89,13 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 
 == Changelog ==
 
-= 4.15.17
+= 4.15.18 =
+* Hardened against XSS vulnerabilities in the admin (thanks to Tim Coen).
+* Added feature to restore default settings for Exclude Extensions.
+* Changed the encoding on the index.php file in the Quarantine to make it more human-readable.
+* Fixed a few small bugs that were throwing PHP Notices in some configurations and added more info to some error messages.
+
+= 4.15.17 =
 * Extended execution_time during the Fix process to increase the number of files that could be fixed at a time.
 * Added a Quarantine log to the database.
 * Fixed a couple of minor bugs that would throw PHP notices.
@@ -319,7 +325,10 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 
 == Upgrade Notice ==
 
-= 4.15.17
+= 4.15.18 =
+Hardened against XSS in the admin, changed encoding of the index.php file in the Quarantine, added more info to some error messages and a feature to restore a default setting, and fixed a few small bugs.
+
+= 4.15.17 =
 Extended execution_time during the Fix process, added a Quarantine log to the database, and fixed a couple of minor bugs.
 
 = 4.15.16 =
