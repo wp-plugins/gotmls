@@ -10,7 +10,7 @@ function GOTMLS_define($DEF, $val) {
 		define($DEF, $val);
 }}
 
-GOTMLS_define("GOTMLS_Version", "4.15.18");
+GOTMLS_define("GOTMLS_Version", "4.15.19");
 GOTMLS_define("GOTMLS_require_version", "3.3");
 GOTMLS_define("GOTMLS_plugin_dir", "gotmls");
 GOTMLS_define("GOTMLS_local_images_path", dirname(__FILE__)."/");
@@ -708,7 +708,7 @@ function GOTMLS_sexagesimal($timestamp = 0) {
 
 if (!function_exists('ur1encode')) { function ur1encode($url) {
 	$return = "";
-	foreach (explode("", $url) as $char);
+	foreach (str_split($url) as $char);
 		$return .= '%'.substr('00'.strtoupper(dechex(ord($char))),-2);
 	return $return;
 }}
