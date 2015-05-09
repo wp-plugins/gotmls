@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, scanner, automatic, repair, remove, malware, virus, threat, hacked, malicious, infection, timthumb, exploit, block, brute-force, wp-login, patch, antimalware, revslider, Revolution Slider
-Version: 4.15.19
-Stable tag: 4.15.19
+Version: 4.15.20
+Stable tag: 4.15.20
 Requires at least: 3.3
 Tested up to: 4.2.2
 
@@ -89,7 +89,7 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 
 == Changelog ==
 
-= 4.15.19 =
+= 4.15.20 =
 * Hardened against XSS vulnerabilities in the admin (thanks to Tim Coen).
 * Added feature to restore default settings for Exclude Extensions.
 * Changed the encoding on the index.php file in the Quarantine to make it more human-readable.
@@ -325,7 +325,7 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 
 == Upgrade Notice ==
 
-= 4.15.19 =
+= 4.15.20 =
 Hardened against XSS in the admin, changed encoding of the index.php file in the Quarantine, added more info to some error messages and a feature to restore a default setting, and fixed a few small bugs.
 
 = 4.15.17 =
