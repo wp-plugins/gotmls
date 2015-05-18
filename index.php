@@ -8,7 +8,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 4.15.21
+Version: 4.15.22
 */
 if (isset($_SERVER["DOCUMENT_ROOT"]) && ($SCRIPT_FILE = str_replace($_SERVER["DOCUMENT_ROOT"], "", isset($_SERVER["SCRIPT_FILENAME"])?$_SERVER["SCRIPT_FILENAME"]:isset($_SERVER["SCRIPT_NAME"])?$_SERVER["SCRIPT_NAME"]:"")) && strlen($SCRIPT_FILE) > strlen("/".basename(__FILE__)) && substr(__FILE__, -1 * strlen($SCRIPT_FILE)) == substr($SCRIPT_FILE, -1 * strlen(__FILE__)))
 	include(dirname(__FILE__)."/safe-load/index.php");
@@ -46,6 +46,7 @@ function GOTMLS_install() {
 register_activation_hook(__FILE__, "GOTMLS_install");
 
 function GOTMLS_user_can() {
+	require_once(ABSPATH.WPINC.'/pluggable.php');
 	if (is_multisite())
 		$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["user_can"] = "manage_network";
 	elseif (!isset($GLOBALS["GOTMLS"]["tmp"]["settings_array"]["user_can"]) || $GLOBALS["GOTMLS"]["tmp"]["settings_array"]["user_can"] == "manage_network")
@@ -374,8 +375,8 @@ setDiv("div_file");
 		<input type="submit" style="width: 100%;" name="auto_update" value="'.__("Download new definitions!",'gotmls').'"> 
 		</div>
 	</form>
-		<div id="registerKeyForm" style="display: none;">'.__("<p>If you already registered your Key then you can get instant access to definition updates.</p>",'gotmls').'<input type="button" style="width: 100%;" value="'.__("Check for Definition Updates Now!",'gotmls').'" onclick="check_for_updates(\'Definition_Updates\');" />
-'.__("<p>If you have not already registered your Key then register now and get instant access to definition updates.</p><p>* All fields are required and I will NOT share your registration information with anyone.</p>",'gotmls').'
+		<div id="registerKeyForm" style="display: none;"><span style="color: #F00">'.__("<p>Get instant access to definition updates.</p>",'gotmls').'</span><input type="button" style="width: 100%;" value="'.__("Check for Definition Updates Now!",'gotmls').'" onclick="check_for_updates(\'Definition_Updates\');" /><p>
+'.__("If you have not already registered your Key then register now using the form below.<br />* All registration fields are required<br />** I will NOT share your information.",'gotmls').'</p>
 <form id="registerform" onsubmit="return sinupFormValidate(this);" action="'.GOTMLS_plugin_home.'wp-login.php?action=register" method="post" name="registerform" target="GOTMLS_iFrame"><input type="hidden" name="redirect_to" id="register_redirect_to" value="/donate/"><input type="hidden" name="user_login" id="register_user_login" value="">
 <div>'.__("Your Full Name:",'gotmls').'</div>
 <div style="float: left; width: 50%;"><input style="width: 100%;" id="first_name" type="text" name="first_name" value="'.$current_user->user_firstname.'" /></div>
@@ -437,7 +438,7 @@ setDiv("div_file");
 			} else {
 				document.getElementById("Definition_Updates").innerHTML = \'<img src="'.GOTMLS_images_path.'wait.gif">'.__("Submitting Registration ...",'gotmls').'\';
 				showhide("Definition_Updates", true);
-				stopCheckingDefinitions = checkupdateserver("'.$Update_Definitions.'", "Definition_Updates");
+				setTimeout(\'stopCheckingDefinitions = checkupdateserver("'.$Update_Definitions.'", "Definition_Updates")\', 3000);
 				showhide("registerKeyForm");
 				return true;
 			}
@@ -469,10 +470,10 @@ setDiv("div_file");
 			<input type="hidden" name="lc" value="US">
 			<input type="hidden" name="bn" value="PP-DonationsBF">
 			<input type="radio" name="amount" value="14.89">$14+
-			<input type="radio" id="default_level_donation" name="amount" value="29.14" checked>$29+
-			<input type="radio" id="higher_level_donation" name="amount" value="49.75">$49+
-			<input type="radio" name="amount" value="76.00">$76
-			<input type="radio" name="amount" value="152.00">$152
+			<input type="radio" id="default_level_donation" name="amount" value="29.29" checked>$29+
+			<input type="radio" id="higher_level_donation" name="amount" value="52.00">$52
+			<input type="radio" name="amount" value="86.00">$86
+			<input type="radio" name="amount" value="133.70">$133.7
 			<input type="hidden" name="item_name" value="Donation to Eli\'s Anti-Malware Plugin">
 			<input type="hidden" name="item_number" value="GOTMLS-key-'.GOTMLS_installation_key.'">
 			<input type="hidden" name="custom" value="key-'.GOTMLS_installation_key.'">
@@ -764,7 +765,7 @@ function GOTMLS_settings() {
 				</div>';
 			}
 		} else
-			$scan_opts .= '<a title="'.__("Download Definition Updates to Use this feature",'gotmls').'"><img src="'.GOTMLS_images_path.'blocked.gif" height=16 width=16 alt="X"><b>&nbsp; '.$threat_level_name.'</b><br /><div style="padding: 14px;" id="check_'.$threat_level.'_div_NA">'.__("Registration of your Installation Key is required for this feature",'gotmls').'</div>';
+			$scan_opts .= '<a title="'.__("Download Definition Updates to Use this feature",'gotmls').'"><img src="'.GOTMLS_images_path.'blocked.gif" height=16 width=16 alt="X"><b>&nbsp; '.$threat_level_name.'</b><br /><div style="padding: 14px;" id="check_'.$threat_level.'_div_NA"><span style="color: #F00">'.__("Download the new definitions (Right sidebar) to activate this feature.",'gotmls').'</span></div>';
 		$scan_opts .= '
 		</div>';
 	}
@@ -1141,6 +1142,11 @@ function GOTMLS_init() {
 				if (is_array($GOTnew_definitions))
 					$GOTMLS_onLoad .= "updates_complete('Downloaded Definitions');";
 			} elseif (($DEF = GOTMLS_get_URL(GOTMLS_update_home.'definitions.php?ver='.GOTMLS_Version.'&wp='.$wp_version.'&ts='.date("YmdHis").'&d='.ur1encode(GOTMLS_siteurl))) && (($GOT_definitions = GOTMLS_decode($DEF)) != serialize($GLOBALS["GOTMLS"]["tmp"]["definitions_array"])) && is_array($GOTnew_definitions = maybe_unserialize($GOT_definitions)) && count($GOTnew_definitions)) {
+				if (!(isset($_REQUEST["check"]) && is_array($_REQUEST["check"])))
+					$_REQUEST["check"] = array();
+				foreach ($GOTnew_definitions as $threat_level=>$definition_names)
+					if (!isset($GLOBALS["GOTMLS"]["tmp"]["definitions_array"]["$threat_level"]) && !(is_array($GLOBALS["GOTMLS"]["tmp"]["settings"]["check"]) && in_array("$threat_level", $GLOBALS["GOTMLS"]["tmp"]["settings"]["check"])) && !in_array("$threat_level", $_REQUEST["check"]))
+						$_REQUEST["check"][] = "$threat_level";
 				$GLOBALS["GOTMLS"]["tmp"]["definitions_array"] = $GOTnew_definitions;
 				$GOTnew_definitions = array();
 				$GOTMLS_onLoad .= "updates_complete('New Definitions Automatically Installed :-)');";
