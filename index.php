@@ -8,7 +8,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 4.15.22
+Version: 4.15.23
 */
 if (isset($_SERVER["DOCUMENT_ROOT"]) && ($SCRIPT_FILE = str_replace($_SERVER["DOCUMENT_ROOT"], "", isset($_SERVER["SCRIPT_FILENAME"])?$_SERVER["SCRIPT_FILENAME"]:isset($_SERVER["SCRIPT_NAME"])?$_SERVER["SCRIPT_NAME"]:"")) && strlen($SCRIPT_FILE) > strlen("/".basename(__FILE__)) && substr(__FILE__, -1 * strlen($SCRIPT_FILE)) == substr($SCRIPT_FILE, -1 * strlen(__FILE__)))
 	include(dirname(__FILE__)."/safe-load/index.php");
@@ -46,7 +46,6 @@ function GOTMLS_install() {
 register_activation_hook(__FILE__, "GOTMLS_install");
 
 function GOTMLS_user_can() {
-	require_once(ABSPATH.WPINC.'/pluggable.php');
 	if (is_multisite())
 		$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["user_can"] = "manage_network";
 	elseif (!isset($GLOBALS["GOTMLS"]["tmp"]["settings_array"]["user_can"]) || $GLOBALS["GOTMLS"]["tmp"]["settings_array"]["user_can"] == "manage_network")
@@ -684,7 +683,7 @@ function GOTMLS_settings() {
 		$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["check"] = $_POST["check"];
 	if (isset($_POST["exclude_ext"])) {	
 		if (strlen(trim(str_replace(",","",$_POST["exclude_ext"]).' ')) > 0)
-			$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["exclude_ext"] = preg_split('/[\s]*([,]+[\s]*)+/', trim(str_replace('.', ',', $_POST["exclude_ext"])), -1, PREG_SPLIT_NO_EMPTY);
+			$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["exclude_ext"] = preg_split('/[\s]*([,]+[\s]*)+/', trim(str_replace('.', ',', htmlentities($_POST["exclude_ext"]))), -1, PREG_SPLIT_NO_EMPTY);
 		else
 			$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["exclude_ext"] = array();
 	}
@@ -698,7 +697,7 @@ function GOTMLS_settings() {
 	}
 	if (isset($_POST["exclude_dir"])) {
 		if (strlen(trim(str_replace(",","",$_POST["exclude_dir"]).' ')) > 0)
-			$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["exclude_dir"] = preg_split('/[\s]*([,]+[\s]*)+/', trim($_POST["exclude_dir"]), -1, PREG_SPLIT_NO_EMPTY);
+			$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["exclude_dir"] = preg_split('/[\s]*([,]+[\s]*)+/', trim(htmlentities($_POST["exclude_dir"])), -1, PREG_SPLIT_NO_EMPTY);
 		else
 			$GLOBALS["GOTMLS"]["tmp"]["settings_array"]["exclude_dir"] = array();
 		for ($d=0; $d<count($GLOBALS["GOTMLS"]["tmp"]["settings_array"]["exclude_dir"]); $d++)
@@ -1345,6 +1344,7 @@ function GOTMLS_init() {
 
 if (function_exists("is_admin") && is_admin() && ((isset($_POST['GOTMLS_whitelist']) && isset($_POST['GOTMLS_chksum'])) || (isset($_GET["GOTMLS_scan"]) && is_dir(GOTMLS_decode($_GET["GOTMLS_scan"]))))) {
 	@set_time_limit($GLOBALS["GOTMLS"]["tmp"]['execution_time'] - 5);
+	require_once(ABSPATH.WPINC.'/pluggable.php');
 	GOTMLS_loaded();
 	GOTMLS_init();
 	die("\n//PHP to Javascript Error!\n");
