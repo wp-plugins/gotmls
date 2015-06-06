@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, scanner, automatic, repair, remove, malware, virus, threat, hacked, malicious, infection, timthumb, exploit, block, brute-force, wp-login, patch, antimalware, revslider, Revolution Slider
-Version: 4.15.24
-Stable tag: 4.15.24
+Version: 4.15.25
+Stable tag: 4.15.25
 Requires at least: 3.3
 Tested up to: 4.2.2
 
@@ -29,7 +29,7 @@ This Anti-Malware scanner searches for Malware, Viruses, and other security thre
 * Automatically Download Definition Updates When running a Complete Scan.
 * Check the integrity of your WordPress Core files.
 
-Updated May 23th
+Updated June 6th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -93,6 +93,11 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 4.15.25 =
+* Moved the quarantine files into the database and deleted the old directory in uploads.
+* Fixed some minor formatting issues in the HTML output on the settings page.
+* Added a warning message if base64_decode has been disabled.
 
 = 4.15.24 =
 * Hardened against injected HTML content by encoding the tags with variables.
@@ -185,8 +190,6 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 
 = 3.13.11 =
 * Fixed a session bug to display the last directory scanned.
-
-= 3.13.10 =
 * Fixed a few small cosmetic bugs for WP 3.8.
 
 = 3.12.27 =
@@ -320,23 +323,20 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 = 1.2.04.08 =
 * Fixed option to exclude directories so that the scan would not get stuck if omitted.
 * Added support for winblows servers using BACKSLASH directory structures.
-
-= 1.2.04.04 =
 * Added option to exclude directories.
 * Changed definition updates to write to the DB instead of a file.
 * Added better messages about available updates.
-* Added more FAQs to the readme.
 
 = 1.2.03.28 =
-* Fixed registration form.
-
-= 1.2.03.27 =
-* Fixed some of the links on the settings page.
+* Fixed registration form and some of the links on the settings page.
 
 = 1.2.03.23 =
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 4.15.25 =
+Moved the quarantine files into the database and deleted the old directory in uploads, fixed some minor HTML formatting issues, and added a warning if base64_decode is disabled.
 
 = 4.15.24 =
 Hardened against injected HTML content and fixed debug option to exclude individual definitions.
@@ -399,10 +399,7 @@ Made the Examine File window sizable, fixed a few small bugs, removed some old c
 Re-purposed Quick Scan to just scan the most affected areas and fixed a few small bugs.
 
 = 3.13.11 =
-Fixed a session bug to display the last directory scanned.
-
-= 3.13.10 =
-Fixed a few small cosmetic bugs for WP 3.8.
+Fixed a session bug to display the last directory scanned and a few other small cosmetic bugs for WP 3.8.
 
 = 3.12.27 =
 Added Spanish translation, thanks to Jelena Kovacevic and Andrew Kurtis.
@@ -507,16 +504,10 @@ Fixed auto-update script to update scan level even if there is no new definition
 Added more info about registration to the readme file, Updated timthumb replacement patch to version 2.8.10, and fixed menu option placement.
 
 = 1.2.04.08 =
-Fixed option to exclude directories and added support for winblows servers using BACKSLASH directory structures.
-
-= 1.2.04.04 =
-Changed definition updates to write to the DB instead of a file and added better messages about available updates.
+Fixed option to exclude directories, added support for winblows servers using BACKSLASHES, changed definition updates to write to the DB instead of a file, and added better messages about available updates.
 
 = 1.2.03.28 =
-Fixed registration form.
-
-= 1.2.03.27 =
-Fixed some of the links on the settings page.
+Fixed registration form and some of the links on the settings page.
 
 = 1.2.03.23 =
 First BETA versions available for WordPress.

@@ -12,5 +12,10 @@ foreach (array("REMOTE_ADDR", "HTTP_HOST", "REQUEST_URI", "HTTP_REFERER", "HTTP_
 	$_SESSION["GOTMLS_detected_attacks"] .= (isset($_SERVER[$var])?"&SERVER_$var=".urlencode($_SERVER[$var]):"");
 foreach (array("log") as $var)
 	$_SESSION["GOTMLS_detected_attacks"] .= (isset($_POST[$var])?"&POST_$var=".urlencode($_POST[$var]):"");
-header("location: http://safe-load.gotmls.net/report.php?ver=4.15.24".$_SESSION["GOTMLS_detected_attacks"]);
+$ver = "Unknown";
+if ($file = str_replace(basename(dirname(__FILE__)), basename(__FILE__), dirname(__FILE__)))
+	if (is_file($file) && $contents = @file_get_contents($file))
+		if (preg_match('/\nversion:\s*([0-9\.]+)/i', $contents, $match))
+			$ver = $match[1];
+header("location: http://safe-load.gotmls.net/report.php?ver=$ver".$_SESSION["GOTMLS_detected_attacks"]);
 die();
