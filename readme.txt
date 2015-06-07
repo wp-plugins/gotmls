@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, scanner, automatic, repair, remove, malware, virus, threat, hacked, malicious, infection, timthumb, exploit, block, brute-force, wp-login, patch, antimalware, revslider, Revolution Slider
-Version: 4.15.25
-Stable tag: 4.15.25
+Version: 4.15.26
+Stable tag: 4.15.26
 Requires at least: 3.3
 Tested up to: 4.2.2
 
@@ -94,7 +94,7 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 
 == Changelog ==
 
-= 4.15.25 =
+= 4.15.26 =
 * Moved the quarantine files into the database and deleted the old directory in uploads.
 * Fixed some minor formatting issues in the HTML output on the settings page.
 * Added a warning message if base64_decode has been disabled.
@@ -335,7 +335,7 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 
 == Upgrade Notice ==
 
-= 4.15.25 =
+= 4.15.26 =
 Moved the quarantine files into the database and deleted the old directory in uploads, fixed some minor HTML formatting issues, and added a warning if base64_decode is disabled.
 
 = 4.15.24 =

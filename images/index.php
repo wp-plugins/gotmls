@@ -10,11 +10,14 @@ function GOTMLS_define($DEF, $val) {
 		define($DEF, $val);
 }}
 
-GOTMLS_define("GOTMLS_Version", "4.15.25");
+$file = basename(__FILE__);
+GOTMLS_define("GOTMLS_local_images_path", substr(__FILE__, 0, strlen(__FILE__) - strlen($file)));
+GOTMLS_define("GOTMLS_plugin_path", substr(dirname(__FILE__), 0, strlen(dirname(__FILE__)) - strlen(basename(dirname(__FILE__)))));
+if (is_file(GOTMLS_plugin_path.$file) && ($contents = @file_get_contents(GOTMLS_plugin_path.$file)) && preg_match('/\nversion:\s*([0-9\.]+)/i', $contents, $match))
+	GOTMLS_define("GOTMLS_Version", $match[1]);
+else
+	GOTMLS_define("GOTMLS_Version", "Unknown");
 GOTMLS_define("GOTMLS_require_version", "3.3");
-GOTMLS_define("GOTMLS_plugin_dir", "gotmls");
-GOTMLS_define("GOTMLS_local_images_path", dirname(__FILE__)."/");
-GOTMLS_define("GOTMLS_plugin_path", dirname(GOTMLS_local_images_path).'/');
 
 if (!function_exists("__")) {
 function __($text, $domain) {
@@ -88,7 +91,6 @@ GOTMLS_define("GOTMLS_require_version_LANGUAGE", sprintf(__("This Plugin require
 GOTMLS_define("GOTMLS_Scan_Settings_LANGUAGE", __("Scan Settings",'gotmls'));
 GOTMLS_define("GOTMLS_Loading_LANGUAGE", __("Loading, Please Wait ...",'gotmls'));
 GOTMLS_define("GOTMLS_Automatically_Fix_LANGUAGE", __("Automatically Fix SELECTED Files Now",'gotmls'));
-GOTMLS_define("GOTMLS_update_images_path", "/wp-content/plugins/update/images/");
 
 if (isset($_SERVER['HTTP_HOST']))
 	$SERVER_HTTP = 'HOST://'.$_SERVER['HTTP_HOST'];
@@ -117,12 +119,14 @@ if (function_exists("get_option")) {
 GOTMLS_define("GOTMLS_installation_key", md5(GOTMLS_siteurl));
 if (function_exists("plugins_url"))
 	GOTMLS_define("GOTMLS_images_path", plugins_url('/', __FILE__));
+elseif (function_exists("plugin_dir_url"))
+	GOTMLS_define("GOTMLS_images_path", plugin_dir_url(__FILE__));
 elseif (isset($_SERVER["DOCUMENT_ROOT"]) && ($_SERVER["DOCUMENT_ROOT"]) && strlen($_SERVER["DOCUMENT_ROOT"]) < __FILE__ && substr(__FILE__, 0, strlen($_SERVER["DOCUMENT_ROOT"])) == $_SERVER["DOCUMENT_ROOT"])
 	GOTMLS_define("GOTMLS_images_path", substr(dirname(__FILE__), strlen($_SERVER["DOCUMENT_ROOT"])));
 elseif (isset($_SERVER["SCRIPT_FILENAME"]) && isset($_SERVER["DOCUMENT_ROOT"]) && ($_SERVER["DOCUMENT_ROOT"]) && strlen($_SERVER["DOCUMENT_ROOT"]) < strlen($_SERVER["SCRIPT_FILENAME"]) && substr($_SERVER["SCRIPT_FILENAME"], 0, strlen($_SERVER["DOCUMENT_ROOT"])) == $_SERVER["DOCUMENT_ROOT"])
 	GOTMLS_define("GOTMLS_images_path", substr(dirname($_SERVER["SCRIPT_FILENAME"]), strlen($_SERVER["DOCUMENT_ROOT"])));
 else
-	GOTMLS_define("GOTMLS_images_path", str_replace("/update/", GOTMLS_plugin_dir, GOTMLS_update_images_path));
+	GOTMLS_define("GOTMLS_images_path", "/wp-content/plugins/update/images/");
 
 $GOTMLS_chmod_file = (0644);
 $GOTMLS_chmod_dir = (0755);
@@ -571,50 +575,6 @@ function GOTMLS_get_current_user_id() {
 		return $current_user->ID;
 	else
 		return 1;
-}
-
-function GOTMLS_quarantine($path = "") {
-	global $wpdb;//, $GOTMLS_new_contents, $GOTMLS_file_contents, $GOTMLS_threats_found;
-	if (!isset($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"])) {
-		if (($upload = wp_upload_dir()) && isset($upload['basedir']))
-			$GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"] = str_replace("/", GOTMLS_slash(), GOTMLS_trailingslashit($upload['basedir'])).'quarantine';
-		else
-			$GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"] = false;
-	}
-	if ($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"] && is_dir($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"])) {
-		$entries = GOTMLS_getfiles($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]);
-		if (is_array($entries) && count($entries)) {
-			foreach ($entries as $entry) {
-				if (is_file($file = GOTMLS_trailingslashit($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]).$entry)) {
-					if (GOTMLS_get_ext($entry) == "gotmls" && ($GOTMLS_file_contents = file_get_contents($file))) {
-						$insert = array("post_author"=>GOTMLS_get_current_user_id(), "ping_status"=>"imported", "post_status"=>"private", "post_type"=>"GOTMLS_quarantine", "post_content"=>GOTMLS_encode($GOTMLS_file_contents), "post_mime_type"=>md5($GOTMLS_file_contents));//! comment_status post_password post_name to_ping post_parent guid menu_order";
-						if (!($insert["comment_count"] = @filesize($file)))
-							$insert["comment_count"] = strlen($GOTMLS_file_contents);
-						$file_date = explode(".", $entry);
-						$insert["post_date"] = date("Y-m-d H:i:s", filemtime($file));
-						$insert["post_date_gmt"] = $insert["post_date"];
-						$insert["post_modified"] = $insert["post_date"];
-						$match = '/^(20)?([0-5][0-9])[\-: \/]*(0*[1-9]|1[0-2])[\-: \/]*(0*[1-9]|[12][0-9]|3[01])[\-: \/]*([0-5][0-9])[\-: \/]*([0-5][0-9])$/';
-						if (count($file_date) > 2 && strlen($file_date[0]) == 5 && preg_match($match, GOTMLS_sexagesimal($file_date[0])))
-							$insert["post_modified"] = GOTMLS_sexagesimal($file_date[0]).":00";
-						elseif (count($file_date) > 3 && strlen($file_date[1]) == 5 && preg_match($match, GOTMLS_sexagesimal($file_date[1])))
-							$insert["post_modified"] = GOTMLS_sexagesimal($file_date[1]).":00";
-						$insert["post_modified_gmt"] = $insert["post_modified"];
-						$insert["post_title"] = GOTMLS_decode($file_date[count($file_date)-2]);
-						if (is_file($insert["post_title"]) && ($GOTMLS_new_contents = file_get_contents($insert["post_title"])))
-							$insert["post_content_filtered"] = GOTMLS_encode($GOTMLS_new_contents);
-						//! pinged post_excerpt
-						if ($wpdb->insert($wpdb->posts, $insert))
-							unlink(trailingslashit($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]).$entry);
-					} elseif (basename($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]) == "quarantine")
-						unlink(trailingslashit($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]).$entry);
-				}
-			}
-		} elseif (basename($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]) == "quarantine")
-			rmdir($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]);
-	}
-	if ($path)
-		return GOTMLS_trailingslashit($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]).(is_file($file)?GOTMLS_sexagesimal(date("y-m-d-H-i", filectime($file))).'.'.GOTMLS_sexagesimal(date("y-m-d-H-i", filemtime($file))):GOTMLS_sexagesimal(date("y-m-d-H-i", time()))).'.'.GOTMLS_encode($file?$file:__FILE__).'.GOTMLS';
 }
 
 function GOTMLS_update_status($status, $percent = -1) {

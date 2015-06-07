@@ -8,7 +8,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 4.15.25
+Version: 4.15.26
 */
 if (isset($_SERVER["DOCUMENT_ROOT"]) && ($SCRIPT_FILE = str_replace($_SERVER["DOCUMENT_ROOT"], "", isset($_SERVER["SCRIPT_FILENAME"])?$_SERVER["SCRIPT_FILENAME"]:isset($_SERVER["SCRIPT_NAME"])?$_SERVER["SCRIPT_NAME"]:"")) && strlen($SCRIPT_FILE) > strlen("/".basename(__FILE__)) && substr(__FILE__, -1 * strlen($SCRIPT_FILE)) == substr($SCRIPT_FILE, -1 * strlen(__FILE__)))
 	include(dirname(__FILE__)."/safe-load/index.php");
@@ -119,7 +119,7 @@ function GOTMLS_display_header($optional_box = "") {
 		echo '<div id="check_site" style="z-index: 1234567;"><img src="'.GOTMLS_images_path.'checked.gif" height=16 width=16 alt="&#x2714;"> '.__("Tested your site. It appears we didn't break anything",'gotmls').' ;-)</div><script type="text/javascript">window.parent.document.getElementById("check_site_warning").style.backgroundColor=\'#0C0\';</script><li>Please <a target="_blank" href="https://wordpress.org/plugins/gotmls/stats/?compatibility%5Bversion%5D='.$wp_version.'&compatibility%5Btopic_version%5D='.GOTMLS_Version.'&compatibility%5Bcompatible%5D=1#compatibility-works">Vote "Works"</a> or <a target="_blank" href="https://wordpress.org/support/view/plugin-reviews/gotmls#postform">write a "Five-Star" Reviews</a> on WordPress.org if you like this plugin.</li><style>#footer, #GOTMLS-metabox-container, #GOTMLS-right-sidebar, #admin-page-container, #wpadminbar, #adminmenuback, #adminmenuwrap, #adminmenu, .error, .updated, .update-nag {display: none !important;} #wpbody-content {padding-bottom: 0;} #wpbody, html.wp-toolbar {padding-top: 0 !important;} #wpcontent, #footer {margin-left: 5px !important;}';
 	else
 		echo '<style>#GOTMLS-right-sidebar {float: right; margin-right: 0px;}';
-	$Update_Definitions = GOTMLS_plugin_home.'definitions.js'.$GLOBALS["GOTMLS"]["tmp"]["Definition"]["Updates"].'&js='.GOTMLS_Version.'&p='.strtoupper(GOTMLS_plugin_dir).'&wp='.$wp_version.'&ts='.date("YmdHis").'&key='.GOTMLS_installation_key.'&d='.ur1encode(GOTMLS_siteurl);
+	$Update_Definitions = GOTMLS_plugin_home.'definitions.js'.$GLOBALS["GOTMLS"]["tmp"]["Definition"]["Updates"].'&js='.GOTMLS_Version.'&p=GOTMLS&wp='.$wp_version.'&ts='.date("YmdHis").'&key='.GOTMLS_installation_key.'&d='.ur1encode(GOTMLS_siteurl);
 	$Update_Link = '<div style="text-align: center;"><a href="';
 	$new_version = "";
 	$file = basename(GOTMLS_plugin_path).'/index.php';
@@ -478,9 +478,9 @@ setDiv("div_file");
 			<div>
 				<ul class="GOTMLS-sidebar-links">
 					<li style="float: right;"><b>on <a target="_blank" href="https://profiles.wordpress.org/scheeeli#content-plugins">WordPress.org</a></b><ul class="GOTMLS-sidebar-links">
-						<li><a target="_blank" href="https://wordpress.org/plugins/'.GOTMLS_plugin_dir.'/faq/">Plugin FAQs</a></li>
-						<li><a target="_blank" href="https://wordpress.org/support/plugin/'.GOTMLS_plugin_dir.'">Forum Posts</a></li>
-						<li><a target="_blank" href="https://wordpress.org/support/view/plugin-reviews/'.GOTMLS_plugin_dir.'">Plugin Reviews</a></li>
+						<li><a target="_blank" href="https://wordpress.org/plugins/gotmls/faq/">Plugin FAQs</a></li>
+						<li><a target="_blank" href="https://wordpress.org/support/plugin/gotmls">Forum Posts</a></li>
+						<li><a target="_blank" href="https://wordpress.org/support/view/plugin-reviews/gotmls">Plugin Reviews</a></li>
 					</ul></li>
 					<li><img src="//gravatar.com/avatar/5feb789dd3a292d563fea3b885f786d6?s=16" border="0" alt="Plugin site:"><b><a target="_blank" href="'.GOTMLS_plugin_home.'">GOTMLS.NET</a></b></li>
 					<li><img src="//gravatar.com/avatar/8151cac22b3fc543d099241fd573d176?s=16" border="0" alt="Developer site:"><b><a target="_blank" href="'.GOTMLS_blog_home.'/category/my-plugins/anti-malware/">Eli\'s Blog</a></b></li>
@@ -619,6 +619,45 @@ function GOTMLS_get_whitelists() {
 
 function GOTMLS_get_quarantine($only = false) {
 	global $wpdb, $current_user, $post;//, $GOTMLS_new_contents, $GOTMLS_file_contents, $GOTMLS_threats_found;
+	if (!isset($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"])) {
+		if (($upload = wp_upload_dir()) && isset($upload['basedir']))
+			$GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"] = str_replace("/", GOTMLS_slash(), GOTMLS_trailingslashit($upload['basedir'])).'quarantine';
+		else
+			$GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"] = false;
+	}
+	if ($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"] && is_dir($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"])) {
+		$entries = GOTMLS_getfiles($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]);
+		if (is_array($entries) && count($entries)) {
+			foreach ($entries as $entry) {
+				if (is_file($file = GOTMLS_trailingslashit($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]).$entry)) {
+					if (GOTMLS_get_ext($entry) == "gotmls" && ($GOTMLS_file_contents = @file_get_contents($file))) {
+						$insert = array("post_author"=>GOTMLS_get_current_user_id(), "ping_status"=>"imported", "post_status"=>"private", "post_type"=>"GOTMLS_quarantine", "post_content"=>GOTMLS_encode($GOTMLS_file_contents), "post_mime_type"=>md5($GOTMLS_file_contents));//! comment_status post_password post_name to_ping post_parent guid menu_order";
+						if (!($insert["comment_count"] = @filesize($file)))
+							$insert["comment_count"] = strlen($GOTMLS_file_contents);
+						$file_date = explode(".", $entry);
+						$insert["post_date"] = date("Y-m-d H:i:s", filemtime($file));
+						$insert["post_date_gmt"] = $insert["post_date"];
+						$insert["post_modified"] = $insert["post_date"];
+						$match = '/^(20)?([0-5][0-9])[\-: \/]*(0*[1-9]|1[0-2])[\-: \/]*(0*[1-9]|[12][0-9]|3[01])[\-: \/]*([0-5][0-9])[\-: \/]*([0-5][0-9])$/';
+						if (count($file_date) > 2 && strlen($file_date[0]) == 5 && preg_match($match, GOTMLS_sexagesimal($file_date[0])))
+							$insert["post_modified"] = GOTMLS_sexagesimal($file_date[0]).":00";
+						elseif (count($file_date) > 3 && strlen($file_date[1]) == 5 && preg_match($match, GOTMLS_sexagesimal($file_date[1])))
+							$insert["post_modified"] = GOTMLS_sexagesimal($file_date[1]).":00";
+						$insert["post_modified_gmt"] = $insert["post_modified"];
+						$insert["post_title"] = GOTMLS_decode($file_date[count($file_date)-2]);
+						if (is_file($insert["post_title"]) && ($GOTMLS_new_contents = file_get_contents($insert["post_title"])))
+							$insert["post_content_filtered"] = GOTMLS_encode($GOTMLS_new_contents);
+						//! pinged post_excerpt
+						if ($wpdb->insert($wpdb->posts, $insert))
+							unlink(trailingslashit($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]).$entry);
+					} elseif (basename($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]) == "quarantine")
+						unlink(trailingslashit($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]).$entry);
+				}
+			}
+		}
+		if (basename($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]) == "quarantine")
+			rmdir($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]);
+	}
 	$Q_Page = '
 	<form method="POST" target="GOTMLS_iFrame" name="GOTMLS_Form_clean"><input type="hidden" id="GOTMLS_fixing" name="GOTMLS_fixing" value="1">';
 	$args = array('posts_per_page' => -1, 'orderby' => 'date', 'post_type' => 'GOTMLS_quarantine', "post_status" => "private");
@@ -633,7 +672,6 @@ function GOTMLS_get_quarantine($only = false) {
 		$root_path = implode(GOTMLS_slash(), array_slice(GOTMLS_explode_dir(__file__), 0, (2 + intval($GLOBALS["GOTMLS"]["tmp"]["settings_array"]["scan_level"])) * -1));
 		while ($my_query->have_posts()) {
 			$my_query->the_post();
-			$clean_file = GOTMLS_encode($post->post_title);
 			$Q_Page .= '
 			<li id="GOTMLS_quarantine_'.$post->ID.'" class="GOTMLS_quarantine_item"><span class="GOTMLS_date">'.$post->post_date_gmt.'</span><span class="GOTMLS_date">'.$post->post_modified_gmt.'</span><input type="checkbox" name="GOTMLS_fix[]" value="'.$post->ID.'" id="check_'.$post->ID.'" onchange="document.getElementById(\'quarantine_buttons\').style.display = \'block\';" /><img src="'.GOTMLS_images_path.'blocked.gif" height=16 width=16 alt="Q">'.GOTMLS_error_link(__("View Quarantined File",'gotmls'), $post->ID).str_replace($root_path, "...", $post->post_title)."</a></li>\n";
 		}
@@ -921,11 +959,7 @@ var startTime = 0;
 		if (is_dir($dir)) {
 			$GOTMLS_dirs_at_depth[0] = 1;
 			$GOTMLS_dir_at_depth[0] = 0;
-/*			if (!(isset($GLOBALS["GOTMLS"]["tmp"]["settings_array"]['skip_quarantine']) && $GLOBALS["GOTMLS"]["tmp"]["settings_array"]['skip_quarantine'])) {
-				$GOTMLS_dirs_at_depth[0]++;
-				GOTMLS_readdir($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]);
-			}
-*/			if (isset($_POST['scan_only']) && is_array($_POST['scan_only'])) {
+			if (isset($_POST['scan_only']) && is_array($_POST['scan_only'])) {
 				$GOTMLS_dirs_at_depth[0] += (count($_POST['scan_only']) - 1);
 				foreach ($_POST['scan_only'] as $only_dir)
 					if (is_dir(GOTMLS_trailingslashit($dir).$only_dir))
@@ -1325,11 +1359,6 @@ function GOTMLS_init() {
 					if (!file_exists($file))
 						die(GOTMLS_html_tags(array("html" => array("body" => sprintf(__("The file %s does not exist, it must have already been deleted.",'gotmls'), $file)."<script type=\"text/javascript\">\nwindow.parent.showhide('GOTMLS_iFrame', true);\n</script>"))));
 					else {
-						$clean_file = $file;
-						if (is_numeric($file) && $file == GOTMLS_quarantine($file)) {
-							$clean_file = 'Quarantined: '.GOTMLS_decode(array_pop(explode(".", '.'.substr($file, strlen(dirname($file))+1, -7))));
-							$_GET["eli"] = "quarantine";
-						}
 						GOTMLS_scanfile($file);
 						$fa = "";
 						$function = 'GOTMLS_decode';
@@ -1375,7 +1404,7 @@ function GOTMLS_init() {
 			}
 		}
 		window.parent.showhide("GOTMLS_iFrame", true);
-		</script><table style="top: 0px; left: 0px; width: 100%; height: 100%; position: absolute;"><tr><td style="width: 100%"><form style="margin: 0;" method="post"'.(is_file($clean_file)?' onsubmit="return confirm(\''.__("Are you sure this file is not infected and you want to ignore it in future scans?",'gotmls').'\');"><input type="hidden" name="GOTMLS_whitelist" value="'.GOTMLS_encode($clean_file).'"><input type="hidden" name="GOTMLS_chksum" value="'.md5($GOTMLS_file_contents).'O'.GOTMLS_installation_key.'"><input type="submit" value="Whitelist this file" style="float: right;">':'>').'</form><div id="fileperms" class="shadowed-box rounded-corners" style="display: none; position: absolute; left: 8px; top: 29px; background-color: #ccc; border: medium solid #C00; box-shadow: -3px 3px 3px #666; border-radius: 10px; padding: 10px;"><b>File Details</b><br />encoding: '.mb_detect_encoding($GOTMLS_file_contents).'<br />size: '.strlen($GOTMLS_file_contents).' ('.filesize($file).'bytes)<br />permissions: '.GOTMLS_fileperms($file).'<br />modified:'.date(" Y-m-d H:i:s ", filemtime($file)).'<br />changed:'.date(" Y-m-d H:i:s ", filectime($file)).'</div><div style="overflow: auto;"><span onmouseover="document.getElementById(\'fileperms\').style.display=\'block\';" onmouseout="document.getElementById(\'fileperms\').style.display=\'none\';">'.__("Potential threats in file:",'gotmls').'</span> ('.$fa.' )</div></td></tr><tr><td style="height: 100%"><textarea id="ta_file" style="width: 100%; height: 100%">'.htmlentities(str_replace("\r", "", $GOTMLS_file_contents)).'</textarea></td></tr></table>');
+		</script><table style="top: 0px; left: 0px; width: 100%; height: 100%; position: absolute;"><tr><td style="width: 100%"><form style="margin: 0;" method="post" onsubmit="return confirm(\''.__("Are you sure this file is not infected and you want to ignore it in future scans?",'gotmls').'\');"><input type="hidden" name="GOTMLS_whitelist" value="'.GOTMLS_encode($file).'"><input type="hidden" name="GOTMLS_chksum" value="'.md5($GOTMLS_file_contents).'O'.GOTMLS_installation_key.'"><input type="submit" value="Whitelist this file" style="float: right;"></form><div id="fileperms" class="shadowed-box rounded-corners" style="display: none; position: absolute; left: 8px; top: 29px; background-color: #ccc; border: medium solid #C00; box-shadow: -3px 3px 3px #666; border-radius: 10px; padding: 10px;"><b>File Details</b><br />encoding: '.mb_detect_encoding($GOTMLS_file_contents).'<br />size: '.strlen($GOTMLS_file_contents).' ('.filesize($file).'bytes)<br />permissions: '.GOTMLS_fileperms($file).'<br />modified:'.date(" Y-m-d H:i:s ", filemtime($file)).'<br />changed:'.date(" Y-m-d H:i:s ", filectime($file)).'</div><div style="overflow: auto;"><span onmouseover="document.getElementById(\'fileperms\').style.display=\'block\';" onmouseout="document.getElementById(\'fileperms\').style.display=\'none\';">'.__("Potential threats in file:",'gotmls').'</span> ('.$fa.' )</div></td></tr><tr><td style="height: 100%"><textarea id="ta_file" style="width: 100%; height: 100%">'.htmlentities(str_replace("\r", "", $GOTMLS_file_contents)).'</textarea></td></tr></table>');
 					}
 				}
 			}
