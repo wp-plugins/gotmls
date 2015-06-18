@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GOTMLS\n"
 "Report-Msgid-Bugs-To: eli@gotmls.net\n"
-"POT-Creation-Date: 2015-06-06 17:29-1000\n"
+"POT-Creation-Date: 2015-06-18 12:35-1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -337,6 +337,15 @@ msgstr ""
 msgid " For more information on Brute-Force attack prevention and the WordPress wp-login-php file "
 msgstr ""
 
+msgid "Default position"
+msgstr ""
+
+msgid "New position"
+msgstr ""
+
+msgid "saved."
+msgstr ""
+
 msgid "Done!"
 msgstr ""
 
@@ -359,6 +368,9 @@ msgstr ""
 msgid "Never mind, it worked!"
 msgstr ""
 
+msgid "Nothing Selected to be Changed!"
+msgstr ""
+
 msgid "Are you sure you want to delete this file from the quarantine?"
 msgstr ""
 
@@ -376,18 +388,6 @@ msgid "Are you sure this file is not infected and you want to ignore it in futur
 msgstr ""
 
 msgid "Potential threats in file:"
-msgstr ""
-
-msgid "Nothing Selected to be Changed!"
-msgstr ""
-
-msgid "Default position"
-msgstr ""
-
-msgid "New position"
-msgstr ""
-
-msgid "saved."
 msgstr ""
 
 msgid "htaccess Threats"
@@ -408,10 +408,13 @@ msgstr ""
 msgid "Failed to list files in directory!"
 msgstr ""
 
-msgid "Run Quick Scan"
+msgid "Quick Scan"
 msgstr ""
 
 msgid "View Quarantine"
+msgstr ""
+
+msgid "View Scan Log"
 msgstr ""
 
 #, php-format
@@ -511,7 +514,4 @@ msgid "Failed to read file!"
 msgstr ""
 
 msgid "The <b>base64_decode</b> function is currently disabled by the disable_functions Directive in your server's php.ini file.<br />This function is required for this Anti-Malware plugin to work properly.<br />Check the disable_functions Directive in your php.ini and take out base64_decode to fix this problem."
-msgstr ""
-
-msgid "View Scan Log"
 msgstr ""

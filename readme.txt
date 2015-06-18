@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, scanner, automatic, repair, remove, malware, virus, threat, hacked, malicious, infection, timthumb, exploit, block, brute-force, wp-login, patch, antimalware, revslider, Revolution Slider
-Version: 4.15.26
-Stable tag: 4.15.26
+Version: 4.15.27
+Stable tag: 4.15.27
 Requires at least: 3.3
 Tested up to: 4.2.2
 
@@ -29,7 +29,7 @@ This Anti-Malware scanner searches for Malware, Viruses, and other security thre
 * Automatically Download Definition Updates When running a Complete Scan.
 * Check the integrity of your WordPress Core files.
 
-Updated June 6th
+Updated June 18th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -93,6 +93,10 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 4.15.27 =
+* Fixed a major bug that made multisite scan extremely slow and sometimes error out.
+* Moved all ajax call out of the init function and into their own functions for better handling time.
 
 = 4.15.26 =
 * Moved the quarantine files into the database and deleted the old directory in uploads.
@@ -226,9 +230,6 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 * Fixed a bug in the Add to Whitelist feature so the you do not need to update the definitions after whitelisting a file.
 
 = 1.3.05.13 =
-* Fixed two bugs in the last release.
-
-= 1.3.05.11 =
 * Added ability to whitelist files.
 
 = 1.3.04.19 =
@@ -335,6 +336,9 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 
 == Upgrade Notice ==
 
+= 4.15.27 =
+Fixed a major bug that made multisite scan extremely slow and moved all ajax call out of the init function and into their own functions.
+
 = 4.15.26 =
 Moved the quarantine files into the database and deleted the old directory in uploads, fixed some minor HTML formatting issues, and added a warning if base64_decode is disabled.
 
@@ -432,9 +436,6 @@ Downgraded the WP-Login threat and changed it to an opt-in fix.
 Fixed a bug in the Add to Whitelist feature so the you do not need to update the definitions after whitelisting a file.
 
 = 1.3.05.13 =
-Fixed two bugs in the last release.
-
-= 1.3.05.11 =
 Added ability to whitelist files.
 
 = 1.3.04.19 =
