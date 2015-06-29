@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GOTMLS\n"
 "Report-Msgid-Bugs-To: eli@gotmls.net\n"
-"POT-Creation-Date: 2015-06-18 12:35-1000\n"
+"POT-Creation-Date: 2015-06-29 11:44-1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -405,6 +405,15 @@ msgstr ""
 msgid "Core File Changes"
 msgstr ""
 
+msgid "You must register and made a donation to use this feature!"
+msgstr ""
+
+msgid "This feature is currently only available to those who have made a donation!"
+msgstr ""
+
+msgid "Your Server could not start a Session!"
+msgstr ""
+
 msgid "Failed to list files in directory!"
 msgstr ""
 
@@ -464,7 +473,13 @@ msgstr ""
 msgid "Failed:"
 msgstr ""
 
+msgid "failed to quarantine!"
+msgstr ""
+
 msgid "reason unknown!"
+msgstr ""
+
+msgid "failed to write!"
 msgstr ""
 
 msgid "file not writable!"
