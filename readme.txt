@@ -5,8 +5,8 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Tags: anti-malware, security, scanner, automatic, repair, remove, malware, virus, threat, hacked, malicious, infection, timthumb, exploit, block, brute-force, wp-login, patch, antimalware, revslider, Revolution Slider
-Version: 4.15.28
-Stable tag: 4.15.28
+Version: 4.15.29
+Stable tag: 4.15.29
 Requires at least: 3.3
 Tested up to: 4.2.2
 
@@ -29,7 +29,7 @@ This Anti-Malware scanner searches for Malware, Viruses, and other security thre
 * Check the integrity of your WordPress Core files.
 * Automatically Download Definition Updates When running a Complete Scan.
 
-Updated June 29th
+Updated July 9th
 
 Register this plugin at [GOTMLS.NET](http://gotmls.net/) and get access to new definitions of "Known Threats" and added features like Automatic Removal, plus patches for specific security vulnerabilities like old versions of timthumb. Updated definition files can be downloaded automatically within the admin once your Key is registered. Otherwise, this plugin just scans for "Potential Threats" and leaves it up to you to identify and remove the malicious ones.
 
@@ -93,6 +93,12 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 5. The Quarantine showing threats that have been fix already.
 
 == Changelog ==
+
+= 4.15.29 =
+* Fixed a bugs in the Quarantine that was memory_limit errors if there number of files in the was too high.
+* Added the highlight malicious code feature back to the Quarantine file viewer.
+* Added the ability to change the admin username if the current username is "admin".
+* Improved the code in the Brute-Force Protection patch.
 
 = 4.15.28 =
 * Fixed a few bugs in the Core Files Check that was preventing it from fixing some unusual file modifications.
@@ -338,6 +344,9 @@ sucuri.net caches their scan results and will not refresh the scan until you cli
 * First BETA versions available for WordPress.
 
 == Upgrade Notice ==
+
+= 4.15.29 =
+Fixed a bugs in the Quarantine, added the highlight malicious code feature back to the Quarantine file viewer, added the ability to change the admin username, and improved the Brute-Force Protection.
 
 = 4.15.28 =
 Fixed a few bugs in the Core Files Check that was preventing it from fixing some unusual file modifications.

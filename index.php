@@ -8,7 +8,7 @@ Author URI: http://wordpress.ieonly.com/category/my-plugins/anti-malware/
 Contributors: scheeeli, gotmls
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QZHD8QHZ2E7PE
 Description: This Anti-Virus/Anti-Malware plugin searches for Malware and other Virus like threats and vulnerabilities on your server and helps you remove them. It's always growing and changing to adapt to new threats so let me know if it's not working for you.
-Version: 4.15.28
+Version: 4.15.29
 */
 if (isset($_SERVER["DOCUMENT_ROOT"]) && ($SCRIPT_FILE = str_replace($_SERVER["DOCUMENT_ROOT"], "", isset($_SERVER["SCRIPT_FILENAME"])?$_SERVER["SCRIPT_FILENAME"]:isset($_SERVER["SCRIPT_NAME"])?$_SERVER["SCRIPT_NAME"]:"")) && strlen($SCRIPT_FILE) > strlen("/".basename(__FILE__)) && substr(__FILE__, -1 * strlen($SCRIPT_FILE)) == substr($SCRIPT_FILE, -1 * strlen(__FILE__)))
 	include(dirname(__FILE__)."/safe-load/index.php");
@@ -135,6 +135,7 @@ function GOTMLS_display_header($optional_box = "") {
 	$Update_Div ='<div id="findUpdates" style="display: none;"><center>'.__("Searching for updates ...",'gotmls').'<br /><img src="'.GOTMLS_images_path.'wait.gif" height=16 width=16 alt="Wait..." /><br /><input type="button" value="Cancel" onclick="cancelserver(\'findUpdates\');" /></center></div>';
 	echo '
 span.GOTMLS_date {float: right; width: 130px; white-space: nowrap;}
+.GOTMLS_page {float: left; border-radius: 10px; padding: 0 5px;}
 .GOTMLS_quarantine_item {margin: 4px 12px;}
 .rounded-corners {margin: 10px; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; border: 1px solid #000;}
 .shadowed-box {box-shadow: -3px 3px 3px #666; -moz-box-shadow: -3px 3px 3px #666; -webkit-box-shadow: -3px 3px 3px #666;}
@@ -635,7 +636,7 @@ function GOTMLS_get_quarantine($only = false) {
 			foreach ($entries as $entry) {
 				if (is_file($file = GOTMLS_trailingslashit($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]).$entry)) {
 					if (GOTMLS_get_ext($entry) == "gotmls" && ($GLOBALS["GOTMLS"]["tmp"]["file_contents"] = @file_get_contents($file))) {
-						$insert = array("post_author"=>GOTMLS_get_current_user_id(), "ping_status"=>"imported", "post_status"=>"private", "post_type"=>"GOTMLS_quarantine", "post_content"=>GOTMLS_encode($GLOBALS["GOTMLS"]["tmp"]["file_contents"]), "post_mime_type"=>md5($GLOBALS["GOTMLS"]["tmp"]["file_contents"]));//! comment_status post_password post_name to_ping post_parent guid menu_order";
+						$insert = array("post_author"=>GOTMLS_get_current_user_id(), "ping_status"=>"imported", "post_status"=>"private", "post_type"=>"GOTMLS_quarantine", "post_content"=>GOTMLS_encode($GLOBALS["GOTMLS"]["tmp"]["file_contents"]), "post_mime_type"=>md5($GLOBALS["GOTMLS"]["tmp"]["file_contents"]), "guid"=>"Unknown");//! comment_status post_password post_name to_ping post_parent menu_order";
 						if (!($insert["comment_count"] = @filesize($file)))
 							$insert["comment_count"] = strlen($GLOBALS["GOTMLS"]["tmp"]["file_contents"]);
 						$file_date = explode(".", $entry);
@@ -662,14 +663,18 @@ function GOTMLS_get_quarantine($only = false) {
 		if (basename($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]) == "quarantine")
 			rmdir($GLOBALS["GOTMLS"]["tmp"]["quarantine_dir"]);
 	}
-	$Q_Page = '
-	<form method="POST" action="'.admin_url('admin-ajax.php').(isset($_SERVER["QUERY_STRING"])&&strlen($_SERVER["QUERY_STRING"])?"?".$_SERVER["QUERY_STRING"]:"").'" target="GOTMLS_iFrame" name="GOTMLS_Form_clean"><input type="hidden" id="GOTMLS_fixing" name="GOTMLS_fixing" value="1"><input type="hidden" name="action" value="GOTMLS_fix">';
-	$args = array('posts_per_page' => -1, 'orderby' => 'date', 'post_type' => 'GOTMLS_quarantine', "post_status" => "private");
 	if (is_numeric($only))
 		return get_post($only, ARRAY_A);
+	elseif ($only)
+		return $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->posts WHERE `post_type` = 'GOTMLS_quarantine' AND `post_status` = 'private'");
+	else
+		$args = array('posts_per_page' => 200, 'orderby' => 'date', 'post_type' => 'GOTMLS_quarantine', "post_status" => "private");
+	if (isset($_POST["paged"]))
+		$args["paged"] = $_POST["paged"];
 	$my_query = new WP_Query($args);
-	if ($only)
-		return $my_query->post_count;
+	$Q_Paged = '<form method="POST" name="GOTMLS_Form_page"><input type="hidden" id="GOTMLS_paged" name="paged" value="1"><div style="float: left;">Page:</div>';
+	$Q_Page = '
+	<form method="POST" action="'.admin_url('admin-ajax.php').(isset($_SERVER["QUERY_STRING"])&&strlen($_SERVER["QUERY_STRING"])?"?".$_SERVER["QUERY_STRING"]:"").'" target="GOTMLS_iFrame" name="GOTMLS_Form_clean"><input type="hidden" id="GOTMLS_fixing" name="GOTMLS_fixing" value="1"><input type="hidden" name="action" value="GOTMLS_fix">';
 	if ($my_query->have_posts()) {
 		$Q_Page .= '<p id="quarantine_buttons" style="display: none;"><input id="repair_button" type="submit" value="'.__("Restore selected files",'gotmls').'" class="button-primary" onclick="if (confirm(\''.__("Are you sure you want to overwrite the previously cleaned files with the selected files in the Quarantine?",'gotmls').'\')) { setvalAllFiles(1); loadIframe(\'File Restoration Results\'); } else return false;" /><input id="delete_button" type="submit" class="button-primary" value="'.__("Delete selected files",'gotmls').'" onclick="if (confirm(\''.__("Are you sure you want to permanently delete the selected files in the Quarantine?",'gotmls').'\')) { setvalAllFiles(2); loadIframe(\'File Deletion Results\'); } else return false;" /></p><p><b>'.__("The following items have been found to contain malicious code, they have been cleaned, and the original infected file contents have been saved here in the Quarantine. The code is safe here and you do not need to do anything further with these files.",'gotmls').'</b></p>
 		<ul name="found_Quarantine" id="found_Quarantine" class="GOTMLS_plugin known" style="background-color: #ccc; padding: 0;"><h3>'.($my_query->post_count>1?'<input type="checkbox" onchange="checkAllFiles(this.checked); document.getElementById(\'quarantine_buttons\').style.display = \'block\';"> '.sprintf(__("Check all %d",'gotmls'),$my_query->post_count):"").__(" Items in Quarantine",'gotmls').'<span class="GOTMLS_date">Date Quarantined</span><span class="GOTMLS_date">Date Infected</span></h3>';
@@ -680,10 +685,13 @@ function GOTMLS_get_quarantine($only = false) {
 			<li id="GOTMLS_quarantine_'.$post->ID.'" class="GOTMLS_quarantine_item"><span class="GOTMLS_date">'.$post->post_date_gmt.'</span><span class="GOTMLS_date">'.$post->post_modified_gmt.'</span><input type="checkbox" name="GOTMLS_fix[]" value="'.$post->ID.'" id="check_'.$post->ID.'" onchange="document.getElementById(\'quarantine_buttons\').style.display = \'block\';" /><img src="'.GOTMLS_images_path.'blocked.gif" height=16 width=16 alt="Q">'.GOTMLS_error_link(__("View Quarantined File",'gotmls'), $post->ID).str_replace($root_path, "...", $post->post_title)."</a></li>\n";
 		}
 		$Q_Page .= "\n</ul>";
-		wp_reset_query();
+		for ($p = 1; $p <= $my_query->max_num_pages; $p++) {
+			$Q_Paged .= '<input class="GOTMLS_page" type="submit" value="'.$p.'"'.((isset($_POST["paged"]) && $_POST["paged"] == $p) || (!isset($_POST["paged"]) && 1 == $p)?" DISABLED":"").' onclick="document.getElementById(\'GOTMLS_paged\').value = \''.$p.'\';">';
+		}
 	} else
 		$Q_Page .= '<h3>'.__("No Items in Quarantine",'gotmls').'</h3>';
-	return "$Q_Page\n</form>\n";
+	wp_reset_query();
+	return "$Q_Paged\n</form><br style=\"clear: left;\" />\n$Q_Page\n</form>\n$Q_Paged\n</form><br style=\"clear: left;\" />\n";
 }
 
 function GOTMLS_View_Quarantine() {
@@ -1148,14 +1156,22 @@ showhide("pause_button", true);'."\n/*{$lt}!--*"."/";
 			else
 				$patch_status = 2;
 		}
-		$sec_opts = '
-		'.$lt.'p'.$gt.$lt.'img src="'.GOTMLS_images_path.'checked.gif"'.$gt.$lt.'b'.$gt.'Revolution Slider Exploit Protection (Automatically Enabled)'.$lt.'/b'.$gt.$lt.'/p'.$gt.$lt.'div style="padding: 0 30px;"'.$gt.__("This protection is automatically activated with this plugin because of the widespread attack on WordPress that are affecting so many site right now. It is still recommended that you make sure to upgrade and older versions of the Revolution Slider plugin, especially those included in some themes that will not update automatically. Even if you do not have Revolution Slider on your site it still can't hurt to have this protection installed.",'gotmls').$lt.'/div'.$gt.$lt.'hr /'.$gt.'
+		$sec_opts = $lt.'div style="padding: 0 30px;"'.$gt.$lt.'p'.$gt.$lt.'img src="'.GOTMLS_images_path.'checked.gif"'.$gt.$lt.'b'.$gt.'Revolution Slider Exploit Protection (Automatically Enabled)'.$lt.'/b'.$gt.$lt.'/p'.$gt.__("This protection is automatically activated with this plugin because of the widespread attack on WordPress that are affecting so many site right now. It is still recommended that you make sure to upgrade and older versions of the Revolution Slider plugin, especially those included in some themes that will not update automatically. Even if you do not have Revolution Slider on your site it still can't hurt to have this protection installed.",'gotmls').$lt.'/div'.$gt.$lt.'hr /'.$gt.'
 		'.$patch_action.'
-		'.$lt.'form method="POST" name="GOTMLS_Form_patch"'.$gt.$lt.'div style="float: right;"'.$gt.$lt.'input type="submit" value="'.$patch_attr[$patch_status]["action"].'" style="'.($patch_status?'"'.$gt:' display: none;" id="GOTMLS_patch_button"'.$gt.$lt.'div id="GOTMLS_patch_searching" style="float: right;"'.$gt.__("Checking for session compatibility ...",'gotmls').' '.$lt.'img src="'.GOTMLS_images_path.'wait.gif" height=16 width=16 alt="Wait..." /'.$gt.$lt.'/div'.$gt).$lt.'input type="hidden" name="GOTMLS_patching" value="1"'.$gt.$lt.'/div'.$gt.$lt.'p'.$gt.$lt.'img src="'.GOTMLS_images_path.$patch_attr[$patch_status]["icon"].'.gif"'.$gt.$lt.'b'.$gt.'Brute-force Protection '.$patch_attr[$patch_status]["status"].$lt.'/b'.$gt.$lt.'/p'.$gt.$lt.'div style="padding: 0 30px;"'.$gt.' &nbsp; * '.$patch_attr[$patch_status]["language"].__(" For more information on Brute-Force attack prevention and the WordPress wp-login-php file ",'gotmls').' '.$lt.'a target="_blank" href="http://gotmls.net/tag/wp-login-php/"'.$gt.__("read my blog",'gotmls')."$lt/a$gt.$lt/div$gt$lt/form$gt\n{$lt}script type='text/javascript'$gt\nfunction search_patch_onload() {\n\tstopCheckingSession = checkupdateserver('".GOTMLS_images_path."gotmls.js?SESSION=0', 'GOTMLS_patch_searching');\n}\nif (window.addEventListener)\n\twindow.addEventListener('load', search_patch_onload)\nelse\n\tdocument.attachEvent('onload', search_patch_onload);\n$lt/script$gt";
+		'.$lt.'form method="POST" name="GOTMLS_Form_patch"'.$gt.$lt.'div style="float: right;"'.$gt.$lt.'input type="submit" value="'.$patch_attr[$patch_status]["action"].'" style="'.($patch_status?'"'.$gt:' display: none;" id="GOTMLS_patch_button"'.$gt.$lt.'div id="GOTMLS_patch_searching" style="float: right;"'.$gt.__("Checking for session compatibility ...",'gotmls').' '.$lt.'img src="'.GOTMLS_images_path.'wait.gif" height=16 width=16 alt="Wait..." /'.$gt.$lt.'/div'.$gt).$lt.'input type="hidden" name="GOTMLS_patching" value="1"'.$gt.$lt.'/div'.$gt.$lt.'div style="padding: 0 30px;"'.$gt.$lt.'p'.$gt.$lt.'img src="'.GOTMLS_images_path.$patch_attr[$patch_status]["icon"].'.gif"'.$gt.$lt.'b'.$gt.'Brute-force Protection '.$patch_attr[$patch_status]["status"].$lt.'/b'.$gt.$lt.'/p'.$gt.' &nbsp; * '.$patch_attr[$patch_status]["language"].__(" For more information on Brute-Force attack prevention and the WordPress wp-login-php file ",'gotmls').' '.$lt.'a target="_blank" href="http://gotmls.net/tag/wp-login-php/"'.$gt.__("read my blog",'gotmls')."$lt/a$gt.$lt/div$gt$lt/form$gt\n{$lt}script type='text/javascript'$gt\nfunction search_patch_onload() {\n\tstopCheckingSession = checkupdateserver('".GOTMLS_images_path."gotmls.js?SESSION=0', 'GOTMLS_patch_searching');\n}\nif (window.addEventListener)\n\twindow.addEventListener('load', search_patch_onload)\nelse\n\tdocument.attachEvent('onload', search_patch_onload);\n$lt/script$gt";
 		$admin_notice = "";
 		if ($current_user->user_login == "admin") {
-			$admin_notice .= $lt.'hr /'.$gt.'
-			'.$lt.'form method="POST" name="GOTMLS_Form_admin"'.$gt.$lt.'p'.$gt.$lt.'img src="'.GOTMLS_images_path.'threat.gif"'.$gt.$lt.'b'.$gt.'Admin Notice'.$lt.'/b'.$gt.$lt.'/p'.$gt.$lt.'div style="padding: 0 30px;"'.$gt.'Your username is "admin", this is the most commonly guessed username by hackers and brute-force scripts. It is highly recommended that you change your username immediately.'.$lt.'/div'.$gt.$lt.'/form'.$gt;
+			if (isset($_POST["GOTMLS_admin_username"]) && ("admin" != trim($_POST["GOTMLS_admin_username"])) && strlen(trim($_POST["GOTMLS_admin_username"])) && preg_match('/^\s*[a-z_0-9\@\.\-]{3,}\s*$/i', $_POST["GOTMLS_admin_username"])) {
+					if ($wpdb->update($wpdb->users, array("user_login" => trim($_POST["GOTMLS_admin_username"])), array("user_login" => "admin")))
+						$admin_notice .= $lt.'div class="updated"'.$gt.sprintf(__("You username has been change to %s. Don't forget to use your new username when you login again.",'gotmls'), $_POST["GOTMLS_admin_username"]).$lt.'/div'.$gt;
+					else
+						$admin_notice .= $lt.'div class="updated"'.$gt.sprintf(__("SQL Error changing username: %s. Please try again later.",'gotmls'), $wpdb->last_error).$lt.'/div'.$gt;
+			} else {
+				$admin_notice .= $lt.'hr /'.$gt;
+				if (isset($_POST["GOTMLS_admin_username"]))
+					$admin_notice .= $lt.'div class="updated"'.$gt.sprintf(__("Your new username must be at least 3 characters and can only contain &quot;%s&quot;. Please try again.",'gotmls'), "a-z0-9_.-@").$lt.'/div'.$gt;
+				$admin_notice .= $lt.'form method="POST" name="GOTMLS_Form_admin"'.$gt.$lt.'div style="float: right;"'.$gt.$lt.'div style="float: left;"'.$gt.__("Change your username:",'gotmls').$lt.'/div'.$gt.$lt.'input style="float: left;" type="text" id="GOTMLS_admin_username" name="GOTMLS_admin_username" size="6" value="admin"'.$gt.$lt.'input style="float: left;" type="submit" value="Change"'.$gt.$lt.'/div'.$gt.$lt.'div style="padding: 0 30px;"'.$gt.$lt.'p'.$gt.$lt.'img src="'.GOTMLS_images_path.'threat.gif"'.$gt.$lt.'b'.$gt.'Admin Notice'.$lt.'/b'.$gt.$lt.'/p'.$gt.'Your username is "admin", this is the most commonly guessed username by hackers and brute-force scripts. It is highly recommended that you change your username immediately.'.$lt.'/div'.$gt.$lt.'/form'.$gt;
+			}
 		}
 		echo GOTMLS_box("Firewall Options", $sec_opts.$admin_notice);
 	}
@@ -1354,11 +1370,15 @@ function GOTMLS_ajax_scan() {
 					}
 				} elseif (isset($Q_post["post_excerpt"]) && strlen($Q_post["post_excerpt"]) && is_array($GLOBALS["GOTMLS"]["tmp"]["threats_found"] = @maybe_unserialize(GOTMLS_decode($Q_post["post_excerpt"])))) {
 					$f = 1;
+					//print_r(array("excerpt:"=>$GLOBALS["GOTMLS"]["tmp"]["threats_found"]));
 					foreach ($GLOBALS["GOTMLS"]["tmp"]["threats_found"] as $threats_found => $threats_name) {
 						list($start, $end, $junk) = explode("-", "$threats_found--", 3);
-						if (strlen($end) > 0 && is_numeric($start) && is_numeric($end) && $start > $end)
-							$fa .= ' <a title="'.htmlspecialchars($threats_name).'" href="javascript:select_text_range(\'ta_file\', '.$start.', '.$end.');">['.$f++.']</a>';
-						else {
+						if (strlen($end) > 0 && is_numeric($start) && is_numeric($end)) {
+							if ($start < $end)
+								$fa .= ' <a title="'.htmlspecialchars($threats_name).'" href="javascript:select_text_range(\'ta_file\', '.$start.', '.$end.');">['.$f++.']</a>';
+							else
+								$fa .= ' <a title="'.htmlspecialchars($threats_name).'" href="javascript:select_text_range(\'ta_file\', '.$end.', '.$start.');">['.$f++.']</a>';
+						} else {
 							if (is_numeric($threats_found)) {
 								$threats_found = $threats_name;
 								$threats_name = $f;
@@ -1372,7 +1392,7 @@ function GOTMLS_ajax_scan() {
 							}
 						}
 					}
-				}
+				} //else echo "excerpt:".$Q_post["post_excerpt"];
 				foreach ($decode_list as $decode => $regex)
 					if (preg_match($regex.substr($GLOBALS["GOTMLS"]["tmp"]["default_ext"], 0, 1),  $GLOBALS["GOTMLS"]["tmp"]["file_contents"]))
 						$fa .= ' <a href="'.GOTMLS_script_URI.'&'.$function.'[]='.$decode.'">decode['.$decode.']</a>';

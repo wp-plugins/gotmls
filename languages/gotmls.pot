@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GOTMLS\n"
 "Report-Msgid-Bugs-To: eli@gotmls.net\n"
-"POT-Creation-Date: 2015-06-29 11:44-1000\n"
+"POT-Creation-Date: 2015-07-09 08:57-1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -335,6 +335,21 @@ msgid "Checking for session compatibility ..."
 msgstr ""
 
 msgid " For more information on Brute-Force attack prevention and the WordPress wp-login-php file "
+msgstr ""
+
+#, php-format
+msgid "You username has been change to %s. Don't forget to use your new username when you login again."
+msgstr ""
+
+#, php-format
+msgid "SQL Error changing username: %s. Please try again later."
+msgstr ""
+
+#, php-format
+msgid "Your new username must be at least 3 characters and can only contain &quot;%s&quot;. Please try again."
+msgstr ""
+
+msgid "Change your username:"
 msgstr ""
 
 msgid "Default position"
