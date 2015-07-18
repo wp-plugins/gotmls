@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GOTMLS\n"
 "Report-Msgid-Bugs-To: eli@gotmls.net\n"
-"POT-Creation-Date: 2015-07-09 08:57-1000\n"
+"POT-Creation-Date: 2015-07-17 22:47-1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -306,6 +306,26 @@ msgstr ""
 msgid "Your WordPress Login page has the old version of my brute-force protection installed. Upgrade this patch to improve the protection on the WordPress Login page and preserve the integrity of your WordPress core files."
 msgstr ""
 
+msgid "Checking .htaccess file ..."
+msgstr ""
+
+msgid "You must register and donate to use this feature!"
+msgstr ""
+
+msgid "This feature is available to those who have donated!"
+msgstr ""
+
+#, php-format
+msgid "Failed to remove XMLRPC Protection (.htaccess %s)"
+msgstr ""
+
+#, php-format
+msgid "Failed to install XMLRPC Protection (.htaccess %s)"
+msgstr ""
+
+msgid "Most WordPress site do not use the XMLRPC features and hack attempt on the xmlrpc.php file are more common then ever before. Even if there are no vulnerabilities for hackers to exploit these attempts can cause slowness or downtime similar to a DDoS attack. This patch automatically blocks all external access to the xmlrpc.php file."
+msgstr ""
+
 msgid "Removed Brute-Force Protection"
 msgstr ""
 
@@ -359,6 +379,9 @@ msgid "New position"
 msgstr ""
 
 msgid "saved."
+msgstr ""
+
+msgid "Failed to empty the trash."
 msgstr ""
 
 msgid "Done!"
@@ -418,12 +441,6 @@ msgid "Known Threats"
 msgstr ""
 
 msgid "Core File Changes"
-msgstr ""
-
-msgid "You must register and made a donation to use this feature!"
-msgstr ""
-
-msgid "This feature is currently only available to those who have made a donation!"
 msgstr ""
 
 msgid "Your Server could not start a Session!"

@@ -68,7 +68,7 @@ if (isset($_GET["SESSION"]) && is_numeric($_GET["SESSION"]) && preg_match('|(.*?
 	if (is_file(GOTMLS_plugin_path."safe-load/session.php"))
 		require_once(GOTMLS_plugin_path."safe-load/session.php");
 	if (isset($_SESSION["GOTMLS_SESSION_TEST"])) 
-		die("/* GOTMLS SESSION PASS */\nif('undefined' != typeof stopCheckingSession && stopCheckingSession)\n\tclearTimeout(stopCheckingSession);\nshowhide('GOTMLS_patch_searching', true);\nif (autoUpdateDownloadGIF = document.getElementById('autoUpdateDownload'))\n\tdonationAmount = autoUpdateDownloadGIF.src.replace(/^.+\?/,'');\nif ((autoUpdateDownloadGIF.src == donationAmount) || donationAmount=='0') {\n\tif (patch_searching_div = document.getElementById('GOTMLS_patch_searching')) {\n\t\tif (autoUpdateDownloadGIF.src == donationAmount)\n\t\t\tpatch_searching_div.innerHTML = '<span style=\"color: #F00;\">".__("You must register and made a donation to use this feature!",'gotmls')."</span>';\n\t\telse\n\t\t\tpatch_searching_div.innerHTML = '<span style=\"color: #F00;\">".__("This feature is currently only available to those who have made a donation!",'gotmls')."</span>';\n\t}\n} else {\n\tshowhide('GOTMLS_patch_searching');\n\tshowhide('GOTMLS_patch_button', true);\n}\n");
+		die("/* GOTMLS SESSION PASS */\nif('undefined' != typeof stopCheckingSession && stopCheckingSession)\n\tclearTimeout(stopCheckingSession);\nshowhide('GOTMLS_patch_searching', true);\nif (autoUpdateDownloadGIF = document.getElementById('autoUpdateDownload'))\n\tdonationAmount = autoUpdateDownloadGIF.src.replace(/^.+\?/,'');\nif ((autoUpdateDownloadGIF.src == donationAmount) || donationAmount=='0') {\n\tif (patch_searching_div = document.getElementById('GOTMLS_patch_searching')) {\n\t\tif (autoUpdateDownloadGIF.src == donationAmount)\n\t\t\tpatch_searching_div.innerHTML = '<span style=\"color: #F00;\">".__("You must register and donate to use this feature!",'gotmls')."</span>';\n\t\telse\n\t\t\tpatch_searching_div.innerHTML = '<span style=\"color: #F00;\">".__("This feature is available to those who have donated!",'gotmls')."</span>';\n\t}\n} else {\n\tshowhide('GOTMLS_patch_searching');\n\tshowhide('GOTMLS_patch_button', true);\n}\n");
 	else {
 		$_SESSION["GOTMLS_SESSION_TEST"] = $_GET["SESSION"] + 1;
 		if ($_GET["SESSION"] > 0)
@@ -578,9 +578,8 @@ function GOTMLS_write_quarantine($file, $className) {
 }
 
 function GOTMLS_get_current_user_id() {
-	global $current_user;
 	$return = 1;
-	if (($current_user = @get_current_user()) && (@$current_user->ID > 1))
+	if (($current_user = @wp_get_current_user()) && (@$current_user->ID > 1))
 		$return = $current_user->ID;
 	return $return;
 }
@@ -698,7 +697,7 @@ if (!function_exists('ur1encode')) { function ur1encode($url) {
 }}
 
 function GOTMLS_strip4java($item) {
-	return preg_replace("/\\\\/", "\\\\\\\\", preg_replace("/'/", "'+\"'\"+'", preg_replace('/\\+n/', "", $item)));//(?<!\\\\)
+	return preg_replace("/\\\\/", "\\\\\\\\", str_replace("'", "'+\"'\"+'", preg_replace('/\\+n|\\+r|\n|\r|\0/', "", $item)));
 }
 
 function GOTMLS_error_link($errorTXT, $file = "", $class = "errors") {
